@@ -1,55 +1,40 @@
-import styled from 'styled-components';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
 import GlobalStyles from './styles/GlobalStyles';
 
-//STYLES KEPT OUTSIDE FOR SHARING W/MULTIPLE COMPONENTS
-import { Button } from './ui/Button';
-import { Input } from './ui/Input';
-import Heading from './ui/Heading';
-import Row from './ui/Row';
-
-//STYLES KEPT ALONG WITH THE COMPONENT - THEY DO NOT GET USED ELSEWHERE!!!
-// const H1 = styled.h1`
-// 	font-size: 30px;
-// 	font-weight: 600;
-// 	background-color: yellow;
-// `;
-
-const StyledApp = styled.div`
-	/* background-color: orangered; */
-	padding: 20px;
-`;
+import Dashboard from './pages/Dashboard';
+import Bookings from './pages/Bookings';
+import Cabins from './pages/Cabins';
+import Users from './pages/Users';
+import Settings from './pages/Settings';
+import Account from './pages/Account';
+import Login from './pages/Login';
+import PageNotFound from './pages/PageNotFound';
 
 function App() {
 	return (
 		<>
 			<GlobalStyles />
-			<StyledApp>
-				{/* <Row type='vertical'> */}
-				{/* We dont need to disclose vertical as type prop as its given as defaultProp */}
-				<Row>
-					<Row type="horizontal">
-						<Heading as="h1">THE WILD OASIS</Heading>
-						<div>
-							<Heading as="h2">Check in and out</Heading>
-							{/* <Button variation="primary" size="medium" onClick={() => alert('Checked In')}> */}
-							{/* We dont even need to disclose variation and size props as they are defaultProps */}
-							<Button onClick={() => alert('Checked In')}>Check in</Button>
-							<Button variation="secondary" size="small" onClick={() => alert('Checked Out')}>
-								Check out
-							</Button>
-						</div>
-					</Row>
-					<Row>
-						<Heading as="h3">Form</Heading>
-						<form>
-							{/* type prop only reflects the custom css change proposed */}
-							{/* as prop actually reflects both the custom css change and also the element */}
-							<Input type="number" placeholder="Number of guests" />
-							<Input type="number" placeholder="Number of guests" />
-						</form>
-					</Row>
-				</Row>
-			</StyledApp>
+			{/* NOTE : WE ARE NOT USING REACT-ROUTER'S DATA LOADING FEATURE WITHIN THIS APP, SO WE GO AHEAD WITH THE TRADITIONAL REACT-ROUTER SETUP */}
+			<BrowserRouter>
+				<Routes>
+					{/* 
+				       <Route index element={<Dashboard />} /> 
+				       WE CAN'T INDEX THE DASHBOARD LIKE THIS, IT WOULD DEFAULT TO '/' ROUTE BUT WE WANT /DASHBOARD
+                   SO WE NEED TO PROGRRAMATICALLY REDIRECT TO DASHBOARD. NAVIGATE COMPONENT IS USED IN THIS REGARD.
+			      */}
+					{/* This is the default page we want to see whenever we launch */}
+					<Route index element={<Navigate replace to="dashboard" />} />
+					<Route path="dashboard" element={<Dashboard />} />
+					<Route path="bookings" element={<Bookings />} />
+					<Route path="cabins" element={<Cabins />} />
+					<Route path="users" element={<Users />} />
+					<Route path="settings" element={<Settings />} />
+					<Route path="account" element={<Account />} />
+					<Route path="login" element={<Login />} />
+					<Route path="*" element={<PageNotFound />} />
+				</Routes>
+			</BrowserRouter>
 		</>
 	);
 }
