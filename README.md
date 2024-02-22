@@ -22,10 +22,11 @@
 <details>
 <summary>Installed NPM packages and utilized APIs:</summary>
 
-| Package command         | Package link | Description                 |
-| ----------------------- | ------------ | --------------------------- |
-| npm create vite@latest  |              |                             |
-| npm i styled-components |              | In-line CSS styling library |
+| Package command         | Package link | Description         |
+| ----------------------- | ------------ | ------------------- |
+| npm create vite@latest  |              |                     |
+| npm i styled-components |              | CSS styling library |
+| npm i react-router-dom  |              | React Router        |
 
 </details>
 
