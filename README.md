@@ -8,6 +8,7 @@
 
 - React folder structure and project planning
 - Styling w/ Styled Components
+- Contemplate Global Remote States w/ Supabase
 
 &emsp;
 
@@ -22,12 +23,13 @@
 <details>
 <summary>Installed NPM packages and utilized APIs:</summary>
 
-| Package command         | Package link | Description         |
-| ----------------------- | ------------ | ------------------- |
-| npm create vite@latest  |              |                     |
-| npm i styled-components |              | CSS styling library |
-| npm i react-router-dom  |              | React Router        |
-| npm i react-icons       |              | React Icons Library |
+| Package command                   | Package link | Description         |
+| --------------------------------- | ------------ | ------------------- |
+| npm create vite@latest            |              |                     |
+| npm i styled-components           |              | CSS styling library |
+| npm i react-router-dom            |              | React Router        |
+| npm i react-icons                 |              | React Icons Library |
+| npm install @supabase/supabase-js |              | Supabase JS         |
 
 </details>
 
