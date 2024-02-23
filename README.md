@@ -27,6 +27,7 @@
 | npm create vite@latest  |              |                     |
 | npm i styled-components |              | CSS styling library |
 | npm i react-router-dom  |              | React Router        |
+| npm i react-icons       |              | React Icons Library |
 
 </details>
 

@@ -1,46 +1,95 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+
+import { NavLink } from 'react-router-dom';
 
 const NavList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.8rem;
 `;
 
-const Link = styled.a`
-  &:link,
-  &:visited {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
+// const Link = styled.a`
+// 	&:link,
+// 	&:visited {
+// 		display: flex;
+// 		align-items: center;
+// 		gap: 1.2rem;
 
-    color: var(--color-grey-600);
-    font-size: 1.6rem;
-    font-weight: 500;
-    padding: 1.2rem 2.4rem;
-    transition: all 0.3s;
-  }
+// 		color: var(--color-grey-600);
+// 		font-size: 1.6rem;
+// 		font-weight: 500;
+// 		padding: 1.2rem 2.4rem;
+// 		transition: all 0.3s;
+// 	}
 
-  /* This works because react-router places the active class on the active NavLink */
-  &:hover,
-  &:active,
-  &.active:link,
-  &.active:visited {
-    color: var(--color-grey-800);
-    background-color: var(--color-grey-50);
-    border-radius: var(--border-radius-sm);
-  }
+// 	/* This works because react-router places the active class on the active NavLink */
+// 	&:hover,
+// 	&:active,
+// 	&.active:link,
+// 	&.active:visited {
+// 		color: var(--color-grey-800);
+// 		background-color: var(--color-grey-50);
+// 		border-radius: var(--border-radius-sm);
+// 	}
+// `;
 
-  & svg {
-    width: 2.4rem;
-    height: 2.4rem;
-    color: var(--color-grey-400);
-    transition: all 0.3s;
-  }
+const StyledNavLink = styled(NavLink)`
+	&:link,
+	&:visited {
+		display: flex;
+		align-items: center;
+		gap: 1.2rem;
 
-  &:hover svg,
-  &:active svg,
-  &.active:link svg,
-  &.active:visited svg {
-    color: var(--color-brand-600);
-  }
+		color: var(--color-grey-600);
+		font-size: 1.6rem;
+		font-weight: 500;
+		padding: 1.2rem 2.4rem;
+		transition: all 0.3s;
+	}
+
+	/* This works because react-router places the active class on the active NavLink */
+	&:hover,
+	&:active,
+	&.active:link,
+	&.active:visited {
+		color: var(--color-grey-800);
+		background-color: var(--color-grey-50);
+		border-radius: var(--border-radius-sm);
+	}
+
+	& svg {
+		width: 2.4rem;
+		height: 2.4rem;
+		color: var(--color-grey-400);
+		transition: all 0.3s;
+	}
+
+	&:hover svg,
+	&:active svg,
+	&.active:link svg,
+	&.active:visited svg {
+		color: var(--color-brand-600);
+	}
 `;
+
+function MainNav() {
+	return (
+		<nav>
+			<NavList>
+				<li>
+					{/* <Link href="/dashboard">Home</Link> */}
+					{/* Instead of Link we got to use Navlink React router component in order to avoid page flash due to reload after click */}
+					{/* <NavLink to="/dashboard">Home</NavLink> */}
+					<StyledNavLink to="/dashboard">Home</StyledNavLink>
+				</li>
+				<li>
+					{/* <Link href="/bookings">Bookings</Link> */}
+					{/* <NavLink to="/bookings">Bookings</NavLink> */}
+					<StyledNavLink to="/bookings">Bookings</StyledNavLink>
+				</li>
+			</NavList>
+		</nav>
+	);
+}
+
+export default MainNav;
