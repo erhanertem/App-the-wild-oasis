@@ -1,4 +1,11 @@
 import styled from 'styled-components';
+import {
+	HiOutlineHome,
+	HiOutlineCalendarDays,
+	HiOutlineHomeModern,
+	HiOutlineUsers,
+	HiOutlineCog6Tooth,
+} from 'react-icons/hi2';
 
 import { NavLink } from 'react-router-dom';
 
@@ -80,12 +87,42 @@ function MainNav() {
 					{/* <Link href="/dashboard">Home</Link> */}
 					{/* Instead of Link we got to use Navlink React router component in order to avoid page flash due to reload after click */}
 					{/* <NavLink to="/dashboard">Home</NavLink> */}
-					<StyledNavLink to="/dashboard">Home</StyledNavLink>
+					<StyledNavLink to="/dashboard">
+						<HiOutlineHome />
+						<span>Home</span>
+					</StyledNavLink>
 				</li>
 				<li>
 					{/* <Link href="/bookings">Bookings</Link> */}
 					{/* <NavLink to="/bookings">Bookings</NavLink> */}
-					<StyledNavLink to="/bookings">Bookings</StyledNavLink>
+					<StyledNavLink to="/bookings">
+						<HiOutlineCalendarDays />
+						<span>Bookings</span>
+					</StyledNavLink>
+				</li>
+				<li>
+					{/* <Link href="/cabins">Cabins</Link> */}
+					{/* <NavLink to="/cabins">Cabins</NavLink> */}
+					<StyledNavLink to="/cabins">
+						<HiOutlineHomeModern />
+						<span>Cabins</span>
+					</StyledNavLink>
+				</li>
+				<li>
+					{/* <Link href="/users">Users</Link> */}
+					{/* <NavLink to="/users">Users</NavLink> */}
+					<StyledNavLink to="/users">
+						<HiOutlineUsers />
+						<span>Users</span>
+					</StyledNavLink>
+				</li>
+				<li>
+					{/* <Link href="/settings">Settings</Link> */}
+					{/* <NavLink to="/settings">Settings</NavLink> */}
+					<StyledNavLink to="/settings">
+						<HiOutlineCog6Tooth />
+						<span>Settings</span>
+					</StyledNavLink>
 				</li>
 			</NavList>
 		</nav>
