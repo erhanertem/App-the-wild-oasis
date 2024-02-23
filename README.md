@@ -23,13 +23,14 @@
 <details>
 <summary>Installed NPM packages and utilized APIs:</summary>
 
-| Package command                   | Package link | Description         |
-| --------------------------------- | ------------ | ------------------- |
-| npm create vite@latest            |              |                     |
-| npm i styled-components           |              | CSS styling library |
-| npm i react-router-dom            |              | React Router        |
-| npm i react-icons                 |              | React Icons Library |
-| npm install @supabase/supabase-js |              | Supabase JS         |
+| Package command                   | Package link | Description                                           |
+| --------------------------------- | ------------ | ----------------------------------------------------- |
+| npm create vite@latest            |              |                                                       |
+| npm i styled-components           |              | CSS styling library                                   |
+| npm i react-router-dom            |              | React Router                                          |
+| npm i react-icons                 |              | React Icons Library                                   |
+| npm install @supabase/supabase-js |              | Supabase JS                                           |
+| npm i @tanstack/react-query       |              | React query fetch and remote state management library |
 
 </details>
 
