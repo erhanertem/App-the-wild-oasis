@@ -13,6 +13,7 @@ import PageNotFound from './pages/PageNotFound';
 import AppLayout from './ui/AppLayout';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // > queryClient sets up the cache behind the scene
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -26,6 +27,7 @@ function App() {
 	return (
 		<>
 			<QueryClientProvider client={queryClient}>
+				<ReactQueryDevtools initialIsOpen={false} />
 				<GlobalStyles />
 				{/* NOTE : WE ARE NOT USING REACT-ROUTER'S DATA LOADING FEATURE WITHIN THIS APP, SO WE GO AHEAD WITH THE TRADITIONAL REACT-ROUTER SETUP */}
 				<BrowserRouter>
