@@ -31,6 +31,7 @@
 | npm i react-icons                 |              | React Icons Library                                   |
 | npm install @supabase/supabase-js |              | Supabase JS                                           |
 | npm i @tanstack/react-query       |              | React query fetch and remote state management library |
+| npm install date-fns              |              | JS date library                                       |
 
 </details>
 
