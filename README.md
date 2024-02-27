@@ -25,13 +25,14 @@
 
 | Package command                   | Package link | Description                                           |
 | --------------------------------- | ------------ | ----------------------------------------------------- |
-| npm create vite@latest            |              |                                                       |
+| npm create vite@latest            |              | Developement Enviroment                               |
 | npm i styled-components           |              | CSS styling library                                   |
 | npm i react-router-dom            |              | React Router                                          |
-| npm i react-icons                 |              | React Icons Library                                   |
-| npm install @supabase/supabase-js |              | Supabase JS                                           |
+| npm install @supabase/supabase-js |              | Supabase JS Connection Library                        |
 | npm i @tanstack/react-query       |              | React query fetch and remote state management library |
-| npm install date-fns              |              | JS date library                                       |
+| npm i react-icons                 |              | React Icons Library                                   |
+| npm i date-fns                    |              | JS date library                                       |
+| npm i react-hot-toast             |              | Notification library for React                        |
 
 </details>
 
