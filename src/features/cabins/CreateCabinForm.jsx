@@ -6,6 +6,9 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createCabin } from "../../services/apiCabins";
+import toast from "react-hot-toast";
 
 const FormRow = styled.div`
   display: grid;
@@ -47,11 +50,33 @@ function CreateCabinForm() {
   // > IMPORT FUNCTIONS FROM THE REACT-HOOK-FORM
   // register fn - Registers the inputs
   // handleSubmit fn -  Submits our actual submit function
-  const { register, handleSubmit } = useForm();
+  // reset fn - function to clear the form data
+  const { register, handleSubmit, reset } = useForm();
 
-  // Our actual submit form function
+  // GET A HOLD OF THE REACT QUERY CLIENT TO INVALIDATE THE QUERY STATE
+  const queryClient = useQueryClient();
+
+  // CREATE MUTATION QUERY W/ERRO-SUCCESS HANDLING
+  const { isPending: isCreating, mutate } = useMutation({
+    // mutationFn: (newCabin) => createCabin(newCabin),
+    mutationFn: createCabin, // same as below - shorthand version
+    onSuccess: () => {
+      // Display success notification
+      toast.success("New cabin succesfully created");
+      // Invalidate the cabins query
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
+      // Reset the data @ form after successfull submission
+      reset();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  //ACTUAL FORM THAT CALLS MUTATE BY INJECTING THE DATA GATHERED FROM THE REACT-HOOK-FORM
+  // Our actual submit form function that mutates our data via useMutation hook
   function onSubmit(data) {
-    console.log(data);
+    // console.log(data);
+    mutate(data);
+    // IMPORTANT!!! - WE DO NOT USE CLEAR() FUNCTION HEAR BECAUSE @  THIS POINT WE ARE NOT SURE ITS SUCCESSFULL TRANSMISSION. THEREFORE, ITS BETTER TO HANDLE FORM RESET @ USEMUTATION HOOK ONSUCCESS KEY
   }
 
   return (
@@ -120,7 +145,8 @@ function CreateCabinForm() {
         >
           Cancel
         </Button>
-        <Button>Add cabin</Button>
+        {console.log(isCreating)}
+        <Button disabled={isCreating}>Add cabin</Button>
       </FormRow>
     </Form>
   );
