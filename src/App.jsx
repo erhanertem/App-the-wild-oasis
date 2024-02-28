@@ -84,6 +84,7 @@ function App() {
         </Routes>
       </BrowserRouter>
 
+      {/* Per docs, it has to be provided at the top level above all pages */}
       <Toaster
         position="top-center"
         gutter={12}

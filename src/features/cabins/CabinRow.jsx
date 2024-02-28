@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
 import { deleteCabin } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const TableRow = styled.div`
   display: grid;
@@ -53,21 +54,23 @@ function CabinRow({ cabin }) {
     image,
   } = cabin;
 
+  // GET A HOLD OF THE QUERY CLIENT
   const queryClient = useQueryClient();
 
-  const { isLoading: isDeleting, mutate } = useMutation({
+  const { isPending: isDeleting, mutate } = useMutation({
     // mutationFn: (id) => deleteCabin(id),
     mutationFn: deleteCabin,
 
     // What we want to do upon successfull delete
     onSuccess: () => {
-      alert("Cabin Succesfuly deleted...");
+      // alert("Cabin succesfuly deleted.");
+      toast.success("Cabin succesfully deleted.");
       queryClient.invalidateQueries({
         queryKey: ["cabins"],
       });
     },
     // onError: (err) => alert(err.message),
-    onError: (err) => alert(err.message),
+    onError: (err) => toast.error(err.message),
   });
 
   // role Attribute is part of WAI-ARIA @ https://www.w3.org/TR/wai-aria/#introroles
