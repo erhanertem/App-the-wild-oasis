@@ -6,6 +6,7 @@ import CabinRow from "./CabinRow.jsx";
 
 import { useCallback, useEffect, useState } from "react";
 import supabase from "../../services/supabase.js";
+import toast from "react-hot-toast";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -39,6 +40,8 @@ function CabinTable() {
 
   //FORCE REFETCH UPON SUPABASE BEACON OF ANY CHANGE IN DB
   const handleRefetch = useCallback(() => {
+    // Display success notification
+    toast.success("Cabin list got updated");
     //INVALIDATE TO FORCE FETCH
     queryClient.invalidateQueries({ queryKey: ["cabins"] });
   }, [queryClient]);
