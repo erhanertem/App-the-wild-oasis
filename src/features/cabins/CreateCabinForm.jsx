@@ -5,6 +5,7 @@ import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
+import { useForm } from "react-hook-form";
 
 const FormRow = styled.div`
   display: grid;
@@ -43,13 +44,24 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
+  // > IMPORT FUNCTIONS FROM THE REACT-HOOK-FORM
+  // register fn - Registers the inputs
+  // handleSubmit fn -  Submits our actual submit function
+  const { register, handleSubmit } = useForm();
+
+  // Our actual submit form function
+  function onSubmit(data) {
+    console.log(data);
+  }
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow>
         <Label htmlFor="name">Cabin name</Label>
         <Input
           type="text"
           id="name"
+          {...register("name")} //For registering data use the corresponding id
         />
       </FormRow>
 
@@ -58,6 +70,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="maxCapacity"
+          {...register("maxCapacity")} //For registering data use the corresponding id
         />
       </FormRow>
 
@@ -66,6 +79,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="regularPrice"
+          {...register("regularPrice")} //For registering data use the corresponding id
         />
       </FormRow>
 
@@ -75,6 +89,7 @@ function CreateCabinForm() {
           type="number"
           id="discount"
           defaultValue={0}
+          {...register("discount")} //For registering data use the corresponding id
         />
       </FormRow>
 
@@ -84,6 +99,7 @@ function CreateCabinForm() {
           type="number"
           id="description"
           defaultValue=""
+          {...register("description")} //For registering data use the corresponding id
         />
       </FormRow>
 
@@ -92,6 +108,7 @@ function CreateCabinForm() {
         <FileInput
           id="image"
           accept="image/*"
+          {...register("image")} //For registering data use the corresponding id
         />
       </FormRow>
 
@@ -103,7 +120,7 @@ function CreateCabinForm() {
         >
           Cancel
         </Button>
-        <Button>Edit cabin</Button>
+        <Button>Add cabin</Button>
       </FormRow>
     </Form>
   );
