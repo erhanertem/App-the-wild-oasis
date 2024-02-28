@@ -49,13 +49,15 @@ const Error = styled.span`
 function CreateCabinForm() {
   // > IMPORT FUNCTIONS FROM THE REACT-HOOK-FORM
   // register fn - Registers the inputs
-  // handleSubmit fn -  Submits our actual submit function
+  // handleSubmit fn -  Submits our actual submit function - Intakes two functions as arguments, one responsible for mutating data, the other is error handling.
   // reset fn - function to clear the form data
-  const { register, handleSubmit, reset } = useForm();
+  // getValues fn - function to get a hold of the inquired registered data
+  // formState object - object that allows read errors
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
+  const { errors } = formState; //Provides the erro message object for toasters
 
   // GET A HOLD OF THE REACT QUERY CLIENT TO INVALIDATE THE QUERY STATE
   const queryClient = useQueryClient();
-
   // CREATE MUTATION QUERY W/ERRO-SUCCESS HANDLING
   const { isPending: isCreating, mutate } = useMutation({
     // mutationFn: (newCabin) => createCabin(newCabin),
@@ -71,16 +73,21 @@ function CreateCabinForm() {
     onError: (err) => toast.error(err.message),
   });
 
+  // > EVENTHANDLERS FOR HANDLESUBMIT REACT-HOOK-FORM FUNCTION
   //ACTUAL FORM THAT CALLS MUTATE BY INJECTING THE DATA GATHERED FROM THE REACT-HOOK-FORM
-  // Our actual submit form function that mutates our data via useMutation hook
+  // #1. Our actual submit form function that mutates our data via useMutation hook
   function onSubmit(data) {
     // console.log(data);
     mutate(data);
     // IMPORTANT!!! - WE DO NOT USE CLEAR() FUNCTION HEAR BECAUSE @  THIS POINT WE ARE NOT SURE ITS SUCCESSFULL TRANSMISSION. THEREFORE, ITS BETTER TO HANDLE FORM RESET @ USEMUTATION HOOK ONSUCCESS KEY
   }
+  // #2. Our actual error handler function that deals with form data validation failures
+  function onError(errors) {
+    console.log(errors);
+  }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
       <FormRow>
         <Label htmlFor="name">Cabin name</Label>
         <Input
@@ -89,6 +96,7 @@ function CreateCabinForm() {
           // {...register("name")} //For registering data use the corresponding id w/out validation
           {...register("name", { required: "This field is required" })} //For registering data use the corresponding id w/validation
         />
+        {errors?.name?.message && <Error>{errors.name.message}</Error>}
       </FormRow>
 
       <FormRow>
@@ -97,7 +105,17 @@ function CreateCabinForm() {
           type="number"
           id="maxCapacity"
           // {...register("maxCapacity")} //For registering data use the corresponding id w/out validation
-          {...register("maxCapacity", { required: "This field is required" })} //For registering data use the corresponding id w/validation
+          {...register("maxCapacity", {
+            required: "This field is required",
+            min: {
+              value: 1, //min value
+              message: "Capacity should be at least 1", // In case validation fails message
+            },
+            max: {
+              value: 4, //max value
+              message: "Capacity shoudl be at most 4", //In case validation fails message
+            },
+          })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
@@ -107,7 +125,13 @@ function CreateCabinForm() {
           type="number"
           id="regularPrice"
           // {...register("regularPrice")} //For registering data use the corresponding id w/out validation
-          {...register("regularPrice", { required: "This field is required" })} //For registering data use the corresponding id w/validation
+          {...register("regularPrice", {
+            required: "This field is required",
+            min: {
+              value: 1, //min value
+              message: "Regular  price should be greater than zero", // In case validation fails message
+            },
+          })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
@@ -118,7 +142,14 @@ function CreateCabinForm() {
           id="discount"
           defaultValue={0}
           // {...register("discount")} //For registering data use the corresponding id w/out validation
-          {...register("discount", { required: "This field is required" })} //For registering data use the corresponding id w/validation
+          {...register("discount", {
+            required: "This field is required",
+            //custom validation function for complex assigments
+            validate: (value) =>
+              // value > 100 || "Discount shloudl be less than regualr price",
+              value <= getValues().regularPrice ||
+              "Discount shloudl be less than regualr price", // In case validation fails message
+          })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
