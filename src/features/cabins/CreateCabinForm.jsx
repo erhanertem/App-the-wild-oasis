@@ -86,7 +86,8 @@ function CreateCabinForm() {
         <Input
           type="text"
           id="name"
-          {...register("name")} //For registering data use the corresponding id
+          // {...register("name")} //For registering data use the corresponding id w/out validation
+          {...register("name", { required: "This field is required" })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
@@ -95,7 +96,8 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="maxCapacity"
-          {...register("maxCapacity")} //For registering data use the corresponding id
+          // {...register("maxCapacity")} //For registering data use the corresponding id w/out validation
+          {...register("maxCapacity", { required: "This field is required" })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
@@ -104,7 +106,8 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="regularPrice"
-          {...register("regularPrice")} //For registering data use the corresponding id
+          // {...register("regularPrice")} //For registering data use the corresponding id w/out validation
+          {...register("regularPrice", { required: "This field is required" })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
@@ -114,7 +117,8 @@ function CreateCabinForm() {
           type="number"
           id="discount"
           defaultValue={0}
-          {...register("discount")} //For registering data use the corresponding id
+          // {...register("discount")} //For registering data use the corresponding id w/out validation
+          {...register("discount", { required: "This field is required" })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
@@ -124,7 +128,8 @@ function CreateCabinForm() {
           type="number"
           id="description"
           defaultValue=""
-          {...register("description")} //For registering data use the corresponding id
+          // {...register("description")} //For registering data use the corresponding id w/out validation
+          {...register("description", { required: "This field is required" })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
@@ -133,7 +138,7 @@ function CreateCabinForm() {
         <FileInput
           id="image"
           accept="image/*"
-          {...register("image")} //For registering data use the corresponding id
+          {...(register("image") && null)} //For registering data use the corresponding id
         />
       </FormRow>
 
@@ -145,7 +150,6 @@ function CreateCabinForm() {
         >
           Cancel
         </Button>
-        {console.log(isCreating)}
         <Button disabled={isCreating}>Add cabin</Button>
       </FormRow>
     </Form>
