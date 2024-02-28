@@ -33,6 +33,7 @@
 | npm i react-icons                 |              | React Icons Library                                   |
 | npm i date-fns                    |              | JS date library                                       |
 | npm i react-hot-toast             |              | Notification library for React                        |
+| npm i react-hook-form             |              | Form state management library for React               |
 
 </details>
 
