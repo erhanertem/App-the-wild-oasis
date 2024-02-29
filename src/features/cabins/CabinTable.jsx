@@ -32,6 +32,7 @@ const TableHeader = styled.header`
 `;
 
 function CabinTable() {
+  // > FORCED REFETCH IMPLEMENTATION UPON DB BEACON
   // GET A HOLD OF THE QUERY CLIENT
   const queryClient = useQueryClient();
   // DECLARE STATE FOR SUPABASE CHANGE BEACON
@@ -40,7 +41,7 @@ function CabinTable() {
   //FORCE REFETCH UPON SUPABASE BEACON OF ANY CHANGE IN DB
   const handleRefetch = useCallback(() => {
     //INVALIDATE TO FORCE FETCH
-    queryClient.invalidateQueries({ queryKey: ["cabins"] });
+    queryClient.invalidateQueries({ queryKey: ["cabins", "cabin-images"] });
   }, [queryClient]);
 
   useEffect(() => {
@@ -67,12 +68,14 @@ function CabinTable() {
     };
   }, []);
 
+  // > STANDARD FETCH IMPLEMENTATION
   const {
     isLoading,
     error,
     data: cabins,
   } = useQuery({
     queryKey: ["cabins"],
+    // queryFn: () => getCabins(),
     queryFn: getCabins,
   });
 
