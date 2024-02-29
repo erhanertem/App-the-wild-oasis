@@ -9,4 +9,5 @@ const supabaseKey =
 // Create database from provided URL and key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+export { supabaseUrl };
 export default supabase;

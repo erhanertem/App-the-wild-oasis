@@ -44,8 +44,10 @@ function CreateCabinForm() {
   //ACTUAL FORM THAT CALLS MUTATE BY INJECTING THE DATA GATHERED FROM THE REACT-HOOK-FORM
   // #1. Our actual submit form function that mutates our data via useMutation hook
   function onSubmit(data) {
+    // console.log(data);
+    // The received data is raw. It has to be prepped to match our supabase table layout
     // console.log("👍", { ...data, image: data.image[0] });
-    mutate({ ...data, image: data.image[0] });
+    mutate({ ...data, image: data.image[0] }); //table data (except img file url) + image file provided to createCabin mutationFn
     // VERY IMPORTANT!!! - WE DO NOT USE CLEAR() FUNCTION HEAR BECAUSE @  THIS POINT WE ARE NOT SURE ITS SUCCESSFULL TRANSMISSION. THEREFORE, ITS BETTER TO HANDLE FORM RESET @ USEMUTATION HOOK ONSUCCESS KEY
   }
   // #2. Our actual error handler function that deals with form data validation failures
