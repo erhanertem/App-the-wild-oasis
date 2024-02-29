@@ -19,9 +19,9 @@ function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { errors } = formState; //Provides the erro message object for toasters
 
-  // GET A HOLD OF THE REACT QUERY CLIENT TO INVALIDATE THE QUERY STATE
+  // > GET A HOLD OF THE REACT QUERY CLIENT TO INVALIDATE THE QUERY STATE
   const queryClient = useQueryClient();
-  // CREATE MUTATION QUERY W/ERRO-SUCCESS HANDLING
+  // CREATE MUTATION QUERY W/ERROR-SUCCESS HANDLING
   const { isPending: isCreating, mutate } = useMutation({
     // mutationFn: (newCabin) => createCabin(newCabin),
     mutationFn: createCabin, // same as below - shorthand version
@@ -40,9 +40,9 @@ function CreateCabinForm() {
   //ACTUAL FORM THAT CALLS MUTATE BY INJECTING THE DATA GATHERED FROM THE REACT-HOOK-FORM
   // #1. Our actual submit form function that mutates our data via useMutation hook
   function onSubmit(data) {
-    // console.log(data);
-    mutate(data);
-    // IMPORTANT!!! - WE DO NOT USE CLEAR() FUNCTION HEAR BECAUSE @  THIS POINT WE ARE NOT SURE ITS SUCCESSFULL TRANSMISSION. THEREFORE, ITS BETTER TO HANDLE FORM RESET @ USEMUTATION HOOK ONSUCCESS KEY
+    // console.log("👍", { ...data, image: data.image[0] });
+    mutate({ ...data, image: data.image[0] });
+    // VERY IMPORTANT!!! - WE DO NOT USE CLEAR() FUNCTION HEAR BECAUSE @  THIS POINT WE ARE NOT SURE ITS SUCCESSFULL TRANSMISSION. THEREFORE, ITS BETTER TO HANDLE FORM RESET @ USEMUTATION HOOK ONSUCCESS KEY
   }
   // #2. Our actual error handler function that deals with form data validation failures
   function onError(errors) {
@@ -72,6 +72,7 @@ function CreateCabinForm() {
           type="number"
           id="maxCapacity"
           disabled={isCreating}
+          min={1}
           // {...register("maxCapacity")} //For registering data use the corresponding id w/out validation
           {...register("maxCapacity", {
             required: "This field is required",
@@ -146,12 +147,18 @@ function CreateCabinForm() {
         />
       </FormRow>
 
-      <FormRow label="Cabin photo">
+      <FormRow
+        label="Cabin photo"
+        error={errors?.description?.message}
+      >
         <FileInput
           id="image"
-          accept="image/*"
+          type="file"
           disabled={isCreating}
-          {...(register("image") && null)} //For registering data use the corresponding id
+          accept="image/*"
+          {...register("image", {
+            required: "This field is required",
+          })} //For registering data use the corresponding id
         />
       </FormRow>
 
