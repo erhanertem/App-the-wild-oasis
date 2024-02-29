@@ -59,6 +59,7 @@ function CabinRow({ cabin }) {
 
   const { isPending: isDeleting, mutate } = useMutation({
     // mutationFn: (id) => deleteCabin(id),
+    // NOTE: buton onClick event triggers mutate(cabinId) so cabinId is the id
     mutationFn: deleteCabin,
 
     // What we want to do upon successfull delete
