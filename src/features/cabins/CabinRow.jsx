@@ -65,6 +65,7 @@ function CabinRow({ cabin }) {
     onSuccess: () => {
       // alert("Cabin succesfuly deleted.");
       toast.success("Cabin succesfully deleted.");
+      // FORCE REFETCH ON CABINS QUERY
       queryClient.invalidateQueries({
         queryKey: ["cabins"],
       });
