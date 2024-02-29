@@ -33,7 +33,11 @@ function CreateCabinForm() {
       // Reset the data @ form after successfull submission
       reset();
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => {
+      toast.error(err.message);
+      // // Optional - reset the form data upon unsuccesfull db write attempt
+      // reset();
+    },
   });
 
   // > EVENTHANDLERS FOR HANDLESUBMIT REACT-HOOK-FORM FUNCTION
@@ -82,7 +86,7 @@ function CreateCabinForm() {
             },
             max: {
               value: 4, //max value
-              message: "Capacity shoudl be at most 4", //In case validation fails message
+              message: "Capacity should be at most 4", //In case validation fails message
             },
           })} //For registering data use the corresponding id w/validation
         />
