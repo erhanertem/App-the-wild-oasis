@@ -3,7 +3,7 @@ import styled from "styled-components";
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
+  grid-template-columns: 20rem 1.5fr 0.8fr;
   gap: 2.4rem;
 
   padding: 1.2rem 0;
@@ -37,7 +37,8 @@ const Error = styled.span`
 function FormRow({ label, error, children }) {
   return (
     <StyledFormRow>
-      {/* Consider w/no labels (FormRow that includes the button only) or w/labels (the rest) */}
+      {/* 👇 Consider w/no labels (FormRow that includes the button only and no label is proped) or w/labels (the rest) */}
+      {/* we can use children.props.id in conditions where children bears only one react component - It reaches that component's props named id and reads it value */}
       {label && <Label htmlFor={children.props.id}>{label}</Label>}
       {children}
       {error && <Error>{error}</Error>}
