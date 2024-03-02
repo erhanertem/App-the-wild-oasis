@@ -11,20 +11,14 @@ import FormRow from "../../ui/FormRow";
 
 import { createCabin } from "../../services/apiCabins";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
-  const { id: editId, ...editValues } = cabinToEdit;
-  const isEditSession = Boolean(editId);
-  // console.log("⚠️", cabinToEdit, editValues, isEditSession);
-
+function CreateCabinForm() {
   // > IMPORT FUNCTIONS FROM THE REACT-HOOK-FORM
   // register fn - Registers the inputs
   // handleSubmit fn -  Submits our actual submit function - Intakes two functions as arguments, one responsible for mutating data, the other is error handling.
   // reset fn - function to clear the form data
   // getValues fn - function to get a hold of the inquired registered data
   // formState object - object that allows read errors
-  const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValues: isEditSession ? editValues : {},
-  });
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { errors } = formState; //Provides the erro message object for toasters
 
   // > GET A HOLD OF THE REACT QUERY CLIENT TO INVALIDATE THE QUERY STATE
@@ -185,9 +179,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         >
           Cancel
         </Button>
-        <Button disabled={isCreating}>
-          {isEditSession ? "Edit cabin" : "Create new cabin"}
-        </Button>
+        <Button disabled={isCreating}>Add cabin</Button>
       </FormRow>
     </Form>
   );
