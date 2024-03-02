@@ -1,8 +1,12 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { formatCurrency } from "../../utils/helpers";
-import { deleteCabin } from "../../services/apiCabins";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import CreateCabinForm from "./CreateCabinForm";
+
+import { deleteCabin } from "../../services/apiCabins";
+import { formatCurrency } from "../../utils/helpers";
 
 const TableRow = styled.div`
   display: grid;
@@ -43,7 +47,9 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin }) {
+function CabinRow({ cabin, setShowAddNewCabinForm }) {
+  const [showEditCabinForm, setShowEditCabinForm] = useState(false);
+
   // console.log(cabin);
   const {
     id: cabinId,
@@ -53,6 +59,8 @@ function CabinRow({ cabin }) {
     discount,
     image,
   } = cabin;
+
+  // console.log(cabin);
 
   // GET A HOLD OF THE QUERY CLIENT
   const queryClient = useQueryClient();
@@ -77,19 +85,34 @@ function CabinRow({ cabin }) {
 
   // role Attribute is part of WAI-ARIA @ https://www.w3.org/TR/wai-aria/#introroles
   return (
-    <TableRow role="row">
-      <Img src={image} />
-      <Cabin>{name}</Cabin>
-      <div>Fits up to {maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
-      <Discount>{formatCurrency(discount)}</Discount>
-      <button
-        onClick={() => mutate(cabinId)}
-        disabled={isDeleting}
-      >
-        Delete
-      </button>
-    </TableRow>
+    <>
+      <TableRow role="row">
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        <Discount>{formatCurrency(discount)}</Discount>
+        <div>
+          <button
+            onClick={() => {
+              // TOGGLE EDIT CABIN FORM
+              setShowEditCabinForm((showEditCabinForm) => !showEditCabinForm);
+              // CLOSE ADD NEW CABIN FORM
+              setShowAddNewCabinForm(false);
+            }}
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => mutate(cabinId)}
+            disabled={isDeleting}
+          >
+            Delete
+          </button>
+        </div>
+      </TableRow>
+      {showEditCabinForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
   );
 }
 

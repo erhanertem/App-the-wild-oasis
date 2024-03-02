@@ -19,7 +19,7 @@ export async function createCabin(newCabin) {
   // https://gbqeulszotpidhqlpfpy.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg
   // #2. Upload image to supabase storage URL
 
-  console.log("🍕", newCabin);
+  // console.log("🍕", newCabin);
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
     "/",
     ""
