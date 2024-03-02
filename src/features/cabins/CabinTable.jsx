@@ -31,7 +31,7 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
-function CabinTable({ setShowAddNewCabinForm }) {
+function CabinTable({ setShowAddNewCabinForm, showAddNewCabinForm }) {
   // > FORCED REFETCH IMPLEMENTATION UPON DB BEACON
   // GET A HOLD OF THE QUERY CLIENT
   const queryClient = useQueryClient();
@@ -96,6 +96,7 @@ function CabinTable({ setShowAddNewCabinForm }) {
           cabin={cabin}
           key={cabin.id}
           setShowAddNewCabinForm={setShowAddNewCabinForm}
+          showAddNewCabinForm={showAddNewCabinForm}
         />
       ))}
     </Table>

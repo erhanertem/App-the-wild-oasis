@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -47,7 +47,7 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin, setShowAddNewCabinForm }) {
+function CabinRow({ cabin, setShowAddNewCabinForm, showAddNewCabinForm }) {
   const [showEditCabinForm, setShowEditCabinForm] = useState(false);
 
   // console.log(cabin);
@@ -61,6 +61,13 @@ function CabinRow({ cabin, setShowAddNewCabinForm }) {
   } = cabin;
 
   // console.log(cabin);
+
+  // > AutoClose all cabin edit forms if Add newCabin clicked
+  useEffect(() => {
+    if (showAddNewCabinForm === true) {
+      setShowEditCabinForm(false);
+    }
+  }, [showAddNewCabinForm]);
 
   // GET A HOLD OF THE QUERY CLIENT
   const queryClient = useQueryClient();
