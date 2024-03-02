@@ -1,11 +1,14 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import { getCabins } from "../../services/apiCabins.js";
 import Spinner from "../../ui/Spinner.jsx";
 import CabinRow from "./CabinRow.jsx";
 
-import { useCallback, useEffect, useState } from "react";
-import supabase from "../../services/supabase.js";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
+// import { useCallback, useEffect, useState } from "react";
+// import { useQuery, useQueryClient } from "@tanstack/react-query";
+// import supabase from "../../services/supabase.js";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -32,41 +35,45 @@ const TableHeader = styled.header`
 `;
 
 function CabinTable({ setShowAddNewCabinForm, showAddNewCabinForm }) {
-  // > FORCED REFETCH IMPLEMENTATION UPON DB BEACON
-  // GET A HOLD OF THE QUERY CLIENT
-  const queryClient = useQueryClient();
-  // DECLARE STATE FOR SUPABASE CHANGE BEACON
-  const [posts, setPosts] = useState({});
+  // > MARK ACTIVE OPEN EDIT FORM
+  const [activeCabinEditForm, setActiveCabinEditForm] = useState(null);
 
-  //FORCE REFETCH UPON SUPABASE BEACON OF ANY CHANGE IN DB
-  const handleRefetch = useCallback(() => {
-    //INVALIDATE TO FORCE FETCH
-    queryClient.invalidateQueries({ queryKey: ["cabins", "cabin-images"] });
-  }, [queryClient]);
+  // // > FORCED REFETCH IMPLEMENTATION UPON DB BEACON
+  // // GET A HOLD OF THE QUERY CLIENT
+  // const queryClient = useQueryClient();
+  // // DECLARE STATE FOR SUPABASE CHANGE BEACON
+  // const [posts, setPosts] = useState({});
 
-  useEffect(() => {
-    // console.log(posts);
-    handleRefetch();
-  }, [handleRefetch, posts]);
+  // //FORCE REFETCH UPON SUPABASE BEACON OF ANY CHANGE IN DB
+  // const handleRefetch = useCallback(() => {
+  //   //INVALIDATE TO FORCE FETCH
+  //   queryClient.invalidateQueries({
+  //     queryKey: ["cabins"],
+  //   });
+  // }, [queryClient]);
 
-  useEffect(() => {
-    //OPEN BEACON UPON CABINTABLE MOUNT
-    const channel = supabase
-      .channel("custom-all-channel")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "cabins" },
-        (payload) => {
-          // console.log("Change received!", payload);
-          setPosts(payload.new);
-        }
-      )
-      .subscribe();
-    // CLEANUP FUNCTION - CLOSE BEACON UPON CABINTABLE DISMOUNT
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+  // useEffect(() => {
+  //   //OPEN BEACON UPON CABINTABLE MOUNT
+  //   const channel = supabase
+  //     .channel("custom-all-channel")
+  //     .on(
+  //       "postgres_changes",
+  //       { event: "*", schema: "public", table: "cabins" },
+  //       (payload) => {
+  //         // console.log("Change received!", payload);
+  //         setPosts(payload.new);
+  //       }
+  //     )
+  //     .subscribe();
+  //   // CLEANUP FUNCTION - CLOSE BEACON UPON CABINTABLE DISMOUNT
+  //   return () => {
+  //     supabase.removeChannel(channel);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   handleRefetch();
+  // }, [handleRefetch, posts]);
 
   // > STANDARD FETCH IMPLEMENTATION
   const {
@@ -97,6 +104,8 @@ function CabinTable({ setShowAddNewCabinForm, showAddNewCabinForm }) {
           key={cabin.id}
           setShowAddNewCabinForm={setShowAddNewCabinForm}
           showAddNewCabinForm={showAddNewCabinForm}
+          activeCabinEditForm={activeCabinEditForm}
+          setActiveCabinEditForm={setActiveCabinEditForm}
         />
       ))}
     </Table>

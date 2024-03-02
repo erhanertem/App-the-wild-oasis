@@ -47,7 +47,16 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin, setShowAddNewCabinForm, showAddNewCabinForm }) {
+function CabinRow({
+  cabin,
+  setShowAddNewCabinForm,
+  showAddNewCabinForm,
+  activeCabinEditForm,
+  setActiveCabinEditForm,
+}) {
+  // GET A HOLD OF THE QUERY CLIENT
+  const queryClient = useQueryClient();
+
   const [showEditCabinForm, setShowEditCabinForm] = useState(false);
 
   // console.log(cabin);
@@ -64,13 +73,10 @@ function CabinRow({ cabin, setShowAddNewCabinForm, showAddNewCabinForm }) {
 
   // > AutoClose all cabin edit forms if Add newCabin clicked
   useEffect(() => {
-    if (showAddNewCabinForm === true) {
-      setShowEditCabinForm(false);
-    }
-  }, [showAddNewCabinForm]);
-
-  // GET A HOLD OF THE QUERY CLIENT
-  const queryClient = useQueryClient();
+    showAddNewCabinForm === true
+      ? setShowEditCabinForm(false)
+      : setShowEditCabinForm(true);
+  }, [showAddNewCabinForm, showEditCabinForm]);
 
   const { isPending: isDeleting, mutate } = useMutation({
     // mutationFn: (id) => deleteCabin(id),
@@ -102,8 +108,19 @@ function CabinRow({ cabin, setShowAddNewCabinForm, showAddNewCabinForm }) {
         <div>
           <button
             onClick={() => {
-              // TOGGLE EDIT CABIN FORM
-              setShowEditCabinForm((showEditCabinForm) => !showEditCabinForm);
+              if (activeCabinEditForm !== cabinId) {
+                //Mark this active cabin
+                setActiveCabinEditForm(cabinId);
+                // Open its form
+                setShowEditCabinForm(true);
+              }
+              // if this is the active edit form and it shows the edit form
+              if (activeCabinEditForm === cabinId && showEditCabinForm) {
+                // turn off edit form
+                setShowEditCabinForm((showEditCabinForm) => !showEditCabinForm);
+                // nullify the selected one
+                setActiveCabinEditForm(null);
+              }
               // CLOSE ADD NEW CABIN FORM
               setShowAddNewCabinForm(false);
             }}
@@ -118,7 +135,9 @@ function CabinRow({ cabin, setShowAddNewCabinForm, showAddNewCabinForm }) {
           </button>
         </div>
       </TableRow>
-      {showEditCabinForm && <CreateCabinForm cabinToEdit={cabin} />}
+      {showEditCabinForm && activeCabinEditForm === cabinId && (
+        <CreateCabinForm cabinToEdit={cabin} />
+      )}
     </>
   );
 }
