@@ -76,7 +76,7 @@ function CabinRow({
     showAddNewCabinForm === true
       ? setShowEditCabinForm(false)
       : setShowEditCabinForm(true);
-  }, [showAddNewCabinForm, showEditCabinForm]);
+  }, [showAddNewCabinForm]);
 
   const { isPending: isDeleting, mutate } = useMutation({
     // mutationFn: (id) => deleteCabin(id),
@@ -136,7 +136,10 @@ function CabinRow({
         </div>
       </TableRow>
       {showEditCabinForm && activeCabinEditForm === cabinId && (
-        <CreateCabinForm cabinToEdit={cabin} />
+        <CreateCabinForm
+          cabinToEdit={cabin}
+          setShowEditCabinForm={setShowEditCabinForm}
+        />
       )}
     </>
   );
