@@ -11,7 +11,12 @@ export async function getCabins() {
   return data;
 }
 
-export async function createCabin(newCabin) {
+export async function createEditCabin(newCabin, id) {
+  // console.log("createEditCabin entry check", newCabin, id);
+
+  const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
+  // or just like this --> const hasImagePath = newCabin.image?.startsWith?.("https://");
+
   // newCabin is table datat except img file URL + image file - need to replace img File w/img URL while submitting table - need to use only newCabin.image to send file to supabase
   // Creating a cabin is a two phase PROCESS
   // #1. Insert cabin data to a table with imagePath reference
@@ -24,31 +29,48 @@ export async function createCabin(newCabin) {
     "/",
     ""
   );
-  const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+  const imagePath = hasImagePath
+    ? newCabin.image
+    : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
   // #1. Create Cabin in DB
-  const { data, error } = await supabase
-    .from("cabins")
-    .insert([{ ...newCabin, image: imagePath }]) //reuse newCabin replacing image File w/image URL information
-    .select();
+  // const { data, error } = await supabase
+  //   .from("cabins")
+  //   .insert([{ ...newCabin, image: imagePath }]) //reuse newCabin replacing image File w/image URL information
+  //   .select() //selects the response data
+  //   .single(); // shows without array annotation
+  let query = supabase.from("cabins");
+  // #1.A If not in edit session (not provided an id) , execute this supabase query
+  if (!id) {
+    query = query.insert([{ ...newCabin, image: imagePath }]); //reuse newCabin replacing image File w/image URL information
+  }
+  // #1.B If in edit session (provided an id), execute this supabase query
+  if (id) {
+    query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
+  }
+
+  const { data, error } = await query
+    .select() //selects the response data
+    .single(); // shows without array annotation
   if (error) {
     console.error(error);
     throw new Error("Cabin could not be created"); // Hits to useMutation hook's onError property
   }
-
-  // #2. Upload Image to DB bucket
-  const { error: storageError } = await supabase.storage
-    .from("cabin-images")
-    .upload(imageName, newCabin.image); //use newCabin file information only for storage
-  // #3. Delete the cabin if there was an error uploading image
-  if (storageError) {
-    await supabase.from("cabins").delete().eq("id", data.id);
-    console.error(error);
-    throw new Error(
-      "Cabin image could not be uploaded and the cabin was not created" // Hits to useMutation hook's onError property
-    );
+  // #2. Upload Image to DB bucket if we submitted a image
+  if (!hasImagePath) {
+    const { error: storageError } = await supabase.storage
+      .from("cabin-images")
+      .upload(imageName, newCabin.image); //use newCabin file information only for storage
+    // #3. Delete the cabin if there was an error uploading image
+    if (storageError) {
+      await supabase.from("cabins").delete().eq("id", data.id);
+      console.error(error);
+      throw new Error(
+        "Cabin image could not be uploaded and the cabin was not created" // Hits to useMutation hook's onError property
+      );
+    }
   }
-
+  // console.log("⭐", data);
   return data;
 }
 
@@ -64,7 +86,7 @@ export async function deleteCabin(id) {
     throw new Error("Can't retrieve Cabin information from DB");
     // This error throw goes to useMutation @ CabinRow omError key where the error toaster is created
   }
-  const imgFileName = cabinItem[0].image.split("/").at(-1);
+  const imgFileName = cabinItem[0].image?.split("/").at(-1);
   const backupCabinData = cabinItem[0];
 
   // #2. Delete the cabin item from DB cabins table
@@ -83,7 +105,7 @@ export async function deleteCabin(id) {
     .remove([imgFileName]);
   // console.log("⛔", data);
   if (fileRemoveError) {
-    createCabin(backupCabinData);
+    createEditCabin(backupCabinData);
     console.error(fileRemoveError);
     throw new Error(
       "Encountered a problem removing the cabin image. Cabin did not get deleted." // Hits to useMutation hook's onError property

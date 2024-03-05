@@ -117,7 +117,7 @@ function CabinRow({
               // if this is the active edit form and it shows the edit form
               if (activeCabinEditForm === cabinId && showEditCabinForm) {
                 // turn off edit form
-                setShowEditCabinForm((showEditCabinForm) => !showEditCabinForm);
+                setShowEditCabinForm(false);
                 // nullify the selected one
                 setActiveCabinEditForm(null);
               }
@@ -139,6 +139,7 @@ function CabinRow({
         <CreateCabinForm
           cabinToEdit={cabin}
           setShowEditCabinForm={setShowEditCabinForm}
+          setActiveCabinEditForm={setActiveCabinEditForm}
         />
       )}
     </>

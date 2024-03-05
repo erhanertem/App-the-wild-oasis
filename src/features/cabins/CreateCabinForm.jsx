@@ -9,9 +9,14 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-import { createCabin } from "../../services/apiCabins";
+import { createEditCabin } from "../../services/apiCabins";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({
+  cabinToEdit = {},
+  setShowEditCabinForm,
+  setActiveCabinEditForm,
+  setShowAddNewCabinForm,
+}) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
   // console.log("⚠️", cabinToEdit, editValues, isEditSession);
@@ -29,10 +34,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
   // > GET A HOLD OF THE REACT QUERY CLIENT TO INVALIDATE THE QUERY STATE
   const queryClient = useQueryClient();
-  // CREATE MUTATION QUERY W/ERROR-SUCCESS HANDLING
-  const { isPending: isCreating, mutate } = useMutation({
-    // mutationFn: (newCabin) => createCabin(newCabin),
-    mutationFn: createCabin, // same as below - shorthand version
+  // CREATE MUTATION QUERY W/ERROR-SUCCESS HANDLING - CREATE NEW CABIN
+  const { isPending: isCreating, mutate: creatingCabin } = useMutation({
+    // mutationFn: (newCabin) => createEditCabin(newCabin),
+    mutationFn: createEditCabin, // same as below - shorthand version
     onSuccess: () => {
       // Display success notification
       toast.success("New cabin succesfully created");
@@ -40,22 +45,53 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
       // Reset the data @ form after successfull submission
       reset();
+      // turn off edit form
+      setShowAddNewCabinForm(false);
     },
     onError: (err) => {
+      console.log(err);
       toast.error(err.message);
       // // Optional - reset the form data upon unsuccesfull db write attempt
       // reset();
     },
   });
+  // CREATE MUTATION QUERY W/ERROR-SUCCESS HANDLING - CREATE EDIT CABIN
+  const { isPending: isEditing, mutate: editingCabin } = useMutation({
+    // mutationFn: (newCabin,id) => createEditCabin(newCabin,id),
+    mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id), // same as above - shorthand version - NOTE: We are allowed to provide only one object as an argument
+    onSuccess: () => {
+      // Display success notification
+      toast.success("Cabin successfully editied");
+      // Invalidate the cabins query
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
+      // Reset the data @ form after successfull submission
+      reset();
+      // turn off edit form
+      setShowEditCabinForm(false);
+      // nullify the selected one
+      setActiveCabinEditForm(null);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const isWorking = isCreating || isEditing;
 
   // > EVENTHANDLERS FOR HANDLESUBMIT REACT-HOOK-FORM FUNCTION
   //ACTUAL FORM THAT CALLS MUTATE BY INJECTING THE DATA GATHERED FROM THE REACT-HOOK-FORM
   // #1. Our actual submit form function that mutates our data via useMutation hook
   function onSubmit(data) {
-    // console.log(data);
+    console.log("🍹- onSubmit @ createcabinform", data);
     // The received data is raw. It has to be prepped to match our supabase table layout
     // console.log("👍", { ...data, image: data.image[0] });
-    mutate({ ...data, image: data.image[0] }); //table data (except img file url) + image file provided to createCabin mutationFn
+
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+
+    if (isEditSession) {
+      editingCabin({ newCabinData: { ...data, image: image }, id: editId });
+    } else creatingCabin({ ...data, image: image }); //table data (except img file url) + image file provided to createEditCabin mutationFn
+    // } else createCabin({ ...data, image: data.image[0] }); //table data (except img file url) + image file provided to createEditCabin mutationFn
     // VERY IMPORTANT!!! - WE DO NOT USE CLEAR() FUNCTION HEAR BECAUSE @  THIS POINT WE ARE NOT SURE ITS SUCCESSFULL TRANSMISSION. THEREFORE, ITS BETTER TO HANDLE FORM RESET @ USEMUTATION HOOK ONSUCCESS KEY
   }
   // #2. Our actual error handler function that deals with form data validation failures
@@ -72,7 +108,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="text"
           id="name"
-          disabled={isCreating}
+          disabled={isWorking}
           // {...register("name")} //For registering data use the corresponding id w/out validation
           {...register("name", { required: "This field is required" })} //For registering data use the corresponding id w/validation
         />
@@ -85,7 +121,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="maxCapacity"
-          disabled={isCreating}
+          disabled={isWorking}
           min={1}
           // {...register("maxCapacity")} //For registering data use the corresponding id w/out validation
           {...register("maxCapacity", {
@@ -109,7 +145,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="regularPrice"
-          disabled={isCreating}
+          disabled={isWorking}
           min={0}
           // {...register("regularPrice")} //For registering data use the corresponding id w/out validation
           {...register("regularPrice", {
@@ -129,7 +165,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="discount"
-          disabled={isCreating}
+          disabled={isWorking}
           defaultValue={0}
           min={0}
           // {...register("discount")} //For registering data use the corresponding id w/out validation
@@ -154,7 +190,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Textarea
           type="number"
           id="description"
-          disabled={isCreating}
+          disabled={isWorking}
           defaultValue=""
           // {...register("description")} //For registering data use the corresponding id w/out validation
           {...register("description", { required: "This field is required" })} //For registering data use the corresponding id w/validation
@@ -163,15 +199,15 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow
         label="Cabin photo"
-        error={errors?.description?.message}
+        error={errors?.image?.message}
       >
         <FileInput
           id="image"
           type="file"
-          disabled={isCreating}
+          disabled={isWorking}
           accept="image/*"
           {...register("image", {
-            required: "This field is required",
+            required: isEditSession ? false : "This field is required", //Conditionalize required - mark tru for non-edit sessions
           })} //For registering data use the corresponding id
         />
       </FormRow>
@@ -181,11 +217,11 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Button
           variation="secondary"
           type="reset"
-          disabled={isCreating}
+          disabled={isWorking}
         >
           Cancel
         </Button>
-        <Button disabled={isCreating}>
+        <Button disabled={isWorking}>
           {isEditSession ? "Edit cabin" : "Create new cabin"}
         </Button>
       </FormRow>
