@@ -73,10 +73,11 @@ function CabinRow({
 
   // > AutoClose all cabin edit forms if Add newCabin clicked
   useEffect(() => {
-    showAddNewCabinForm === true
-      ? setShowEditCabinForm(false)
-      : setShowEditCabinForm(true);
-  }, [showAddNewCabinForm]);
+    if (showAddNewCabinForm === true) {
+      setShowEditCabinForm(false);
+      setActiveCabinEditForm(null);
+    } else setShowEditCabinForm(true);
+  }, [showAddNewCabinForm, setActiveCabinEditForm]);
 
   const { isPending: isDeleting, mutate } = useMutation({
     // mutationFn: (id) => deleteCabin(id),
