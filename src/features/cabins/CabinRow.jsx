@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import toast from "react-hot-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import CreateCabinForm from "./CreateCabinForm";
 
-import { deleteCabin } from "../../services/apiCabins";
 import { formatCurrency } from "../../utils/helpers";
+import { useDeleteCabin } from "./useDeleteCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -54,9 +52,6 @@ function CabinRow({
   activeCabinEditForm,
   setActiveCabinEditForm,
 }) {
-  // GET A HOLD OF THE QUERY CLIENT
-  const queryClient = useQueryClient();
-
   const [showEditCabinForm, setShowEditCabinForm] = useState(false);
 
   // console.log(cabin);
@@ -79,23 +74,7 @@ function CabinRow({
     } else setShowEditCabinForm(true);
   }, [showAddNewCabinForm, setActiveCabinEditForm]);
 
-  const { isPending: isDeleting, mutate } = useMutation({
-    // mutationFn: (id) => deleteCabin(id),
-    // NOTE: buton onClick event triggers mutate(cabinId) so cabinId is the id
-    mutationFn: deleteCabin,
-
-    // What we want to do upon successfull delete
-    onSuccess: () => {
-      // alert("Cabin succesfuly deleted.");
-      toast.success("Cabin succesfully deleted.");
-      // FORCE REFETCH ON CABINS QUERY
-      queryClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-    },
-    // onError: (err) => alert(err.message),
-    onError: (err) => toast.error(err.message),
-  });
+  const { isDeleting, deleteCabin } = useDeleteCabin();
 
   // role Attribute is part of WAI-ARIA @ https://www.w3.org/TR/wai-aria/#introroles
   return (
@@ -133,7 +112,7 @@ function CabinRow({
             Edit
           </button>
           <button
-            onClick={() => mutate(cabinId)}
+            onClick={() => deleteCabin(cabinId)}
             disabled={isDeleting}
           >
             Delete

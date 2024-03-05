@@ -1,10 +1,10 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { getCabins } from "../../services/apiCabins.js";
+
 import Spinner from "../../ui/Spinner.jsx";
 import CabinRow from "./CabinRow.jsx";
 
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useCabins } from "./useCabins.js";
 
 // import { useCallback, useEffect, useState } from "react";
 // import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -76,15 +76,16 @@ function CabinTable({ setShowAddNewCabinForm, showAddNewCabinForm }) {
   // }, [handleRefetch, posts]);
 
   // > STANDARD FETCH IMPLEMENTATION
-  const {
-    isLoading,
-    error,
-    data: cabins,
-  } = useQuery({
-    queryKey: ["cabins"],
-    // queryFn: () => getCabins(),
-    queryFn: getCabins,
-  });
+  const { isLoading, error, cabins } = useCabins();
+  // const {
+  //   isLoading,
+  //   error,
+  //   data: cabins,
+  // } = useQuery({
+  //   queryKey: ["cabins"],
+  //   // queryFn: () => getCabins(),
+  //   queryFn: getCabins,
+  // });
 
   if (isLoading) return <Spinner />;
 

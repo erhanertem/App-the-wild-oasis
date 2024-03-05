@@ -1,6 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -9,7 +7,8 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-import { createEditCabin } from "../../services/apiCabins";
+import { useCreateCabin } from "./useCreateCabin";
+import { useEditCabin } from "./useEditCabin";
 
 function CreateCabinForm({
   cabinToEdit = {},
@@ -33,64 +32,93 @@ function CreateCabinForm({
   const { errors } = formState; //Provides the erro message object for toasters
 
   // > GET A HOLD OF THE REACT QUERY CLIENT TO INVALIDATE THE QUERY STATE
-  const queryClient = useQueryClient();
   // CREATE MUTATION QUERY W/ERROR-SUCCESS HANDLING - CREATE NEW CABIN
-  const { isPending: isCreating, mutate: creatingCabin } = useMutation({
-    // mutationFn: (newCabin) => createEditCabin(newCabin),
-    mutationFn: createEditCabin, // same as below - shorthand version
-    onSuccess: () => {
-      // Display success notification
-      toast.success("New cabin succesfully created");
-      // Invalidate the cabins query
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      // Reset the data @ form after successfull submission
-      reset();
-      // turn off edit form
-      setShowAddNewCabinForm(false);
-    },
-    onError: (err) => {
-      console.log(err);
-      toast.error(err.message);
-      // // Optional - reset the form data upon unsuccesfull db write attempt
-      // reset();
-    },
-  });
+  const { isCreating, createCabin } = useCreateCabin();
+  // const { isPending: isCreating, mutate: creatingCabin } = useMutation({
+  //   // mutationFn: (newCabin) => createEditCabin(newCabin),
+  //   mutationFn: createEditCabin, // same as below - shorthand version
+  //   onSuccess: () => {
+  //     // Display success notification
+  //     toast.success("New cabin succesfully created");
+  //     // Invalidate the cabins query
+  //     queryClient.invalidateQueries({ queryKey: ["cabins"] });
+  //     // Reset the data @ form after successfull submission
+  //     reset();
+  //     // turn off edit form
+  //     setShowAddNewCabinForm(false);
+  //   },
+  //   onError: (err) => {
+  //     console.log(err);
+  //     toast.error(err.message);
+  //     // // Optional - reset the form data upon unsuccesfull db write attempt
+  //     // reset();
+  //   },
+  // });
   // CREATE MUTATION QUERY W/ERROR-SUCCESS HANDLING - CREATE EDIT CABIN
-  const { isPending: isEditing, mutate: editingCabin } = useMutation({
-    // mutationFn: (newCabin,id) => createEditCabin(newCabin,id),
-    mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id), // same as above - shorthand version - NOTE: We are allowed to provide only one object as an argument
-    onSuccess: () => {
-      // Display success notification
-      toast.success("Cabin successfully editied");
-      // Invalidate the cabins query
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      // Reset the data @ form after successfull submission
-      reset();
-      // turn off edit form
-      setShowEditCabinForm(false);
-      // nullify the selected one
-      setActiveCabinEditForm(null);
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
+  const { isEditing, editCabin } = useEditCabin();
+  // const { isPending: isEditing, mutate: editCabin } = useMutation({
+  //   // mutationFn: (newCabin,id) => createEditCabin(newCabin,id),
+  //   mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id), // same as above - shorthand version - NOTE: We are allowed to provide only one object as an argument
+  //   onSuccess: () => {
+  //     // Display success notification
+  //     toast.success("Cabin successfully editied");
+  //     // Invalidate the cabins query
+  //     queryClient.invalidateQueries({ queryKey: ["cabins"] });
+  //     // Reset the data @ form after successfull submission
+  //     reset();
+  //     // turn off edit form
+  //     setShowEditCabinForm(false);
+  //     // nullify the selected one
+  //     setActiveCabinEditForm(null);
+  //   },
+  //   onError: (err) => {
+  //     toast.error(err.message);
+  //   },
+  // });
   const isWorking = isCreating || isEditing;
 
   // > EVENTHANDLERS FOR HANDLESUBMIT REACT-HOOK-FORM FUNCTION
   //ACTUAL FORM THAT CALLS MUTATE BY INJECTING THE DATA GATHERED FROM THE REACT-HOOK-FORM
   // #1. Our actual submit form function that mutates our data via useMutation hook
   function onSubmit(data) {
-    console.log("🍹- onSubmit @ createcabinform", data);
+    // console.log("🍹- onSubmit @ createcabinform", data);
     // The received data is raw. It has to be prepped to match our supabase table layout
     // console.log("👍", { ...data, image: data.image[0] });
 
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
-    if (isEditSession) {
-      editingCabin({ newCabinData: { ...data, image: image }, id: editId });
-    } else creatingCabin({ ...data, image: image }); //table data (except img file url) + image file provided to createEditCabin mutationFn
+    if (isEditSession)
+      editCabin(
+        { newCabinData: { ...data, image: image }, id: editId },
+        {
+          // VERY IMPORTANT!! SEE THE NOTE @ USEEDITCABIN.JS
+          onSuccess: (data) => {
+            // NOTE: WE DO HAVE ACCESS TO DATA AS WELL HERE
+            console.log(data);
+            // Reset the data @ form after successfull submission
+            reset();
+            // turn off edit form
+            setShowEditCabinForm(false);
+            // nullify the selected one
+            setActiveCabinEditForm(null);
+          },
+        }
+      );
+    else
+      createCabin(
+        { ...data, image: image },
+        {
+          // VERY IMPORTANT!! SEE THE NOTE @ USECREATECABIN.JS
+          onSuccess: (data) => {
+            // NOTE: WE DO HAVE ACCESS TO DATA AS WELL HERE
+            console.log(data);
+            // Reset the data @ form after successfull submission
+            reset();
+            // turn off edit form
+            setShowAddNewCabinForm(false);
+          },
+        }
+      ); //table data (except img file url) + image file provided to createEditCabin mutationFn
     // } else createCabin({ ...data, image: data.image[0] }); //table data (except img file url) + image file provided to createEditCabin mutationFn
     // VERY IMPORTANT!!! - WE DO NOT USE CLEAR() FUNCTION HEAR BECAUSE @  THIS POINT WE ARE NOT SURE ITS SUCCESSFULL TRANSMISSION. THEREFORE, ITS BETTER TO HANDLE FORM RESET @ USEMUTATION HOOK ONSUCCESS KEY
   }
