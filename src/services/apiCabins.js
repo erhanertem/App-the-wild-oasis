@@ -76,8 +76,8 @@ export async function createEditCabin(newCabin, id) {
   return data;
 }
 
-export async function deleteCabin(id) {
-  // console.log(id);
+export async function deleteCabin(id, image) {
+  console.log(id, image);
   // #1. Read the cabin data pertinent to this id - to be used reverting the data if failed deleting the image
   const { data: cabinItem, error: cabinReadError } = await supabase
     .from("cabins")
@@ -101,16 +101,35 @@ export async function deleteCabin(id) {
     throw new Error("Cabin could not be deleted");
     // This error throw goes to useMutation @ CabinRow omError key where the error toaster is created
   }
-  // #3. Delete Image from DB bucket
-  const { error: fileRemoveError } = await supabase.storage
-    .from("cabin-images")
-    .remove([imgFileName]);
-  // console.log("⛔", data);
-  if (fileRemoveError) {
+
+  // console.log("🥶", image);
+  // >#3. Check if image is being shared w/ more than 1 entry
+  const { data: imageHoldersList, error: imageListerError } = await supabase
+    .from("cabins")
+    .select("image")
+    .eq("image", image);
+
+  // console.log("🍹", imageHoldersList.length);
+  if (imageListerError) {
+    console.error(imageListerError);
     createEditCabin(backupCabinData);
-    console.error(fileRemoveError);
     throw new Error(
-      "Encountered a problem removing the cabin image. Cabin did not get deleted." // Hits to useMutation hook's onError property
+      "Encountered a problem gathering list of cabins using the same image. Cabin did not get deleted." // Hits to useMutation hook's onError property
     );
+  }
+
+  if (imageHoldersList.length === 0) {
+    console.log("gotto delete");
+    // #3. Delete Image from DB bucket
+    const { error: fileRemoveError } = await supabase.storage
+      .from("cabin-images")
+      .remove([imgFileName]);
+    if (fileRemoveError) {
+      createEditCabin(backupCabinData);
+      console.error(fileRemoveError);
+      throw new Error(
+        "Encountered a problem removing the cabin image. Cabin did not get deleted." // Hits to useMutation hook's onError property
+      );
+    }
   }
 }

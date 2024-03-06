@@ -133,7 +133,7 @@ function CabinRow({
             <HiPencil />
           </button>
           <button
-            onClick={() => deleteCabin(cabinId)}
+            onClick={() => deleteCabin({ cabinId, image })}
             disabled={isDeleting}
           >
             <HiTrash />

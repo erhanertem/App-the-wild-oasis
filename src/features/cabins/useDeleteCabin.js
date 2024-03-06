@@ -12,7 +12,7 @@ export function useDeleteCabin() {
   const { isPending: isDeleting, mutate: deleteCabin } = useMutation({
     // mutationFn: (id) => deleteCabin(id),
     // NOTE: buton onClick event triggers mutate(cabinId) so cabinId is the id
-    mutationFn: deleteCabinAPI,
+    mutationFn: ({ cabinId, image }) => deleteCabinAPI(cabinId, image),
 
     // What we want to do upon successfull delete
     onSuccess: () => {
