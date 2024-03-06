@@ -120,7 +120,7 @@ export async function deleteCabin(id, image) {
 
   if (imageHoldersList.length === 0) {
     console.log("gotto delete");
-    // #3. Delete Image from DB bucket
+    // #4. Delete Image from DB bucket
     const { error: fileRemoveError } = await supabase.storage
       .from("cabin-images")
       .remove([imgFileName]);
