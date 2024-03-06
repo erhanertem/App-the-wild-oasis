@@ -7,6 +7,8 @@ export async function getSettings() {
     console.error(error);
     throw new Error("Settings could not be loaded");
   }
+
+  console.log(data);
   return data;
 }
 
