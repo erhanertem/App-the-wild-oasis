@@ -6,6 +6,7 @@ import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabin } from "./useDeleteCabin";
+import { useCreateCabin } from "./useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -63,6 +64,7 @@ function CabinRow({
     regularPrice,
     discount,
     image,
+    description,
   } = cabin;
 
   // console.log(cabin);
@@ -76,6 +78,18 @@ function CabinRow({
   }, [showAddNewCabinForm, setActiveCabinEditForm]);
 
   const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { isCreating, createCabin } = useCreateCabin();
+
+  function handleDuplicate() {
+    createCabin({
+      name: `Copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      image,
+      description,
+    });
+  }
 
   // role Attribute is part of WAI-ARIA @ https://www.w3.org/TR/wai-aria/#introroles
   return (
@@ -91,7 +105,10 @@ function CabinRow({
           <span>&mdash;</span>
         )}
         <div>
-          <button>
+          <button
+            disabled={isCreating}
+            onClick={handleDuplicate}
+          >
             <HiSquare2Stack />
           </button>
           <button

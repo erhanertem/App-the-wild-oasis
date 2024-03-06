@@ -33,18 +33,18 @@ export async function createEditCabin(newCabin, id) {
     ? newCabin.image
     : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
-  // #1. Create Cabin in DB
+  // > #1. Create Cabin in DB based on if its Edit or New Entry
   // const { data, error } = await supabase
   //   .from("cabins")
   //   .insert([{ ...newCabin, image: imagePath }]) //reuse newCabin replacing image File w/image URL information
   //   .select() //selects the response data
   //   .single(); // shows without array annotation
   let query = supabase.from("cabins");
-  // #1.A If not in edit session (not provided an id) , execute this supabase query
+  // > #1.A If not in edit session (not provided an id) , execute this supabase query
   if (!id) {
     query = query.insert([{ ...newCabin, image: imagePath }]); //reuse newCabin replacing image File w/image URL information
   }
-  // #1.B If in edit session (provided an id), execute this supabase query
+  // > #1.B If in edit session (provided an id), execute this supabase query
   if (id) {
     query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
   }
@@ -56,19 +56,21 @@ export async function createEditCabin(newCabin, id) {
     console.error(error);
     throw new Error("Cabin could not be created"); // Hits to useMutation hook's onError property
   }
-  // #2. Upload Image to DB bucket if we submitted a image
-  if (!hasImagePath) {
-    const { error: storageError } = await supabase.storage
-      .from("cabin-images")
-      .upload(imageName, newCabin.image); //use newCabin file information only for storage
-    // #3. Delete the cabin if there was an error uploading image
-    if (storageError) {
-      await supabase.from("cabins").delete().eq("id", data.id);
-      console.error(error);
-      throw new Error(
-        "Cabin image could not be uploaded and the cabin was not created" // Hits to useMutation hook's onError property
-      );
-    }
+
+  // > #2. Upload Image to DB bucket if we submitted a image
+  // if hasImagePath
+  if (hasImagePath) return data;
+  // if !hasImagePath
+  const { error: storageError } = await supabase.storage
+    .from("cabin-images")
+    .upload(imageName, newCabin.image); //use newCabin file information only for storage
+  // #3. Delete the cabin if there was an error uploading image
+  if (storageError) {
+    await supabase.from("cabins").delete().eq("id", data.id);
+    console.error(error);
+    throw new Error(
+      "Cabin image could not be uploaded and the cabin was not created" // Hits to useMutation hook's onError property
+    );
   }
   // console.log("⭐", data);
   return data;
