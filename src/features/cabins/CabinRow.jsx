@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import CreateCabinForm from "./CreateCabinForm";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabin } from "./useDeleteCabin";
@@ -90,6 +91,9 @@ function CabinRow({
           <span>&mdash;</span>
         )}
         <div>
+          <button>
+            <HiSquare2Stack />
+          </button>
           <button
             onClick={() => {
               if (activeCabinEditForm !== cabinId) {
@@ -109,13 +113,13 @@ function CabinRow({
               setShowAddNewCabinForm(false);
             }}
           >
-            Edit
+            <HiPencil />
           </button>
           <button
             onClick={() => deleteCabin(cabinId)}
             disabled={isDeleting}
           >
-            Delete
+            <HiTrash />
           </button>
         </div>
       </TableRow>
