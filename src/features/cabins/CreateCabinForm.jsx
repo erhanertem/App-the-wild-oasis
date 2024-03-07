@@ -14,7 +14,7 @@ function CreateCabinForm({
   cabinToEdit = {},
   setShowEditCabinForm,
   setActiveCabinEditForm,
-  setShowAddNewCabinForm,
+  onCloseModal,
 }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
@@ -115,7 +115,7 @@ function CreateCabinForm({
             // Reset the data @ form after successfull submission
             reset();
             // turn off edit form
-            setShowAddNewCabinForm(false);
+            onCloseModal?.();
           },
         }
       ); //table data (except img file url) + image file provided to createEditCabin mutationFn
@@ -128,7 +128,10 @@ function CreateCabinForm({
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow
         label="Cabin name"
         error={errors?.name?.message}
@@ -241,11 +244,13 @@ function CreateCabinForm({
       </FormRow>
 
       <FormRow>
-        {/* type is an HTML attribute! */}
+        {/* type is an HTML attribute! <button type="button|submit|reset"> */}
         <Button
           variation="secondary"
           type="reset"
           disabled={isWorking}
+          onClick={() => onCloseModal?.()}
+          // VERY IMPORTANT!! WE USED OPTIONAL CHAINING ON ONCLOSEMODAL AS ITS NOT THE CASE FOR EDITCABINS FOR INSTANCE AS ITS BEING SHARED BY BOTH. ONCLOSEMODAL WILL BE UNDEFINED AND BREAK THE CODE IN EDITCABINS
         >
           Cancel
         </Button>

@@ -3,11 +3,10 @@ import { useState } from "react";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import CabinTable from "../features/cabins/CabinTable";
-import Button from "../ui/Button";
-import CreateCabinForm from "../features/cabins/CreateCabinForm";
+import AddNewCabin from "../features/cabins/AddNewCabin";
 
 function Cabins() {
-  const [showAddNewCabinForm, setShowAddNewCabinForm] = useState(false);
+  const [showAddNewCabinModal, setShowAddNewCabinModal] = useState(false);
 
   return (
     <>
@@ -18,22 +17,13 @@ function Cabins() {
 
       <Row>
         <CabinTable
-          showAddNewCabinForm={showAddNewCabinForm}
-          setShowAddNewCabinForm={setShowAddNewCabinForm}
+          showAddNewCabinModal={showAddNewCabinModal}
+          setShowAddNewCabinModal={setShowAddNewCabinModal}
         />
-
-        <Button
-          onClick={() => {
-            setShowAddNewCabinForm(
-              (showAddNewCabinForm) => !showAddNewCabinForm
-            );
-          }}
-        >
-          Add new cabin
-        </Button>
-        {showAddNewCabinForm && (
-          <CreateCabinForm setShowAddNewCabinForm={setShowAddNewCabinForm} />
-        )}
+        <AddNewCabin
+          showAddNewCabinModal={showAddNewCabinModal}
+          setShowAddNewCabinModal={setShowAddNewCabinModal}
+        />
       </Row>
     </>
   );

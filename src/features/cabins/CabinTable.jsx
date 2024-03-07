@@ -34,7 +34,7 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
-function CabinTable({ setShowAddNewCabinForm, showAddNewCabinForm }) {
+function CabinTable({ setShowAddNewCabinModal, showAddNewCabinModal }) {
   // > MARK ACTIVE OPEN EDIT FORM
   const [activeCabinEditForm, setActiveCabinEditForm] = useState(null);
 
@@ -103,8 +103,8 @@ function CabinTable({ setShowAddNewCabinForm, showAddNewCabinForm }) {
         <CabinRow
           cabin={cabin}
           key={cabin.id}
-          setShowAddNewCabinForm={setShowAddNewCabinForm}
-          showAddNewCabinForm={showAddNewCabinForm}
+          setShowAddNewCabinModal={setShowAddNewCabinModal}
+          showAddNewCabinModal={showAddNewCabinModal}
           activeCabinEditForm={activeCabinEditForm}
           setActiveCabinEditForm={setActiveCabinEditForm}
         />

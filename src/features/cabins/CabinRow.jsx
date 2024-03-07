@@ -49,8 +49,8 @@ const Discount = styled.div`
 
 function CabinRow({
   cabin,
-  setShowAddNewCabinForm,
-  showAddNewCabinForm,
+  setShowAddNewCabinModal,
+  showAddNewCabinModal,
   activeCabinEditForm,
   setActiveCabinEditForm,
 }) {
@@ -71,11 +71,11 @@ function CabinRow({
 
   // > AutoClose all cabin edit forms if Add newCabin clicked
   useEffect(() => {
-    if (showAddNewCabinForm === true) {
+    if (showAddNewCabinModal === true) {
       setShowEditCabinForm(false);
       setActiveCabinEditForm(null);
     } else setShowEditCabinForm(true);
-  }, [showAddNewCabinForm, setActiveCabinEditForm]);
+  }, [showAddNewCabinModal, setActiveCabinEditForm]);
 
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
@@ -127,7 +127,7 @@ function CabinRow({
                 setActiveCabinEditForm(null);
               }
               // CLOSE ADD NEW CABIN FORM
-              setShowAddNewCabinForm(false);
+              setShowAddNewCabinModal(false);
             }}
           >
             <HiPencil />
