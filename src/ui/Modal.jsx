@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 
@@ -51,7 +52,8 @@ const Button = styled.button`
 `;
 
 function Modal({ children, onClose }) {
-  return (
+  return createPortal(
+    // #1 ARGUMENT - JSX CONTENT TO RENDER
     <Overlay>
       <StyledModal>
         <Button onClick={onClose}>
@@ -59,7 +61,9 @@ function Modal({ children, onClose }) {
         </Button>
         <div>{children}</div>
       </StyledModal>
-    </Overlay>
+    </Overlay>,
+    // #2 ARGUMENT - WHERE TO PLACE
+    document.body
   );
 }
 
