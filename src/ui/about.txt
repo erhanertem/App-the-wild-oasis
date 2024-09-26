@@ -1,0 +1,1 @@
+Includes all the generic components that do not fall into a specific feature or belong to a specific component but used thru out the project.

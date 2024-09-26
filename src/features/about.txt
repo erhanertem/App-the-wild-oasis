@@ -1,0 +1,2 @@
+All identified feature catergories for state updates resides here
+Each feature folder has all the pertinent hooks, js files, and components.
