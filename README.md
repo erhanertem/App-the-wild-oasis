@@ -6,27 +6,21 @@
 
 ### **Objective:** Create The Wild Oasis App
 
+Key take-aways from this project:
+
 - React folder structure and project planning
 - Styling w/ Styled Components
 
 &emsp;
 
-#### Link to Project &rarr;
+#### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 
-![Screenshot](screenshot.webp)
+<img src="./screenshot.webp" width="600px"/>
 
 ---
 
-![JS](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
-
-<details>
-<summary>Installed NPM packages and utilized APIs:</summary>
-
-| Package command         | Package link | Description                 |
-| ----------------------- | ------------ | --------------------------- |
-| npm create vite@latest  |              |                             |
-| npm i styled-components |              | In-line CSS styling library |
-
-</details>
-
-&emsp;
+![JS](https://img.shields.io/badge/JavaScript-323330?style=square&logo=javascript&logoColor=F7DF1E)
+![React](https://img.shields.io/badge/React-20232A?style=square&logo=react&logoColor=61DAF)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=square&logo=react-router&logoColor=white)
+![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=square&logo=styled-components&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?style=square&logo=vite&logoColor=FFD62E)
