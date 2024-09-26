@@ -4,22 +4,21 @@ import CreateCabinForm from "./CreateCabinForm";
 
 function AddCabin({ showAddNewCabinModal, setShowAddNewCabinModal }) {
   return (
-    <>
-      <Button
-        onClick={() => {
-          setShowAddNewCabinModal((show) => !show);
-        }}
-      >
-        Add new cabin
-      </Button>
-      {showAddNewCabinModal && (
-        <Modal onClose={() => setShowAddNewCabinModal(false)}>
-          <CreateCabinForm
-            onCloseModal={() => setShowAddNewCabinModal(false)}
-          />
-        </Modal>
-      )}
-    </>
+    <Modal>
+      <Modal.Open opens="cabin-form">
+        <Button>Add new cabin</Button>
+      </Modal.Open>
+      <Modal.Window name="cabin-form">
+        <CreateCabinForm />
+      </Modal.Window>
+      {/* EXAMPLE OF CREATING MULTIPLE MODAL WINDOW DEPENDING ON WHICH MODAL BUTTON CLICKED */}
+      {/* <Modal.Open opens="table">
+        <Button>Show table</Button>
+      </Modal.Open>
+      <Modal.Window name="table">
+        <CreateCabinForm />
+      </Modal.Window> */}
+    </Modal>
   );
 }
 

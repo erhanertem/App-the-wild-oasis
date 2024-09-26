@@ -15,9 +15,7 @@ export async function createEditCabin(newCabin, id) {
   // console.log("createEditCabin entry check", newCabin, id);
 
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
-  // or just like this --> const hasImagePath = newCabin.image?.startsWith?.("https://");
-
-  // newCabin is table datat except img file URL + image file - need to replace img File w/img URL while submitting table - need to use only newCabin.image to send file to supabase
+  // newCabin is table data except img file URL + image file - need to replace img File w/img URL while submitting table - need to use only newCabin.image to send file to supabase
   // Creating a cabin is a two phase PROCESS
   // #1. Insert cabin data to a table with imagePath reference
   // TEMPLATE URL FOR UPLOADING IMAGE TO SUPABASE
@@ -34,11 +32,6 @@ export async function createEditCabin(newCabin, id) {
     : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
   // > #1. Create Cabin in DB based on if its Edit or New Entry
-  // const { data, error } = await supabase
-  //   .from("cabins")
-  //   .insert([{ ...newCabin, image: imagePath }]) //reuse newCabin replacing image File w/image URL information
-  //   .select() //selects the response data
-  //   .single(); // shows without array annotation
   let query = supabase.from("cabins");
   // > #1.A If not in edit session (not provided an id) , execute this supabase query
   if (!id) {
