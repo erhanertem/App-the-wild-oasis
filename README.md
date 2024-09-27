@@ -23,6 +23,7 @@ Key take-aways from this project:
     - Propping via custom_named prop
     - Propping via as prop (HTML tag modifier)
     - defaultProps function - Set defaults for the propping type
+  - React Router
 
 &emsp;
 
