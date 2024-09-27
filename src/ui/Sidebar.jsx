@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import Logo from './Logo';
+import MainNav from './MainNav';
 
 // Parent styling
 const StyledSidebar = styled.aside`
@@ -10,7 +12,12 @@ const StyledSidebar = styled.aside`
 `;
 
 function Sidebar() {
-  return <StyledSidebar>SIDEBAR</StyledSidebar>;
+  return (
+    <StyledSidebar>
+      <Logo />
+      <MainNav />
+    </StyledSidebar>
+  );
 }
 
 export default Sidebar;
