@@ -23,16 +23,18 @@ Key take-aways from this project:
     - Propping via custom_named prop
     - Propping via as prop (HTML tag modifier)
     - defaultProps function - Set defaults for the propping type
-  - React Router
-    - Declariative route setup
-      - BrowserRouter RR component
-      - Routes RR component
-      - Route RR component
-      - Create index RR route
-        - Navigate RR component
-        - replace attribute
-      - Create wrapper component (routeless) RR route used across multiple routes
-        - \<Outlet/> RR component - Have wrapper RR route pass thru child routes
+  - Create styled componenet contemplating a (ReactRouter) component
+    - styled() SC function
+- React Router
+  - Declariative route setup
+    - BrowserRouter RR component
+    - Routes RR component
+    - Route RR component
+    - Create index RR route
+      - Navigate RR component
+      - replace attribute
+    - Create wrapper component (routeless) RR route used across multiple routes
+      - \<Outlet/> RR component - Have wrapper RR route pass thru child routes
 
 &emsp;
 
