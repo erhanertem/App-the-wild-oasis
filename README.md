@@ -10,6 +10,11 @@ Key take-aways from this project:
 
 - React folder structure and project planning
 - Styling w/ Styled Components
+  - Create in-component styled-components
+    - Create child styled-component
+    - Create parent styled-component AKA \<GlobalStyles />
+  - createGlobalStyles Tagged Template Literal - Create global styled-components
+    - Provide global styles to the app
 
 &emsp;
 
