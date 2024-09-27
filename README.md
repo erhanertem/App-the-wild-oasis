@@ -24,6 +24,13 @@ Key take-aways from this project:
     - Propping via as prop (HTML tag modifier)
     - defaultProps function - Set defaults for the propping type
   - React Router
+    - Declariative route setup
+      - BrowserRouter RR component
+      - Routes RR component
+      - Route RR component
+      - Create index RR route
+        - Navigate RR component
+        - replace attribute
 
 &emsp;
 
