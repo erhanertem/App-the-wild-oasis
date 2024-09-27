@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Account from './pages/Account';
 import PageNotFound from './pages/PageNotFound';
 import Users from './pages/Users';
+import AppLayout from './ui/AppLayout';
 
 function App() {
   return (
@@ -17,47 +18,51 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          {/* Redirecting from root to /dashboard */}
-          <Route
-            index
-            element={
-              // Used Navigate component to not dublicate <Dashboard/> component
-              // replace attribute ensures this redirect action replaces the current entry in the history to prevent user from going back
-              // to points to route that handles <Dashboard/> component
-              <Navigate
-                replace
-                to="dashboard"
-              />
-            }
-          />
-          {/* Main routes */}
-          <Route
-            path="dashboard"
-            element={<Dashboard />}
-          />
-          <Route
-            path="bookings"
-            element={<Bookings />}
-          />
-          <Route
-            path="cabins"
-            element={<Cabins />}
-          />
-          <Route
-            path="settings"
-            element={<Settings />}
-          />
-          <Route
-            path="users"
-            element={<Users />}
-          />
+          <Route element={<AppLayout />}>
+            {/* Redirecting from root to /dashboard */}
+            <Route
+              index
+              element={
+                // Used Navigate component to not dublicate <Dashboard/> component
+                // replace attribute ensures this redirect action replaces the current entry in the history to prevent user from going back
+                // to points to route that handles <Dashboard/> component
+                <Navigate
+                  replace
+                  to="dashboard"
+                />
+              }
+            />
+            {/* Main routes */}
+            <Route
+              path="dashboard"
+              element={<Dashboard />}
+            />
+            <Route
+              path="bookings"
+              element={<Bookings />}
+            />
+            <Route
+              path="cabins"
+              element={<Cabins />}
+            />
+            <Route
+              path="settings"
+              element={<Settings />}
+            />
+            <Route
+              path="users"
+              element={<Users />}
+            />
+            <Route
+              path="account"
+              element={<Account />}
+            />
+          </Route>
+
+          {/* THESE ROUTES BELOW DOES NOT NEED TO DISPLAY APPLAYOUT */}
           <Route
             path="login"
             element={<Login />}
-          />
-          <Route
-            path="account"
-            element={<Account />}
           />
           {/* Handle undefined routes */}
           <Route

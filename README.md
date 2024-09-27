@@ -31,6 +31,8 @@ Key take-aways from this project:
       - Create index RR route
         - Navigate RR component
         - replace attribute
+      - Create wrapper component (routeless) RR route used across multiple routes
+        - \<Outlet/> RR component - Have wrapper RR route pass thru child routes
 
 &emsp;
 
