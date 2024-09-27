@@ -23,8 +23,21 @@ function App() {
 
             <div>
               <Heading as="h2">Checkin | out</Heading>
-              <Button onClick={() => alert('Checked in')}>Check-in</Button>
-              <Button onClick={() => alert('Checked out')}>Check-out</Button>
+              {/* Takes defaultProps as type */}
+              <Button
+                // variation="primary"
+                // size="medium"
+                onClick={() => alert('Checked in')}
+              >
+                Check-in
+              </Button>
+              <Button
+                variation="secondary"
+                size="small"
+                onClick={() => alert('Checked out')}
+              >
+                Check-out
+              </Button>
             </div>
           </Row>
 

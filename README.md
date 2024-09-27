@@ -20,9 +20,9 @@ Key take-aways from this project:
   - Dynamic styled-components
     - template literals + conditional statements
   - Creating re-usable styled components
-    - Propping via type (non-sensitive)
-    - Propping via as (SEO, accessibility sensitive)
-    - defaultProps function - SEt defualts for the propping type
+    - Propping via custom_named prop
+    - Propping via as prop (HTML tag modifier)
+    - defaultProps function - Set defaults for the propping type
 
 &emsp;
 
