@@ -15,7 +15,9 @@ function App() {
     <>
       <GlobalStyles />
       <StyledApp>
-        <Row type="vertical">
+        {/* <Row type="vertical"> */}
+        {/* Takes defaultProps as type */}
+        <Row>
           <Row type="horizontal">
             <Heading as="h1">The Wild Oasis</Heading>
 
@@ -26,7 +28,9 @@ function App() {
             </div>
           </Row>
 
-          <Row type="vertical">
+          {/* <Row type="vertical"> */}
+          {/* Takes defaultProps as type */}
+          <Row>
             <Heading as="h3">Form</Heading>
 
             <form>
