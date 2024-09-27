@@ -15,6 +15,12 @@ Key take-aways from this project:
     - Create parent styled-component AKA \<GlobalStyles />
   - createGlobalStyles Tagged Template Literal - Create global styled-components
     - Provide global styles to the app
+    - Experiment w/ css literal prefix hack to get prettier support on the code
+  - Experiment w/ & symbol for SASS like feature inside styled components
+  - Dynamic styled-components
+    - template literals + conditional statements
+  - Creating re-usable styled components
+    - Propping via type / as
 
 &emsp;
 
