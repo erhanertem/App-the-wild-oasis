@@ -1,5 +1,6 @@
 import GlobalStyles from './styles/GlobalStyles';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import Dashboard from './pages/Dashboard';
 import Cabins from './pages/Cabins';
@@ -10,10 +11,28 @@ import Account from './pages/Account';
 import PageNotFound from './pages/PageNotFound';
 import Users from './pages/Users';
 import AppLayout from './ui/AppLayout';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+// > #1. SETUP TANSTACK QUERY CLIENT W/CACHING SUPPORT
+const queryClient = new QueryClient({
+  // Query Client configuration
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+});
 
 function App() {
   return (
-    <>
+    // > #2. PROVIDE TANSTACK QUERY CLIENT
+    <QueryClientProvider client={queryClient}>
+      {/* QUERY DEVTOOLS */}
+      <ReactQueryDevtools
+        initialIsOpen={false}
+        buttonPosition={'bottom-left'}
+        position={'bottom'}
+      />
       {/* Provide global styled-components */}
       <GlobalStyles />
       <BrowserRouter>
@@ -71,7 +90,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </>
+    </QueryClientProvider>
   );
 }
 

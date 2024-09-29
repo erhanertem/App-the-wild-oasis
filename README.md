@@ -35,6 +35,7 @@ Key take-aways from this project:
       - replace attribute
     - Create wrapper component (routeless) RR route used across multiple routes
       - \<Outlet/> RR component - Have wrapper RR route pass thru child routes
+- Tanstack React Query
 
 &emsp;
 
@@ -47,5 +48,6 @@ Key take-aways from this project:
 ![JS](https://img.shields.io/badge/JavaScript-323330?style=square&logo=javascript&logoColor=F7DF1E)
 ![React](https://img.shields.io/badge/React-20232A?style=square&logo=react&logoColor=61DAF)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=square&logo=react-router&logoColor=white)
+![React Query](https://img.shields.io/badge/React_Query-FF4154?style=square&logo=ReactQuery&logoColor=white)
 ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=square&logo=styled-components&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=square&logo=vite&logoColor=FFD62E)
