@@ -35,9 +35,12 @@ Key take-aways from this project:
       - replace attribute
     - Create wrapper component (routeless) RR route used across multiple routes
       - \<Outlet/> RR component - Have wrapper RR route pass thru child routes
-- Tanstack React Query
-
-&emsp;
+- Tanstack Query
+  - Create TQ client
+  - Provide TQ client via \<QueryClientProvider/>
+  - Consume Query Data
+    - Fetch datat w/ useQuery TQ hook
+  - &emsp;
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 
