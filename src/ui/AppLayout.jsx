@@ -23,6 +23,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
+
+  overflow: auto;
+  scrollbar-gutter: stable;
 `;
 
 function AppLayout() {
