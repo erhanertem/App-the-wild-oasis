@@ -38,9 +38,12 @@ Key take-aways from this project:
 - Tanstack Query
   - Create TQ client
   - Provide TQ client via \<QueryClientProvider/>
-  - Consume Query Data
-    - Fetch datat w/ useQuery TQ hook
-  - &emsp;
+  - Query Remote Data
+    - 'GET' data w/ useQuery TQ hook
+    - 'DELETE' data w/ useMutation TQ hook
+      - Get instance of TQ client via useQueryClient TQ hook
+
+&emsp;
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 

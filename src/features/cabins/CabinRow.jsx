@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { formatCurrency } from '../../utils/helpers';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteCabin } from '../../services/apiCabins';
 
 const TableRow = styled.div`
   display: grid;
@@ -41,7 +43,29 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-  const { name, maxCapacity, regularPrice, discount, image } = cabin;
+  const { id: cabinId, name, maxCapacity, regularPrice, discount, image } = cabin;
+
+  // GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
+  const queryClient = useQueryClient();
+
+  // >#3.DELETE data via TQ
+  const {
+    isLoading: isDeleting, // Tracks whether the mutation is in progress (mutation state)
+    mutate, // Function to trigger the mutation (like deleting a cabin)
+    error, // Holds any error that occurs during the mutation
+  } = useMutation({
+    //MUTATOR
+    mutationFn: deleteCabin, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
+    // As soon as mutation is complete, in order to trigger a refresh by invalidating the cached UI, we make use of onSuccess. This field gets a hold of the TQ client instance
+    onSuccess: () => {
+      alert('Cabin succesfully deleted');
+      // Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+      queryClient.invalidateQueries({
+        queryKey: ['cabins'],
+      });
+    },
+    onError: (err) => alert(err.message),
+  });
 
   return (
     <TableRow role="row">
@@ -50,7 +74,12 @@ function CabinRow({ cabin }) {
       <div>Fits up to {maxCapacity} guests</div>
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{formatCurrency(discount)}</Discount>
-      <button>Delete</button>
+      <button
+        onClick={() => mutate(cabinId)}
+        disabled={isDeleting}
+      >
+        Delete
+      </button>
     </TableRow>
   );
 }
