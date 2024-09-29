@@ -16,14 +16,25 @@ const Main = styled.main`
   padding: 4rem 4.8rem 6.4rem;
 `;
 
+//Centers the content of the Outlet component nicely in the middle w/ a max-width limitation so that Outlet content does not stretch to the ends of Main component
+const Container = styled.div`
+  max-width: 120rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+`;
+
 function AppLayout() {
   return (
     <StyledAppLayout>
       <Sidebar />
       <Header />
       <Main>
-        {/* Let child routes pass thru RR Outlet component - AKA contents coming from pages */}
-        <Outlet />
+        <Container>
+          {/* Let child routes pass thru RR Outlet component - AKA contents coming from pages */}
+          <Outlet />
+        </Container>
       </Main>
     </StyledAppLayout>
   );
