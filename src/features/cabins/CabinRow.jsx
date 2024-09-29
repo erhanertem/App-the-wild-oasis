@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { formatCurrency } from '../../utils/helpers';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteCabin } from '../../services/apiCabins';
+import toast from 'react-hot-toast';
 
 const TableRow = styled.div`
   display: grid;
@@ -58,13 +59,15 @@ function CabinRow({ cabin }) {
     mutationFn: deleteCabin, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
     // As soon as mutation is complete, in order to trigger a refresh by invalidating the cached UI, we make use of onSuccess. This field gets a hold of the TQ client instance
     onSuccess: () => {
-      alert('Cabin succesfully deleted');
+      // alert('Cabin succesfully deleted');
+      toast.success('Cabin succesfully deleted');
       // Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
       queryClient.invalidateQueries({
         queryKey: ['cabins'],
       });
     },
-    onError: (err) => alert(err.message),
+    // onError: (err) => alert(err.message),
+    onError: (err) => toast.error(err.message),
   });
 
   return (
