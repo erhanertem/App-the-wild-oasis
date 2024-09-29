@@ -52,7 +52,7 @@ function CabinRow({ cabin }) {
   const {
     isLoading: isDeleting, // Tracks whether the mutation is in progress (mutation state)
     mutate, // Function to trigger the mutation (like deleting a cabin)
-    error, // Holds any error that occurs during the mutation
+    // error, // Holds any error that occurs during the mutation
   } = useMutation({
     //MUTATOR
     mutationFn: deleteCabin, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
