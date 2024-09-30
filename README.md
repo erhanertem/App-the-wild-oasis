@@ -23,8 +23,10 @@ Key take-aways from this project:
     - Propping via 'custom_named' prop
     - Propping via 'as' prop (HTML tag modifier)
     - defaultProps function - Set defaults for the propping type
-  - Create styled componenet contemplating a (ReactRouter) component
+  - Create styled component contemplating a (ReactRouter) component
     - styled() SC function
+  - Create styled component w/ injected tag element attributes for code abstraction
+    - attrs() SC function
 - React Router
 
   - Declariative route setup
@@ -40,11 +42,12 @@ Key take-aways from this project:
 - Tanstack Query
 
   - Create TQ client
+    - Get instance of TQ client via useQueryClient TQ hook
   - Provide TQ client via \<QueryClientProvider/>
   - Query Remote Data
     - 'GET' data w/ useQuery TQ hook
+    - 'POST' data w/ useMutation TQ hook
     - 'DELETE' data w/ useMutation TQ hook
-      - Get instance of TQ client via useQueryClient TQ hook
 
 - Reach-Hook-Form
   - useForm() RHF hook
