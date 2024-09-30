@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -37,6 +38,7 @@ function CreateCabinForm() {
   }
   function onErrorFn(errors) {
     console.log(errors);
+    // Log it on the console or any error monitoring services like centry
   }
 
   // >#6.GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
@@ -134,7 +136,8 @@ function CreateCabinForm() {
           {...register('discount', {
             required: 'This field is required',
             // VIA CUSTOM VALIDATION
-            validate: (value) => value <= getValues().regularPrice || 'Discount should not exceed regular price',
+            validate: (value) =>
+              Number(value) <= Number(getValues().regularPrice) || 'Discount should not exceed regular price',
           })}
         />
       </FormRow>
