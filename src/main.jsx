@@ -5,8 +5,8 @@ import { StyleSheetManager } from 'styled-components';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <StyleSheetManager shouldForwardProp={() => true}> */}
-    <App />
-    {/* </StyleSheetManager> */}
+    <StyleSheetManager shouldForwardProp={() => true}>
+      <App />
+    </StyleSheetManager>
   </StrictMode>
 );
