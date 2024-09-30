@@ -48,7 +48,16 @@ const Error = styled.span`
 
 function CreateCabinForm() {
   // >#1.REACT-HOOK-FORM
-  const { register, handleSubmit, reset, getValues } = useForm();
+  const {
+    register, // Register form field values
+    handleSubmit, // Dial in actual form submission fn
+    reset, // Resets the form fields
+    getValues, // Reads values from other form fields to accomodate dependant form fields
+    formState, // Gets the errors from onErrorFn handler out of RHF to be used in practical UI error handling mediums such as toaster
+  } = useForm();
+
+  // GET THE ERRORS OUT OF RHF AND USE IT IN JSX BODY CONDITIONALLY
+  const { errors } = formState;
 
   // >#4.OUR CUSTOM SUBMIT HANDLER FN
   function onSubmitFn(data) {
@@ -91,7 +100,7 @@ function CreateCabinForm() {
   });
 
   return (
-    // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FNS> DISCLOSED @ STEP#4 - FOR PROBLEMATIC SUBMISSION ROUTED TO onErrorFn HANDLER, FOR NON-PROBLEMATIC SUBMISSION ROUTED TO onSubmitFn HANDLER
+    // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FNS> DISCLOSED @ STEP#4 - FOR PROBLEMATIC SUBMISSION ROUTED TO onErrorFn HANDLER (suited only for console.logs), FOR NON-PROBLEMATIC SUBMISSION ROUTED TO onSubmitFn HANDLER
     <Form onSubmit={handleSubmit(onSubmitFn, onErrorFn)}>
       <FormRow>
         <Label htmlFor='name'>Cabin name</Label>
@@ -103,6 +112,8 @@ function CreateCabinForm() {
             required: 'This field is required',
           })}
         />
+        {/* Conditionally disclose an error message if there is any reported by the RHF */}
+        {errors?.name?.message && <Error>{errors.name.message}</Error>}
       </FormRow>
 
       <FormRow>
@@ -119,6 +130,8 @@ function CreateCabinForm() {
             min: { value: 1, message: 'Capacity should be at least 1' },
           })}
         />
+        {/* Conditionally disclose an error message if there is any reported by the RHF */}
+        {errors?.maxCapacity?.message && <Error>{errors.maxCapacity.message}</Error>}
       </FormRow>
 
       <FormRow>
@@ -135,6 +148,8 @@ function CreateCabinForm() {
             min: { value: 1, message: 'Price should be at least 1' },
           })}
         />
+        {/* Conditionally disclose an error message if there is any reported by the RHF */}
+        {errors?.regularPrice?.message && <Error>{errors.regularPrice.message}</Error>}
       </FormRow>
 
       <FormRow>
@@ -153,6 +168,8 @@ function CreateCabinForm() {
             // max: { value: getValues().regularPrice, message: 'Discount should not exceed regular price' },
           })}
         />
+        {/* Conditionally disclose an error message if there is any reported by the RHF */}
+        {errors?.discount?.message && <Error>{errors.discount.message}</Error>}
       </FormRow>
 
       <FormRow>
@@ -166,6 +183,8 @@ function CreateCabinForm() {
           })}
           defaultValue=''
         />
+        {/* Conditionally disclose an error message if there is any reported by the RHF */}
+        {errors?.description?.message && <Error>{errors.description.message}</Error>}
       </FormRow>
 
       <FormRow>
