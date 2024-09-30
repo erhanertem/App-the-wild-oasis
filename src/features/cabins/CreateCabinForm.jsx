@@ -32,9 +32,10 @@ function CreateCabinForm() {
   // >#4.OUR CUSTOM SUBMIT HANDLER FN
   function onSubmitFn(data) {
     // Data object is { name, maxCapacity, regularPrice, discount, description}
-    // console.log(data);
+    console.log(data);
     // >#7.USE MUTATE FN TO INITIATE TQ FETCHING
-    mutate(data);
+    // Before mutation data is submitted, we re-configure the data provided by RHF to so articulate uploaded file data in a more refined manner
+    mutate({ ...data, image: data.image[0] });
   }
   function onErrorFn(errors) {
     console.log(errors);
