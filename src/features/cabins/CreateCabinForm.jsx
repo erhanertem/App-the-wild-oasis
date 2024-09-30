@@ -9,41 +9,10 @@ import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
 import { createCabin } from '../../services/apiCabins';
-
-const FormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
-
-  padding: 1.2rem 0;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
-`;
+import FormRow from '../../ui/FormRow';
 
 const Label = styled.label`
   font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
 `;
 
 function CreateCabinForm() {
@@ -104,7 +73,7 @@ function CreateCabinForm() {
     <Form onSubmit={handleSubmit(onSubmitFn, onErrorFn)}>
       <FormRow
         label='Cabin name'
-        error='errors?.name?.message'
+        error={errors?.name?.message}
       >
         <Input
           type='text'
@@ -118,7 +87,7 @@ function CreateCabinForm() {
 
       <FormRow
         label='Maximum capacity'
-        error='errors?.maxCapacity?.message'
+        error={errors?.maxCapacity?.message}
       >
         <Input
           type='number'
@@ -136,7 +105,7 @@ function CreateCabinForm() {
 
       <FormRow
         label='Regular price'
-        error='errors?.regularPrice?.message'
+        error={errors?.regularPrice?.message}
       >
         <Input
           type='number'
@@ -154,7 +123,7 @@ function CreateCabinForm() {
 
       <FormRow
         label='Discount'
-        error='errors?.discount?.message'
+        error={errors?.discount?.message}
       >
         <Input
           type='number'
@@ -174,7 +143,7 @@ function CreateCabinForm() {
 
       <FormRow
         label='Description for website'
-        error='errors?.description?.message'
+        error={errors?.description?.message}
       >
         <Textarea
           type='number'
