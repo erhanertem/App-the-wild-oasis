@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,11 +11,7 @@ import Textarea from '../../ui/Textarea';
 import { createCabin } from '../../services/apiCabins';
 import FormRow from '../../ui/FormRow';
 
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-function CreateCabinForm() {
+function CreateCabinForm({ cabinToEdit }) {
   // >#1.REACT-HOOK-FORM
   const {
     register, // Register form field values
@@ -163,8 +158,7 @@ function CreateCabinForm() {
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor='image'>Cabin photo</Label>
+      <FormRow label='Cabin photo'>
         <FileInput
           // NOTE: We can either provide the attribute here or engae in styled component declaration via attrs() function
           // type='file' // A field that allows users to upload a file.
