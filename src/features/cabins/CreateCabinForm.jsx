@@ -47,43 +47,48 @@ function CreateCabinForm() {
   // > #1. REACT-HOOK-FORM
   const { register, handleSubmit } = useForm();
 
+  function onSubmit(data) {
+    console.log(data);
+  }
+
   return (
-    <Form>
+    // > #3. HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FN> ON THE FORM
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow>
-        <Label htmlFor="name">Cabin name</Label>
+        <Label htmlFor='name'>Cabin name</Label>
         <Input
-          type="text"
-          id="name"
+          type='text'
+          id='name'
           // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
           {...register('name')}
         />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
+        <Label htmlFor='maxCapacity'>Maximum capacity</Label>
         <Input
-          type="number"
-          id="maxCapacity"
+          type='number'
+          id='maxCapacity'
           // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'maxCapacity' - creates onBlur and onChnage props in this styled Input component
           {...register('maxCapacity')}
         />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
+        <Label htmlFor='regularPrice'>Regular price</Label>
         <Input
-          type="number"
-          id="regularPrice"
+          type='number'
+          id='regularPrice'
           // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
           {...register('regularPrice')}
         />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="discount">Discount</Label>
+        <Label htmlFor='discount'>Discount</Label>
         <Input
-          type="number"
-          id="discount"
+          type='number'
+          id='discount'
           defaultValue={0}
           // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
           {...register('discount')}
@@ -91,33 +96,33 @@ function CreateCabinForm() {
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="description">Description for website</Label>
+        <Label htmlFor='description'>Description for website</Label>
         <Textarea
-          type="number"
-          id="description"
+          type='number'
+          id='description'
           // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
           {...register('description')}
-          defaultValue=""
+          defaultValue=''
         />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="image">Cabin photo</Label>
+        <Label htmlFor='image'>Cabin photo</Label>
         <FileInput
-          id="image"
-          accept="image/*"
+          id='image'
+          accept='image/*'
         />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button
-          variation="secondary"
-          type="reset"
+          variation='secondary'
+          type='reset' //Regular HTML attribute
         >
           Cancel
         </Button>
-        <Button>Edit cabin</Button>
+        <Button>Add cabin</Button>
       </FormRow>
     </Form>
   );
