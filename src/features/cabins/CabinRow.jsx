@@ -50,7 +50,11 @@ function CabinRow({ cabin }) {
   const queryClient = useQueryClient();
 
   // >#3.DELETE data via TQ
-  const x = useMutation({
+  const {
+    isPending: isDeleting, // Tracks whether the mutation is in progress (mutation state)
+    mutate, // Function to trigger the mutation (like deleting a cabin)
+    // error, // Holds any error that occurs during the mutation - - This is useless as onError is responding to this error object inside him
+  } = useMutation({
     //MUTATOR
     mutationFn: deleteCabin, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
     // As soon as mutation is complete, in order to trigger a refresh by invalidating the cached UI, we make use of onSuccess. This field gets a hold of the TQ client instance
@@ -65,12 +69,7 @@ function CabinRow({ cabin }) {
     // onError: (err) => alert(err.message),
     onError: (err) => toast.error(err.message),
   });
-  const {
-    isPending: isDeleting, // Tracks whether the mutation is in progress (mutation state)
-    mutate, // Function to trigger the mutation (like deleting a cabin)
-    // error, // Holds any error that occurs during the mutation
-  } = x;
-  console.log(isDeleting);
+
   return (
     <TableRow role='row'>
       <Img src={image} />
