@@ -1,11 +1,14 @@
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import Input from '../../ui/Input';
 import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
-import { useForm } from 'react-hook-form';
+import { createCabin } from '../../services/apiCabins';
 
 const FormRow = styled.div`
   display: grid;
@@ -44,22 +47,55 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
-  // > #1. REACT-HOOK-FORM
-  const { register, handleSubmit } = useForm();
+  // >#1.REACT-HOOK-FORM
+  const { register, handleSubmit, reset } = useForm();
 
-  function onSubmit(data) {
-    console.log(data);
+  // >#4.OUR CUSTOM SUBMIT HANDLER FN
+  function onSubmitFn(data) {
+    // Data object is { name, maxCapacity, regularPrice, discount, description}
+    // console.log(data);
+    // >#7.USE MUTATE FN TO INITIATE TQ FETCHING
+    mutate(data);
   }
 
+  // >#6.GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
+  const queryClient = useQueryClient();
+
+  // >#5.CREATE CABIN via TQ
+  const {
+    isPending: isCreating, // Tracks whether the mutation is in progress (mutation state)
+    mutate, // Function to trigger the mutation (like creating a cabin)
+    error, // Holds any error that occurs during the mutation
+  } = useMutation({
+    // MUTATOR
+    mutationFn: createCabin, // Same as mutationFn: (newCabinData) => createCabin(newCabinData),
+    // UI INVALIDATOR(REFRESHER) UPON SUCCESS
+    onSuccess: () => {
+      toast.success('New cabin succesfully created');
+      // alert('New cabin succesfully created');
+
+      // >#6.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+      queryClient.invalidateQueries({
+        queryKey: ['cabins'],
+      });
+      // Reset the data @ form after successfull submission
+      // NOTE: We do not handle reset inside the custom submit handler fn and keep it as close as possible to onSuccess.
+      reset();
+    },
+    // HANDLE ERRORS
+    // onError: (err) => alert(err.message),
+    onError: (err) => toast.error(err.message),
+  });
+
   return (
-    // > #3. HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FN> ON THE FORM
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FN> DISCLOSED @ STEP#4
+    <Form onSubmit={handleSubmit(onSubmitFn)}>
       <FormRow>
         <Label htmlFor='name'>Cabin name</Label>
         <Input
           type='text'
           id='name'
-          // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
+          // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
           {...register('name')}
         />
       </FormRow>
@@ -69,7 +105,7 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='maxCapacity'
-          // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'maxCapacity' - creates onBlur and onChnage props in this styled Input component
+          // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'maxCapacity' - creates onBlur and onChnage props in this styled Input component
           {...register('maxCapacity')}
         />
       </FormRow>
@@ -79,7 +115,7 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='regularPrice'
-          // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
+          // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
           {...register('regularPrice')}
         />
       </FormRow>
@@ -90,7 +126,7 @@ function CreateCabinForm() {
           type='number'
           id='discount'
           defaultValue={0}
-          // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
+          // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
           {...register('discount')}
         />
       </FormRow>
@@ -100,7 +136,7 @@ function CreateCabinForm() {
         <Textarea
           type='number'
           id='description'
-          // > #2. REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
+          // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
           {...register('description')}
           defaultValue=''
         />
@@ -122,7 +158,7 @@ function CreateCabinForm() {
         >
           Cancel
         </Button>
-        <Button>Add cabin</Button>
+        <Button disabled={isCreating}>Add cabin</Button>
       </FormRow>
     </Form>
   );
