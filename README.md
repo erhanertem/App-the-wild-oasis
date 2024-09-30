@@ -47,7 +47,10 @@ Key take-aways from this project:
       - Get instance of TQ client via useQueryClient TQ hook
 
 - Reach-Hook-Form
-  - useForm() hook
+  - useForm() RHF hook
+    - Standard Form validation RHF rules (required, min, max)
+    - Custom(functionalized) Form validation rule (validate)
+    - Read values from form fields via getValues() RHF fn to compliment dependant validation challanges
 
 &emsp;
 

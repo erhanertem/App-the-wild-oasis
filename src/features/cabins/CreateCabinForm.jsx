@@ -48,7 +48,7 @@ const Error = styled.span`
 
 function CreateCabinForm() {
   // >#1.REACT-HOOK-FORM
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, getValues } = useForm();
 
   // >#4.OUR CUSTOM SUBMIT HANDLER FN
   function onSubmitFn(data) {
@@ -56,6 +56,9 @@ function CreateCabinForm() {
     // console.log(data);
     // >#7.USE MUTATE FN TO INITIATE TQ FETCHING
     mutate(data);
+  }
+  function onErrorFn(errors) {
+    console.log(errors);
   }
 
   // >#6.GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
@@ -65,7 +68,7 @@ function CreateCabinForm() {
   const {
     isPending: isCreating, // Tracks whether the mutation is in progress (mutation state)
     mutate, // Function to trigger the mutation (like creating a cabin)
-    error, // Holds any error that occurs during the mutation
+    // error, // Holds any error that occurs during the mutation - This is useless as onError is responding to this error object inside him
   } = useMutation({
     // MUTATOR
     mutationFn: createCabin, // Same as mutationFn: (newCabinData) => createCabin(newCabinData),
@@ -88,15 +91,17 @@ function CreateCabinForm() {
   });
 
   return (
-    // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FN> DISCLOSED @ STEP#4
-    <Form onSubmit={handleSubmit(onSubmitFn)}>
+    // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FNS> DISCLOSED @ STEP#4 - FOR PROBLEMATIC SUBMISSION ROUTED TO onErrorFn HANDLER, FOR NON-PROBLEMATIC SUBMISSION ROUTED TO onSubmitFn HANDLER
+    <Form onSubmit={handleSubmit(onSubmitFn, onErrorFn)}>
       <FormRow>
         <Label htmlFor='name'>Cabin name</Label>
         <Input
           type='text'
           id='name'
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
-          {...register('name')}
+          {...register('name', {
+            required: 'This field is required',
+          })}
         />
       </FormRow>
 
@@ -105,8 +110,14 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='maxCapacity'
+          min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'maxCapacity' - creates onBlur and onChnage props in this styled Input component
-          {...register('maxCapacity')}
+          {...register('maxCapacity', {
+            required: 'This field is required',
+            // VIA MIN TQ ATTR VALIDATION
+            // NOTE: NEED CSS MIN/MAX CONTROL AS WELL TO NOT DROP BELOW 1
+            min: { value: 1, message: 'Capacity should be at least 1' },
+          })}
         />
       </FormRow>
 
@@ -115,8 +126,14 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='regularPrice'
+          min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
-          {...register('regularPrice')}
+          {...register('regularPrice', {
+            required: 'This field is required',
+            // VIA MIN TQ ATTR VALIDATION
+            // NOTE: NEED CSS MIN/MAX CONTROL AS WELL TO NOT DROP BELOW 1
+            min: { value: 1, message: 'Price should be at least 1' },
+          })}
         />
       </FormRow>
 
@@ -125,9 +142,16 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='discount'
+          min={0} //CSS fix for decrementor
           defaultValue={0}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
-          {...register('discount')}
+          {...register('discount', {
+            required: 'This field is required',
+            // Solution#1.VIA CUSTOM VALIDATION
+            validate: (value) => value <= getValues().regularPrice || 'Discount should not exceed regular price',
+            // Solution#2.VIA MAX TQ ATTR VALIDATION
+            // max: { value: getValues().regularPrice, message: 'Discount should not exceed regular price' },
+          })}
         />
       </FormRow>
 
@@ -137,7 +161,9 @@ function CreateCabinForm() {
           type='number'
           id='description'
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
-          {...register('description')}
+          {...register('description', {
+            required: 'This field is required',
+          })}
           defaultValue=''
         />
       </FormRow>
