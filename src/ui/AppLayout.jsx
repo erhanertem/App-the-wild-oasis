@@ -14,6 +14,7 @@ const StyledAppLayout = styled.div`
 const Main = styled.main`
   background-color: var(--color-grey-50);
   padding: 4rem 4.8rem 6.4rem;
+  overflow: scroll; // Make only the form & cabintable to scroll excluding the header and nav sidebar which renders across all pages
 `;
 
 //Centers the content of the Outlet component nicely in the middle w/ a max-width limitation so that Outlet content does not stretch to the ends of Main component
