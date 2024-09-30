@@ -6,6 +6,7 @@ import Row from '../ui/Row';
 import CreateCabinForm from '../features/cabins/CreateCabinForm';
 
 function Cabins() {
+  // TOGGLE ADD CABIN FORM VIEW STATE
   const [showForm, setShowForm] = useState(false);
 
   return (
