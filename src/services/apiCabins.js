@@ -15,12 +15,23 @@ export async function getCabins() {
   return data;
 }
 
+export async function createCabin(newCabinData) {
+  const { data, error: cabinCreateError } = await supabase.from('cabins').insert([newCabinData]).select();
+  // GUARD CLAUSE - HANDLE ERROR OBJECT FROM SUPABASE RESPONSE
+  if (cabinCreateError) {
+    console.error('Error creating cabin:', cabinCreateError);
+    throw new Error('Cabin could not be created');
+  }
+
+  return;
+}
+
 export async function deleteCabin(id) {
   const { error: cabinDeleteError } = await supabase.from('cabins').delete().eq('id', id);
   // GUARD CLAUSE - HANDLE ERROR OBJECT FROM SUPABASE RESPONSE
   if (cabinDeleteError) {
-    console.error('Error deleting cabins:', cabinDeleteError);
-    throw new Error('Cabins could not be deleted');
+    console.error('Error deleting cabin:', cabinDeleteError);
+    throw new Error('Cabin could not be deleted');
   }
 
   return;
