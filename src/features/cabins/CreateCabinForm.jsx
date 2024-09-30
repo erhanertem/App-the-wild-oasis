@@ -133,10 +133,8 @@ function CreateCabinForm() {
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
           {...register('discount', {
             required: 'This field is required',
-            // Solution#1.VIA CUSTOM VALIDATION
+            // VIA CUSTOM VALIDATION
             validate: (value) => value <= getValues().regularPrice || 'Discount should not exceed regular price',
-            // Solution#2.VIA MAX TQ ATTR VALIDATION
-            // max: { value: getValues().regularPrice, message: 'Discount should not exceed regular price' },
           })}
         />
       </FormRow>
