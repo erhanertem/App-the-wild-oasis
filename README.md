@@ -9,24 +9,28 @@
 Key take-aways from this project:
 
 - React folder structure and project planning
+
 - Styling w/ Styled Components
+
   - Create in-component styled-components
-    - Create child styled-component
-    - Create parent styled-component AKA \<GlobalStyles />
-  - createGlobalStyles Tagged Template Literal - Create global styled-components
+  - Create global styled-component
+    - createGlobalStyles Tagged Template Literal
     - Provide global styles to the app
+  - Symbols in styled Components
     - Experiment w/ css literal prefix hack to get prettier support on the code
-  - Experiment w/ & symbol for SASS like feature inside styled components
+    - Experiment w/ & symbol for SASS like feature inside styled components
   - Dynamic styled-components
     - template literals + conditional statements
   - Creating re-usable styled components
     - Propping via 'custom_named' prop
+      - \<StyleSheetManager> App wrapper SC component for enabling transient custom props
     - Propping via 'as' prop (HTML tag modifier)
     - defaultProps function - Set defaults for the propping type
   - Create styled component contemplating a (ReactRouter) component
     - styled() SC function
   - Create styled component w/ injected tag element attributes for code abstraction
     - attrs() SC function
+
 - React Router
 
   - Declariative route setup
