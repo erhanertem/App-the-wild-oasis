@@ -154,19 +154,25 @@ function CreateCabinForm() {
           type='number'
           id='description'
           disabled={isCreating}
+          defaultValue=''
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
           {...register('description', {
             required: 'This field is required',
           })}
-          defaultValue=''
         />
       </FormRow>
 
       <FormRow>
         <Label htmlFor='image'>Cabin photo</Label>
         <FileInput
+          // NOTE: We can either provide the attribute here or engae in styled component declaration via attrs() function
+          // type='file' // A field that allows users to upload a file.
           id='image'
           accept='image/*'
+          // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'image' - creates onBlur and onChnage props in this styled Input component
+          {...register('image', {
+            required: 'This field is required',
+          })}
         />
       </FormRow>
 
