@@ -80,6 +80,7 @@ function CreateCabinForm() {
         <Input
           type='text'
           id='name'
+          disabled={isCreating}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
           {...register('name', {
             required: 'This field is required',
@@ -94,6 +95,7 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='maxCapacity'
+          disabled={isCreating}
           min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'maxCapacity' - creates onBlur and onChnage props in this styled Input component
           {...register('maxCapacity', {
@@ -112,6 +114,7 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='regularPrice'
+          disabled={isCreating}
           min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
           {...register('regularPrice', {
@@ -130,6 +133,7 @@ function CreateCabinForm() {
         <Input
           type='number'
           id='discount'
+          disabled={isCreating}
           min={0} //CSS fix for decrementor
           defaultValue={0}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
@@ -149,6 +153,7 @@ function CreateCabinForm() {
         <Textarea
           type='number'
           id='description'
+          disabled={isCreating}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
           {...register('description', {
             required: 'This field is required',
