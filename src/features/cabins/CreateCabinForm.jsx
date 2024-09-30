@@ -102,8 +102,10 @@ function CreateCabinForm() {
   return (
     // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FNS> DISCLOSED @ STEP#4 - FOR PROBLEMATIC SUBMISSION ROUTED TO onErrorFn HANDLER (suited only for console.logs), FOR NON-PROBLEMATIC SUBMISSION ROUTED TO onSubmitFn HANDLER
     <Form onSubmit={handleSubmit(onSubmitFn, onErrorFn)}>
-      <FormRow>
-        <Label htmlFor='name'>Cabin name</Label>
+      <FormRow
+        label='Cabin name'
+        error='errors?.name?.message'
+      >
         <Input
           type='text'
           id='name'
@@ -112,12 +114,12 @@ function CreateCabinForm() {
             required: 'This field is required',
           })}
         />
-        {/* Conditionally disclose an error message if there is any reported by the RHF */}
-        {errors?.name?.message && <Error>{errors.name.message}</Error>}
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor='maxCapacity'>Maximum capacity</Label>
+      <FormRow
+        label='Maximum capacity'
+        error='errors?.maxCapacity?.message'
+      >
         <Input
           type='number'
           id='maxCapacity'
@@ -130,12 +132,12 @@ function CreateCabinForm() {
             min: { value: 1, message: 'Capacity should be at least 1' },
           })}
         />
-        {/* Conditionally disclose an error message if there is any reported by the RHF */}
-        {errors?.maxCapacity?.message && <Error>{errors.maxCapacity.message}</Error>}
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor='regularPrice'>Regular price</Label>
+      <FormRow
+        label='Regular price'
+        error='errors?.regularPrice?.message'
+      >
         <Input
           type='number'
           id='regularPrice'
@@ -148,12 +150,12 @@ function CreateCabinForm() {
             min: { value: 1, message: 'Price should be at least 1' },
           })}
         />
-        {/* Conditionally disclose an error message if there is any reported by the RHF */}
-        {errors?.regularPrice?.message && <Error>{errors.regularPrice.message}</Error>}
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor='discount'>Discount</Label>
+      <FormRow
+        label='Discount'
+        error='errors?.discount?.message'
+      >
         <Input
           type='number'
           id='discount'
@@ -168,12 +170,12 @@ function CreateCabinForm() {
             // max: { value: getValues().regularPrice, message: 'Discount should not exceed regular price' },
           })}
         />
-        {/* Conditionally disclose an error message if there is any reported by the RHF */}
-        {errors?.discount?.message && <Error>{errors.discount.message}</Error>}
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor='description'>Description for website</Label>
+      <FormRow
+        label='Description for website'
+        error='errors?.description?.message'
+      >
         <Textarea
           type='number'
           id='description'
@@ -183,8 +185,6 @@ function CreateCabinForm() {
           })}
           defaultValue=''
         />
-        {/* Conditionally disclose an error message if there is any reported by the RHF */}
-        {errors?.description?.message && <Error>{errors.description.message}</Error>}
       </FormRow>
 
       <FormRow>
