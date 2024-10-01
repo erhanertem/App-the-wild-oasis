@@ -28,7 +28,8 @@ export async function createCabin(newCabinData) {
     .from('cabins')
     // Override imageURL only to provided data for cabin table submission
     .insert([{ ...newCabinData, image: imagePath }])
-    .select();
+    .select()
+    .single(); // Returns the data without array enclosure for convinience - usefull for deleting record - uploadedCabinData.id
   // GUARD CLAUSE - HANDLE ERROR OBJECT FROM SUPABASE RESPONSE
   if (cabinCreateError) {
     console.error('Error creating cabin:', cabinCreateError);
