@@ -172,7 +172,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           accept='image/*'
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'image' - creates onBlur and onChnage props in this styled Input component
           {...register('image', {
-            required: 'This field is required',
+            required: isEditSession ? false : 'This field is required',
           })}
         />
       </FormRow>
