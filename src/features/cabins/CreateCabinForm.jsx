@@ -11,7 +11,13 @@ import Textarea from '../../ui/Textarea';
 import { createCabin } from '../../services/apiCabins';
 import FormRow from '../../ui/FormRow';
 
-function CreateCabinForm({ cabinToEdit }) {
+// NOTE: WE PROVIDE CABINTOEDIT WITH AN EMPTY {} BY DEFAULT. BECAUSE WE USE CABIN CREATION FORM FOR TWO ACTIONS: 1. CREATE A NEW CABIN, 2. EDIT AN EXISTING CABIN
+function CreateCabinForm({ cabinToEdit = {} }) {
+  // FOR CABINS BEING EDITED, PREP THE CABIN DATA FROM cabinToEdit PROP
+  const { id: editId, ...editValues } = cabinToEdit;
+  // IDENTIFY IF ITS AN EDIT SESSION TO PRELOAD THE VALUES FROM editValues
+  const isEditSession = Boolean(editId);
+
   // >#1.REACT-HOOK-FORM
   const {
     register, // Register form field values
@@ -19,7 +25,7 @@ function CreateCabinForm({ cabinToEdit }) {
     reset, // Resets the form fields
     getValues, // Reads values from other form fields to accomodate dependant form fields
     formState, // Gets the errors from onErrorFn handler out of RHF to be used in practical UI error handling mediums such as toaster
-  } = useForm();
+  } = useForm({ defaultValues: isEditSession ? editValues : {} });
 
   // GET THE ERRORS OUT OF RHF AND USE IT IN JSX BODY CONDITIONALLY
   const { errors } = formState;
@@ -179,7 +185,7 @@ function CreateCabinForm({ cabinToEdit }) {
         >
           Cancel
         </Button>
-        <Button disabled={isCreating}>Add cabin</Button>
+        <Button disabled={isCreating}>{isEditSession ? 'Edit cabin' : 'Create new cabin'}</Button>
       </FormRow>
     </Form>
   );
