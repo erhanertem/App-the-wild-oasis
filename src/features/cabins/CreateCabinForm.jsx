@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -8,15 +7,17 @@ import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
-import { createCabin } from '../../services/apiCabins';
+import { createOrEditCabin } from '../../services/apiCabins';
 import FormRow from '../../ui/FormRow';
 
 // NOTE: WE PROVIDE CABINTOEDIT WITH AN EMPTY {} BY DEFAULT. BECAUSE WE USE CABIN CREATION FORM FOR TWO ACTIONS: 1. CREATE A NEW CABIN, 2. EDIT AN EXISTING CABIN
 function CreateCabinForm({ cabinToEdit = {} }) {
   // FOR CABINS BEING EDITED, PREP THE CABIN DATA FROM cabinToEdit PROP
-  const { id: editId, ...editValues } = cabinToEdit;
+  const { id: idForCabinEditing, ...editValues } = cabinToEdit;
   // IDENTIFY IF ITS AN EDIT SESSION TO PRELOAD THE VALUES FROM editValues
-  const isEditSession = Boolean(editId);
+  const isEditSession = Boolean(idForCabinEditing);
+  // console.log('isEditSession :', isEditSession);
+  // console.log('cabintoEdit id', idForCabinEditing);
 
   // >#1.REACT-HOOK-FORM
   const {
@@ -31,35 +32,42 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const { errors } = formState;
 
   // >#4.OUR CUSTOM SUBMIT HANDLER FN
-  function onSubmitFn(data) {
-    // Data object is { name, maxCapacity, regularPrice, discount, description}
-    console.log(data);
+  function onSubmitFn(formData) {
+    // Data object is { name, maxCapacity, regularPrice, discount, description, image (either a file obj || imageURL)}
+    // console.log('createcabinform - formData :', formData);
     // >#7.USE MUTATE FN TO INITIATE TQ FETCHING
     // Before mutation data is submitted, we re-configure the data provided by RHF to so articulate uploaded file data in a more refined manner
-    mutate({ ...data, image: data.image[0] });
+    if (isEditSession) {
+      // console.log('Using edit session...');
+      editCabin({ cabinToEdit: formData, idForCabinEditing });
+    }
+    if (!isEditSession) {
+      // console.log('Using create session...');
+      // console.log(formData);
+      createCabin(formData);
+    }
   }
   function onErrorFn(errors) {
     console.log(errors);
     // Log it on the console or any error monitoring services like centry
   }
-
   // >#6.GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
   const queryClient = useQueryClient();
 
-  // >#5.CREATE CABIN via TQ
+  // >#5.1.CREATE CABIN via TQ
   const {
     isPending: isCreating, // Tracks whether the mutation is in progress (mutation state)
-    mutate, // Function to trigger the mutation (like creating a cabin)
+    mutate: createCabin, // Function to trigger the mutation (like creating a cabin)
     // error, // Holds any error that occurs during the mutation - This is useless as onError is responding to this error object inside him
   } = useMutation({
     // MUTATOR
-    mutationFn: createCabin, // Same as mutationFn: (newCabinData) => createCabin(newCabinData),
+    mutationFn: createOrEditCabin, // Same as mutationFn: (newCabinData) => createCabin(newCabinData),
     // UI INVALIDATOR(REFRESHER) UPON SUCCESS
     onSuccess: () => {
       toast.success('New cabin succesfully created');
       // alert('New cabin succesfully created');
 
-      // >#6.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+      // >#6.1.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
       queryClient.invalidateQueries({
         queryKey: ['cabins'],
       });
@@ -72,6 +80,23 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     onError: (err) => toast.error(err.message),
   });
 
+  // >#5.2.EDIT CABIN via TQ
+  const { isPending: isEditing, mutate: editCabin } = useMutation({
+    mutationFn: ({ cabinToEdit, idForCabinEditing }) => createOrEditCabin(cabinToEdit, idForCabinEditing),
+    onSuccess: () => {
+      toast.success('Cabin succesfully edited');
+      // >#6.2.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+      queryClient.invalidateQueries({
+        queryKey: ['cabins'],
+      });
+      reset();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  // Combine the loading states
+  const isProcessing = isEditing || isCreating;
+
   return (
     // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FNS> DISCLOSED @ STEP#4 - FOR PROBLEMATIC SUBMISSION ROUTED TO onErrorFn HANDLER (suited only for console.logs), FOR NON-PROBLEMATIC SUBMISSION ROUTED TO onSubmitFn HANDLER
     <Form onSubmit={handleSubmit(onSubmitFn, onErrorFn)}>
@@ -82,7 +107,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type='text'
           id='name'
-          disabled={isCreating}
+          disabled={isProcessing}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
           {...register('name', {
             required: 'This field is required',
@@ -97,7 +122,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type='number'
           id='maxCapacity'
-          disabled={isCreating}
+          disabled={isProcessing}
           min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'maxCapacity' - creates onBlur and onChnage props in this styled Input component
           {...register('maxCapacity', {
@@ -116,7 +141,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type='number'
           id='regularPrice'
-          disabled={isCreating}
+          disabled={isProcessing}
           min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
           {...register('regularPrice', {
@@ -135,7 +160,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type='number'
           id='discount'
-          disabled={isCreating}
+          disabled={isProcessing}
           min={0} //CSS fix for decrementor
           defaultValue={0}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
@@ -155,7 +180,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Textarea
           type='number'
           id='description'
-          disabled={isCreating}
+          disabled={isProcessing}
           defaultValue=''
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
           {...register('description', {
@@ -164,13 +189,16 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         />
       </FormRow>
 
-      <FormRow label='Cabin photo'>
+      <FormRow
+        label='Cabin photo'
+        error={errors?.description?.message}
+      >
         <FileInput
           // NOTE: We can either provide the attribute here or engae in styled component declaration via attrs() function
           // type='file' // A field that allows users to upload a file.
           id='image'
           accept='image/*'
-          disabled={isCreating}
+          disabled={isProcessing}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'image' - creates onBlur and onChnage props in this styled Input component
           {...register('image', {
             required: isEditSession ? false : 'This field is required',
@@ -186,7 +214,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         >
           Cancel
         </Button>
-        <Button disabled={isCreating}>{isEditSession ? 'Edit cabin' : 'Create new cabin'}</Button>
+        <Button disabled={isProcessing}>{isEditSession ? 'Edit cabin' : 'Create new cabin'}</Button>
       </FormRow>
     </Form>
   );
