@@ -6,7 +6,8 @@
 
 ### **Objective:** Create The Wild Oasis App
 
-Key take-aways from this project:
+<details>
+<summary>Key take-aways from this project:</summary>
 
 - React folder structure and project planning
 
@@ -55,11 +56,20 @@ Key take-aways from this project:
 
 - Reach-Hook-Form
   - useForm() RHF hook
-    - Standard Form validation RHF rules (required, min, max)
+  - Standard Form validation RHF rules (required, min, max)
     - Custom(functionalized) Form validation rule (validate)
     - Read values from form fields via getValues() RHF fn to compliment dependant validation challanges
+    </details>
 
 &emsp;
+
+In addition to the project cirriculum:
+
+- Provide custom solutions around cabin API
+  - Refined cabin edit and create API handling
+  - Improved DELETE functionality w/ cabin data recovery feature upon unsuccessful image delete operation
+- Implement auto switching forms @ cabins page between edit forms and create forms allowing only a single form displayed
+  at a time.
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 

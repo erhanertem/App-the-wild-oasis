@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { getCabins } from '../../services/apiCabins';
 import Spinner from '../../ui/Spinner';
 import CabinRow from './CabinRow';
+import { useEffect, useState } from 'react';
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -28,7 +29,11 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
-function CabinTable() {
+function CabinTable({ showForm, setShowForm }) {
+  // > MARK ACTIVE OPEN EDIT FORM
+  // STATE THAT KEEPS TRACK OF OPEN edit form
+  const [activeEditForm, setActiveEditForm] = useState(null);
+
   // >#3.GET data via TQ
   const {
     isLoading, // Represents the loading state while the query is fetching data
@@ -39,13 +44,11 @@ function CabinTable() {
     queryFn: getCabins, // The function responsible for fetching the data
   });
 
-  // console.log(cabins);
-
   if (isLoading) return <Spinner />;
 
   return (
-    <Table role="table">
-      <TableHeader role="row">
+    <Table role='table'>
+      <TableHeader role='row'>
         <div></div>
         <div>Cabin</div>
         <div>Capacity</div>
@@ -57,6 +60,10 @@ function CabinTable() {
         <CabinRow
           cabin={cabin}
           key={cabin.id}
+          showForm={showForm}
+          setShowForm={setShowForm}
+          activeEditForm={activeEditForm}
+          setActiveEditForm={setActiveEditForm}
         />
       ))}
     </Table>

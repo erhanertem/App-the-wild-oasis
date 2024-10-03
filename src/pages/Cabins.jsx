@@ -6,7 +6,7 @@ import Row from '../ui/Row';
 import CreateCabinForm from '../features/cabins/CreateCabinForm';
 
 function Cabins() {
-  // TOGGLE ADD CABIN FORM VIEW STATE
+  // STATE TOGGLE BETWEEN edit form AND all create forms
   const [showForm, setShowForm] = useState(false);
 
   return (
@@ -17,10 +17,13 @@ function Cabins() {
       </Row>
 
       <Row>
-        <CabinTable />
+        <CabinTable
+          showForm={showForm}
+          setShowForm={setShowForm}
+        />
 
         <Button onClick={() => setShowForm((showForm) => !showForm)}>Add new cabin</Button>
-        {showForm && <CreateCabinForm />}
+        {showForm && <CreateCabinForm setShowForm={setShowForm} />}
       </Row>
     </>
   );

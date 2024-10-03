@@ -3,7 +3,7 @@ import { formatCurrency } from '../../utils/helpers';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteCabin } from '../../services/apiCabins';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreateCabinForm from './CreateCabinForm';
 
 const TableRow = styled.div`
@@ -45,9 +45,20 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin }) {
-  // TOGGLE EDIT CABIN FORM VIEW STATE
-  const [showForm, setShowForm] = useState(false);
+function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditForm }) {
+  // STATE TOGGLE CURRENT EDIT CABIN FORM VIEW
+  const [showCurrentEditForm, setShowCurrentEditForm] = useState(false);
+  // STATE TOGGLE FOR CLOSING all cabin edit forms if create cabin form is active
+  useEffect(() => {
+    // OPEN create form && CLOSE edit forms and reset active edit form state
+    if (showForm === true) {
+      setShowCurrentEditForm(false);
+      setActiveEditForm(null);
+    } else {
+      // CLOSE create form && OPEN all edit forms
+      setShowCurrentEditForm(true);
+    }
+  }, [setActiveEditForm, showForm]);
 
   const { id: cabinId, name, maxCapacity, regularPrice, discount, image } = cabin;
 
@@ -84,7 +95,29 @@ function CabinRow({ cabin }) {
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>{formatCurrency(discount)}</Discount>
         <div>
-          <button onClick={() => setShowForm((show) => !show)}>Edit</button>
+          <button
+            onClick={() => {
+              // Update ACTIVE edit form state @ CabinTable
+              // When clicked, if not an active edit form open it
+              if (activeEditForm !== cabinId) {
+                // Mark this edit form active
+                setActiveEditForm(cabinId);
+                // Show the current edit form
+                setShowCurrentEditForm(true);
+              }
+              // When clicked, if it's the active edit form, close it
+              if (activeEditForm === cabinId && showCurrentEditForm) {
+                // Close the current edit form
+                setShowCurrentEditForm(false);
+                // Reset the active edit form state
+                setActiveEditForm(null);
+              }
+              // Close create new cabin form
+              showForm && setShowForm(false);
+            }}
+          >
+            Edit
+          </button>
           <button
             // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
             onClick={() => mutate(cabinId)}
@@ -94,7 +127,13 @@ function CabinRow({ cabin }) {
           </button>
         </div>
       </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+      {activeEditForm === cabinId && showCurrentEditForm && (
+        <CreateCabinForm
+          cabinToEdit={cabin}
+          setActiveEditForm={setActiveEditForm}
+          setShowCurrentEditForm={setShowCurrentEditForm}
+        />
+      )}
     </>
   );
 }

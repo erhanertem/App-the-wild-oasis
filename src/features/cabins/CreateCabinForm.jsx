@@ -11,7 +11,7 @@ import { createOrEditCabin } from '../../services/apiCabins';
 import FormRow from '../../ui/FormRow';
 
 // NOTE: WE PROVIDE CABINTOEDIT WITH AN EMPTY {} BY DEFAULT. BECAUSE WE USE CABIN CREATION FORM FOR TWO ACTIONS: 1. CREATE A NEW CABIN, 2. EDIT AN EXISTING CABIN
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, setShowCurrentEditForm }) {
   // FOR CABINS BEING EDITED, PREP THE CABIN DATA FROM cabinToEdit PROP
   const { id: idForCabinEditing, ...editValues } = cabinToEdit;
   // IDENTIFY IF ITS AN EDIT SESSION TO PRELOAD THE VALUES FROM editValues
@@ -74,10 +74,16 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       // Reset the data @ form after successfull submission
       // NOTE: We do not handle reset inside the custom submit handler fn and keep it as close as possible to onSuccess.
       reset();
+      // Close create form after succesfull submission
+      setShowForm(false);
     },
     // HANDLE ERRORS
     // onError: (err) => alert(err.message),
-    onError: (err) => toast.error(err.message),
+    onError: (err) => {
+      toast.error(err.message);
+      // // Optional - reset the form data upon unsuccesfull db write attempt
+      // reset();
+    },
   });
 
   // >#5.2.EDIT CABIN via TQ
@@ -90,6 +96,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         queryKey: ['cabins'],
       });
       reset();
+      // Close edit form
+      setShowCurrentEditForm(false);
+      // Reset active edit form
+      setActiveEditForm(null);
     },
     onError: (err) => toast.error(err.message),
   });
