@@ -93,7 +93,7 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
         <Cabin>{name}</Cabin>
         <div>Fits up to {maxCapacity} guests</div>
         <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>{formatCurrency(discount)}</Discount>
+        <Discount>{discount ? formatCurrency(discount) : <span>&mdash;</span>}</Discount>
         <div>
           <button
             onClick={() => {
