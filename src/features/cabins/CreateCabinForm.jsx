@@ -152,13 +152,15 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
           type='number'
           id='regularPrice'
           disabled={isProcessing}
-          min={1} //CSS fix for decrementor
+          // onWheel={(e) => e.target.blur()} // Disables the scrolling behavior
+          // min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
           {...register('regularPrice', {
             required: 'This field is required',
             // VIA MIN TQ ATTR VALIDATION
             // NOTE: NEED CSS MIN/MAX CONTROL AS WELL TO NOT DROP BELOW 1
             min: { value: 1, message: 'Price should be at least 1' },
+            max: { value: 32767, message: 'Price can not exceed 32767' },
           })}
         />
       </FormRow>
