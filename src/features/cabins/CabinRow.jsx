@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 import { formatCurrency } from '../../utils/helpers';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteCabin } from '../../services/apiCabins';
-import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import CreateCabinForm from './CreateCabinForm';
+import { useDeleteCabin } from './useDeleteCabin';
 
 const TableRow = styled.div`
   display: grid;
@@ -62,29 +60,31 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
 
   const { id: cabinId, name, maxCapacity, regularPrice, discount, image } = cabin;
 
-  // GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
-  const queryClient = useQueryClient();
+  // > MOVED TO A CUSTOM HOOK
+  const { isDeleting, deleteCabin } = useDeleteCabin();
+  // // GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
+  // const queryClient = useQueryClient();
 
-  // >#3.DELETE data via TQ
-  const {
-    isPending: isDeleting, // Tracks whether the mutation is in progress (mutation state)
-    mutate, // Function to trigger the mutation (like deleting a cabin)
-    // error, // Holds any error that occurs during the mutation - - This is useless as onError is responding to this error object inside him
-  } = useMutation({
-    //MUTATOR
-    mutationFn: deleteCabin, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
-    // As soon as mutation is complete, in order to trigger a refresh by invalidating the cached UI, we make use of onSuccess. This field gets a hold of the TQ client instance
-    onSuccess: () => {
-      // alert('Cabin succesfully deleted');
-      toast.success('Cabin succesfully deleted');
-      // Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
-      queryClient.invalidateQueries({
-        queryKey: ['cabins'],
-      });
-    },
-    // onError: (err) => alert(err.message),
-    onError: (err) => toast.error(err.message),
-  });
+  // // >#3.DELETE data via TQ
+  // const {
+  //   isPending: isDeleting, // Tracks whether the mutation is in progress (mutation state)
+  //   mutate, // Function to trigger the mutation (like deleting a cabin)
+  //   // error, // Holds any error that occurs during the mutation - - This is useless as onError is responding to this error object inside him
+  // } = useMutation({
+  //   //MUTATOR
+  //   mutationFn: deleteCabin, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
+  //   // As soon as mutation is complete, in order to trigger a refresh by invalidating the cached UI, we make use of onSuccess. This field gets a hold of the TQ client instance
+  //   onSuccess: () => {
+  //     // alert('Cabin succesfully deleted');
+  //     toast.success('Cabin succesfully deleted');
+  //     // Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+  //     queryClient.invalidateQueries({
+  //       queryKey: ['cabins'],
+  //     });
+  //   },
+  //   // onError: (err) => alert(err.message),
+  //   onError: (err) => toast.error(err.message),
+  // });
 
   return (
     <>
@@ -120,7 +120,7 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
           </button>
           <button
             // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
-            onClick={() => mutate(cabinId)}
+            onClick={() => deleteCabin(cabinId)}
             disabled={isDeleting}
           >
             Delete
