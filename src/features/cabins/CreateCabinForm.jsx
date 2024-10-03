@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 import Input from '../../ui/Input';
@@ -7,8 +7,11 @@ import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
-import { createOrEditCabin } from '../../services/apiCabins';
 import FormRow from '../../ui/FormRow';
+
+import { createOrEditCabin } from '../../services/apiCabins';
+import { useCreateCabin } from './useCreateCabin';
+import { useEditCabin } from './useEditCabin';
 
 // NOTE: WE PROVIDE CABINTOEDIT WITH AN EMPTY {} BY DEFAULT. BECAUSE WE USE CABIN CREATION FORM FOR TWO ACTIONS: 1. CREATE A NEW CABIN, 2. EDIT AN EXISTING CABIN
 function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, setShowCurrentEditForm }) {
@@ -39,70 +42,91 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
     // Before mutation data is submitted, we re-configure the data provided by RHF to so articulate uploaded file data in a more refined manner
     if (isEditSession) {
       // console.log('Using edit session...');
-      editCabin({ cabinToEdit: formData, idForCabinEditing });
+      editCabin(
+        { cabinToEdit: formData, idForCabinEditing },
+        {
+          onSuccess: () => {
+            reset();
+            // Close edit form
+            setShowCurrentEditForm(false);
+            // Reset active edit form
+            setActiveEditForm(null);
+          },
+        }
+      );
     }
     if (!isEditSession) {
       // console.log('Using create session...');
       // console.log(formData);
-      createCabin(formData);
+      createCabin(formData, {
+        onSuccess: () => {
+          // Reset the data @ form after successfull submission
+          // NOTE: We do not handle reset inside the custom submit handler fn and keep it as close as possible to onSuccess.
+          reset();
+          // Close create form after succesfull submission
+          setShowForm(false);
+        },
+      });
     }
   }
   function onErrorFn(errors) {
     console.log(errors);
     // Log it on the console or any error monitoring services like centry
   }
-  // >#6.GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
-  const queryClient = useQueryClient();
 
-  // >#5.1.CREATE CABIN via TQ
-  const {
-    isPending: isCreating, // Tracks whether the mutation is in progress (mutation state)
-    mutate: createCabin, // Function to trigger the mutation (like creating a cabin)
-    // error, // Holds any error that occurs during the mutation - This is useless as onError is responding to this error object inside him
-  } = useMutation({
-    // MUTATOR
-    mutationFn: createOrEditCabin, // Same as mutationFn: (newCabinData) => createCabin(newCabinData),
-    // UI INVALIDATOR(REFRESHER) UPON SUCCESS
-    onSuccess: () => {
-      toast.success('New cabin succesfully created');
-      // alert('New cabin succesfully created');
+  // > MOVED TO A CUSTOM HOOK
+  const { isCreating, createCabin } = useCreateCabin();
+  const { isEditing, editCabin } = useEditCabin();
+  // // >#6.GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
+  // const queryClient = useQueryClient();
+  // // >#5.1.CREATE CABIN via TQ
+  // const {
+  //   isPending: isCreating, // Tracks whether the mutation is in progress (mutation state)
+  //   mutate: createCabin, // Function to trigger the mutation (like creating a cabin)
+  //   // error, // Holds any error that occurs during the mutation - This is useless as onError is responding to this error object inside him
+  // } = useMutation({
+  //   // MUTATOR
+  //   mutationFn: createOrEditCabin, // Same as mutationFn: (newCabinData) => createCabin(newCabinData),
+  //   // UI INVALIDATOR(REFRESHER) UPON SUCCESS
+  //   onSuccess: () => {
+  //     toast.success('New cabin succesfully created');
+  //     // alert('New cabin succesfully created');
 
-      // >#6.1.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
-      queryClient.invalidateQueries({
-        queryKey: ['cabins'],
-      });
-      // Reset the data @ form after successfull submission
-      // NOTE: We do not handle reset inside the custom submit handler fn and keep it as close as possible to onSuccess.
-      reset();
-      // Close create form after succesfull submission
-      setShowForm(false);
-    },
-    // HANDLE ERRORS
-    // onError: (err) => alert(err.message),
-    onError: (err) => {
-      toast.error(err.message);
-      // // Optional - reset the form data upon unsuccesfull db write attempt
-      // reset();
-    },
-  });
-
-  // >#5.2.EDIT CABIN via TQ
-  const { isPending: isEditing, mutate: editCabin } = useMutation({
-    mutationFn: ({ cabinToEdit, idForCabinEditing }) => createOrEditCabin(cabinToEdit, idForCabinEditing),
-    onSuccess: () => {
-      toast.success('Cabin succesfully edited');
-      // >#6.2.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
-      queryClient.invalidateQueries({
-        queryKey: ['cabins'],
-      });
-      reset();
-      // Close edit form
-      setShowCurrentEditForm(false);
-      // Reset active edit form
-      setActiveEditForm(null);
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  //     // >#6.1.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+  //     queryClient.invalidateQueries({
+  //       queryKey: ['cabins'],
+  //     });
+  //     // Reset the data @ form after successfull submission
+  //     // NOTE: We do not handle reset inside the custom submit handler fn and keep it as close as possible to onSuccess.
+  //     reset();
+  //     // Close create form after succesfull submission
+  //     setShowForm(false);
+  //   },
+  //   // HANDLE ERRORS
+  //   // onError: (err) => alert(err.message),
+  //   onError: (err) => {
+  //     toast.error(err.message);
+  //     // // Optional - reset the form data upon unsuccesfull db write attempt
+  //     // reset();
+  //   },
+  // });
+  // // >#5.2.EDIT CABIN via TQ
+  // const { isPending: isEditing, mutate: editCabin } = useMutation({
+  //   mutationFn: ({ cabinToEdit, idForCabinEditing }) => createOrEditCabin(cabinToEdit, idForCabinEditing),
+  //   onSuccess: () => {
+  //     toast.success('Cabin succesfully edited');
+  //     // >#6.2.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+  //     queryClient.invalidateQueries({
+  //       queryKey: ['cabins'],
+  //     });
+  //     reset();
+  //     // Close edit form
+  //     setShowCurrentEditForm(false);
+  //     // Reset active edit form
+  //     setActiveEditForm(null);
+  //   },
+  //   onError: (err) => toast.error(err.message),
+  // });
 
   // Combine the loading states
   const isProcessing = isEditing || isCreating;
