@@ -103,7 +103,10 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>{discount ? formatCurrency(discount) : <span>&mdash;</span>}</Discount>
         <div>
-          <button onClick={handleDuplicate}>
+          <button
+            disabled={isCreating}
+            onClick={handleDuplicate}
+          >
             <HiSquare2Stack />
           </button>
           <button
