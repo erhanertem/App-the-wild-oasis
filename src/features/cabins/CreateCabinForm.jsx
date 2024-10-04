@@ -31,7 +31,7 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
   // GET THE ERRORS OUT OF RHF AND USE IT IN JSX BODY CONDITIONALLY
   const { errors } = formState;
 
-  // >#4.OUR CUSTOM SUBMIT HANDLER FN
+  // >#4.OUR RHF CUSTOM SUBMIT HANDLER FN
   function onSubmitFn(formData) {
     // Data object is { name, maxCapacity, regularPrice, discount, description, image (either a file obj || imageURL)}
     // console.log('createcabinform - formData :', formData);

@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import styled from 'styled-components';
 import { formatCurrency } from '../../utils/helpers';
 import { useEffect, useState } from 'react';
 import CreateCabinForm from './CreateCabinForm';
 import { useDeleteCabin } from './useDeleteCabin';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+import { useCreateCabin } from './useCreateCabin';
 
 const TableRow = styled.div`
   display: grid;
@@ -59,7 +61,7 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
     }
   }, [setActiveEditForm, showForm]);
 
-  const { id: cabinId, name, maxCapacity, regularPrice, discount, image } = cabin;
+  const { id: cabinId, name, maxCapacity, regularPrice, discount, image, description } = cabin;
 
   // > MOVED TO A CUSTOM HOOK
   const { isDeleting, deleteCabin } = useDeleteCabin();
@@ -86,6 +88,11 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
   //   // onError: (err) => alert(err.message),
   //   onError: (err) => toast.error(err.message),
   // });
+  const { isCreating, createCabin } = useCreateCabin(); // Used for duplicating cabin
+
+  function handleDuplicate() {
+    createCabin({ name: `Copy of ${name}`, maxCapacity, regularPrice, discount, image, description });
+  }
 
   return (
     <>
@@ -96,7 +103,7 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>{discount ? formatCurrency(discount) : <span>&mdash;</span>}</Discount>
         <div>
-          <button>
+          <button onClick={handleDuplicate}>
             <HiSquare2Stack />
           </button>
           <button
