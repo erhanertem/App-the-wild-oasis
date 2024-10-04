@@ -1,6 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 
 import Input from '../../ui/Input';
 import Form from '../../ui/Form';
@@ -9,7 +7,6 @@ import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
 import FormRow from '../../ui/FormRow';
 
-import { createOrEditCabin } from '../../services/apiCabins';
 import { useCreateCabin } from './useCreateCabin';
 import { useEditCabin } from './useEditCabin';
 
@@ -45,7 +42,7 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
       editCabin(
         { cabinToEdit: formData, idForCabinEditing },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
             reset();
             // Close edit form
             setShowCurrentEditForm(false);
@@ -59,7 +56,7 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
       // console.log('Using create session...');
       // console.log(formData);
       createCabin(formData, {
-        onSuccess: () => {
+        onSuccess: (data) => {
           // Reset the data @ form after successfull submission
           // NOTE: We do not handle reset inside the custom submit handler fn and keep it as close as possible to onSuccess.
           reset();
