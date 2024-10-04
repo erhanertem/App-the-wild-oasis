@@ -110,8 +110,8 @@ export async function createOrEditCabin(formData, idForCabinEditing) {
   return cabinData;
 }
 
-export async function deleteCabin(id) {
-  // #1. Read the cabin data pertinent to this id - to be used reverting the data if failed deleting the image
+export async function deleteCabin(id, image = '') {
+  // > #1. Read the cabin data pertinent to this id - to be used reverting the data if failed deleting the image
   const { data: cabin, error: cabinReadError } = await supabase.from('cabins').select('*').eq('id', id);
   if (cabinReadError) {
     console.error(cabinReadError);
@@ -120,7 +120,7 @@ export async function deleteCabin(id) {
   const backupCabinData = cabin[0];
   const imgFileName = backupCabinData.image.split('/').pop();
 
-  // #2. Delete the cabin row from DB cabins table
+  // > #2. Delete the cabin row from DB cabins table
   const { error: cabinDeleteError } = await supabase.from('cabins').delete().eq('id', id);
   // GUARD CLAUSE - HANDLE ERROR OBJECT FROM SUPABASE RESPONSE
   if (cabinDeleteError) {
@@ -128,15 +128,30 @@ export async function deleteCabin(id) {
     throw new Error('Cabin could not be deleted');
   }
 
-  // #3. Delete Image from DB bucket
-  const { error: fileRemoveError } = await supabase.storage.from('cabin-images').remove([imgFileName]);
-  // const fileRemoveError = true; // FOR TESTING FILEREMOVE ERROR
-  if (fileRemoveError) {
-    //Revert deletion
-    createOrEditCabin(backupCabinData);
-    //Error handling
-    console.error(fileRemoveError);
-    throw new Error('Encountered a problem removing the cabin image. Cabin did not get deleted.');
+  // > #3. Check if image is being shared with more than 1 entry
+  const { data: imageBearerList, error: imageBearerListError } = await supabase
+    .from('cabins')
+    .select('image')
+    .eq('image', image);
+  if (imageBearerListError) {
+    //  Error handling
+    console.error(imageBearerListError);
+    throw new Error('Encountered a problem gathering list of cabins using the same image. Cabin did not get deleted.');
   }
+  // console.log(imageBearerList);
+
+  if (!imageBearerList.length) {
+    // > #4. Delete Image from DB bucket
+    const { error: fileRemoveError } = await supabase.storage.from('cabin-images').remove([imgFileName]);
+    // const fileRemoveError = true; // FOR TESTING FILEREMOVE ERROR
+    if (fileRemoveError) {
+      //Revert deletion
+      createOrEditCabin(backupCabinData);
+      //Error handling
+      console.error(fileRemoveError);
+      throw new Error('Encountered a problem removing the cabin image. Cabin did not get deleted.');
+    }
+  }
+
   return;
 }

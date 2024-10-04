@@ -70,6 +70,7 @@ In addition to the project cirriculum:
   - Improved DELETE functionality w/ cabin data recovery feature upon unsuccessful image delete operation
 - Implement auto switching forms @ cabins page between edit forms and create forms allowing only a single form displayed
   at a time.
+- Restrict deletion of shared image bucket files, if shared more than one cabin to keep integrity of cabin table data.
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 

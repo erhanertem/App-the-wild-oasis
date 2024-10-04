@@ -13,7 +13,8 @@ export function useDeleteCabin() {
     // error, // Holds any error that occurs during the mutation - - This is useless as onError is responding to this error object inside him
   } = useMutation({
     //MUTATOR
-    mutationFn: deleteCabinApi, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
+    mutationFn: ({ cabinId, image }) => deleteCabinApi(cabinId, image),
+    // mutationFn: deleteCabinApi, // NOTE: Sames as mutationFn: (id) => deleteCabin(id),
     // As soon as mutation is complete, in order to trigger a refresh by invalidating the cached UI, we make use of onSuccess. This field gets a hold of the TQ client instance
     onSuccess: () => {
       // alert('Cabin succesfully deleted');

@@ -134,7 +134,8 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
           </button>
           <button
             // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
-            onClick={() => deleteCabin(cabinId)}
+            // NOTE: Provided image reference to the delete mutation fn so that if there are dubs using the sasme image reference  should not pursue also deleting the image from the bucket
+            onClick={() => deleteCabin({ cabinId, image })}
             disabled={isDeleting}
           >
             <HiTrash />
