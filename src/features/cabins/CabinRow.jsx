@@ -3,6 +3,7 @@ import { formatCurrency } from '../../utils/helpers';
 import { useEffect, useState } from 'react';
 import CreateCabinForm from './CreateCabinForm';
 import { useDeleteCabin } from './useDeleteCabin';
+import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 
 const TableRow = styled.div`
   display: grid;
@@ -95,6 +96,9 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>{discount ? formatCurrency(discount) : <span>&mdash;</span>}</Discount>
         <div>
+          <button>
+            <HiSquare2Stack />
+          </button>
           <button
             onClick={() => {
               // Update ACTIVE edit form state @ CabinTable
@@ -116,14 +120,14 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
               showForm && setShowForm(false);
             }}
           >
-            Edit
+            <HiPencil />
           </button>
           <button
             // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
             onClick={() => deleteCabin(cabinId)}
             disabled={isDeleting}
           >
-            Delete
+            <HiTrash />
           </button>
         </div>
       </TableRow>
