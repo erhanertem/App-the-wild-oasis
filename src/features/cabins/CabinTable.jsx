@@ -4,6 +4,7 @@ import { getCabins } from '../../services/apiCabins';
 import Spinner from '../../ui/Spinner';
 import CabinRow from './CabinRow';
 import { useEffect, useState } from 'react';
+import { useGetCabins } from './useGetCabins';
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -34,15 +35,17 @@ function CabinTable({ showForm, setShowForm }) {
   // STATE THAT KEEPS TRACK OF OPEN edit form
   const [activeEditForm, setActiveEditForm] = useState(null);
 
-  // >#3.GET data via TQ
-  const {
-    isLoading, // Represents the loading state while the query is fetching data
-    data: cabins, // The fetched data (renamed to cabins using object destructuring)
-    // error, // Any error that occurred during the fetch
-  } = useQuery({
-    queryKey: ['cabins'], // The unique key for caching and identifying the query
-    queryFn: getCabins, // The function responsible for fetching the data
-  });
+  // > MOVED TO A CUSTOM HOOK
+  const { isLoading, cabins } = useGetCabins();
+  // // >#3.GET data via TQ
+  // const {
+  //   isLoading, // Represents the loading state while the query is fetching data
+  //   data: cabins, // The fetched data (renamed to cabins using object destructuring)
+  //   // error, // Any error that occurred during the fetch
+  // } = useQuery({
+  //   queryKey: ['cabins'], // The unique key for caching and identifying the query
+  //   queryFn: getCabins, // The function responsible for fetching the data
+  // });
 
   if (isLoading) return <Spinner />;
 

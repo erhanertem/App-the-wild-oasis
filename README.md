@@ -51,8 +51,8 @@
   - Provide TQ client via \<QueryClientProvider/>
   - Query Remote Data
     - 'GET' data w/ useQuery TQ hook
-    - 'POST' data w/ useMutation TQ hook
-    - 'DELETE' data w/ useMutation TQ hook
+    - 'POST'/'UPDATE'/'DELETE' data w/ useMutation TQ hook
+  - Re-factoring TQ context snippets to dry react components
 
 - Reach-Hook-Form
   - useForm() RHF hook
