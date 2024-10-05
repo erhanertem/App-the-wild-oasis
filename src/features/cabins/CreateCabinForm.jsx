@@ -11,7 +11,13 @@ import { useCreateCabin } from './useCreateCabin';
 import { useEditCabin } from './useEditCabin';
 
 // NOTE: WE PROVIDE CABINTOEDIT WITH AN EMPTY {} BY DEFAULT. BECAUSE WE USE CABIN CREATION FORM FOR TWO ACTIONS: 1. CREATE A NEW CABIN, 2. EDIT AN EXISTING CABIN
-function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, setShowCurrentEditForm }) {
+function CreateCabinForm({
+  cabinToEdit = {},
+  setShowForm,
+  setActiveEditForm,
+  setShowCurrentEditForm,
+  onCloseModal,
+}) {
   // FOR CABINS BEING EDITED, PREP THE CABIN DATA FROM cabinToEdit PROP
   const { id: idForCabinEditing, ...editValues } = cabinToEdit;
   // IDENTIFY IF ITS AN EDIT SESSION TO PRELOAD THE VALUES FROM editValues
@@ -44,10 +50,12 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
         {
           onSuccess: (data) => {
             reset();
+            // Close modal
+            onCloseModal?.();
             // Close edit form
-            setShowCurrentEditForm(false);
+            // setShowCurrentEditForm(false);
             // Reset active edit form
-            setActiveEditForm(null);
+            // setActiveEditForm(null);
           },
         }
       );
@@ -60,8 +68,10 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
           // Reset the data @ form after successfull submission
           // NOTE: We do not handle reset inside the custom submit handler fn and keep it as close as possible to onSuccess.
           reset();
+          // Close modal
+          onCloseModal?.();
           // Close create form after succesfull submission
-          setShowForm(false);
+          // setShowForm(false);
         },
       });
     }
@@ -201,7 +211,8 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
             required: 'This field is required',
             // VIA CUSTOM VALIDATION
             validate: (value) =>
-              Number(value) <= Number(getValues().regularPrice) || 'Discount should not exceed regular price',
+              Number(value) <= Number(getValues().regularPrice) ||
+              'Discount should not exceed regular price',
           })}
         />
       </FormRow>
@@ -244,10 +255,13 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm, setActiveEditForm, set
         <Button
           variation='secondary'
           type='reset' //Regular HTML attribute
+          onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>
-        <Button disabled={isProcessing}>{isEditSession ? 'Edit cabin' : 'Create new cabin'}</Button>
+        <Button disabled={isProcessing}>
+          {isEditSession ? 'Edit cabin' : 'Create new cabin'}
+        </Button>
       </FormRow>
     </Form>
   );
