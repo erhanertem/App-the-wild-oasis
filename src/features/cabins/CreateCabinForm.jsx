@@ -140,7 +140,10 @@ function CreateCabinForm({
 
   return (
     // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FNS> DISCLOSED @ STEP#4 - FOR PROBLEMATIC SUBMISSION ROUTED TO onErrorFn HANDLER (suited only for console.logs), FOR NON-PROBLEMATIC SUBMISSION ROUTED TO onSubmitFn HANDLER
-    <Form onSubmit={handleSubmit(onSubmitFn, onErrorFn)}>
+    <Form
+      onSubmit={handleSubmit(onSubmitFn, onErrorFn)}
+      type={onCloseModal ? 'modal' : 'regular'} // Identify the type of form beased on props served
+    >
       <FormRow
         label='Cabin name'
         error={errors?.name?.message}
