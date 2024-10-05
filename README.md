@@ -55,11 +55,14 @@
   - Re-factoring TQ context snippets to dry react components
 
 - Reach-Hook-Form
-  - useForm() RHF hook
-  - Standard Form validation RHF rules (required, min, max)
-    - Custom(functionalized) Form validation rule (validate)
+
+  - Manual user triggered form submission
+    - useForm() RHF hook
+    - Standard Form validation RHF rules (required, min, max) - Custom(functionalized) Form validation rule (validate)
     - Read values from form fields via getValues() RHF fn to compliment dependant validation challanges
-    </details>
+  - Automatic onBlur type form submission
+
+  </details>
 
 &emsp;
 
