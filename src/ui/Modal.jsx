@@ -63,8 +63,9 @@ function Modal({ onClose, children }) {
       </StyledModal>
     </Overlay>,
     // #2. Where to insert the portal
-    document.body
+    // document.body
     // document.querySelector(selectors)
+    document.getElementById('modal-container')
   );
 }
 
