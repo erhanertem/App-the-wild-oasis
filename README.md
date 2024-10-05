@@ -74,6 +74,8 @@ In addition to the project cirriculum:
 - Implement auto switching forms @ cabins page between edit forms and create forms allowing only a single form displayed
   at a time.
 - Restrict deletion of shared image bucket files, if shared more than one cabin to keep integrity of cabin table data.
+- Avoid redundant PATCH fetch requests by checking the currValue against the onBlur value while handling automatic
+  onBlur type form submission @ settings page
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 
