@@ -17,11 +17,13 @@ function UpdateSettingsForm() {
   if (isLoading) return <Spinner />;
 
   // > ONBLUR EVENT HANDLER FN
-  function handleUpdate(event, fieldNameToUpdate) {
+  function handleUpdate(event, fieldNameToUpdate, currFieldData) {
     const { value } = event.target;
     // console.log(value);
     // GUARD CLAUSE
     if (!value) return;
+    // Check if user has changed anything else return gracefully
+    if (Number(value) === currFieldData) return;
     /*
     Based on supabase specs - update required a column name and the data key/value pait in an object syntax.
 
@@ -45,7 +47,8 @@ function UpdateSettingsForm() {
           id='min-nights'
           disabled={isUpdatingSetting}
           defaultValue={minBookingLength}
-          onBlur={(e) => handleUpdate(e, 'minBookingLength')}
+          // Add currValue as the third argument to check against what we got onBlur which triggers a UPDATE request to server in order to avoid redundant requests
+          onBlur={(e) => handleUpdate(e, 'minBookingLength', minBookingLength)}
         />
       </FormRow>
       <FormRow label='Maximum nights/booking'>
@@ -54,7 +57,7 @@ function UpdateSettingsForm() {
           id='max-nights'
           disabled={isUpdatingSetting}
           defaultValue={maxBookingLength}
-          onBlur={(e) => handleUpdate(e, 'maxBookingLength')}
+          onBlur={(e) => handleUpdate(e, 'maxBookingLength', maxBookingLength)}
         />
       </FormRow>
       <FormRow label='Maximum guests/booking'>
@@ -63,7 +66,7 @@ function UpdateSettingsForm() {
           id='max-guests'
           disabled={isUpdatingSetting}
           defaultValue={maxGuestsPerBooking}
-          onBlur={(e) => handleUpdate(e, 'maxGuestsPerBooking')}
+          onBlur={(e) => handleUpdate(e, 'maxGuestsPerBooking', maxGuestsPerBooking)}
         />
       </FormRow>
       <FormRow label='Breakfast price'>
@@ -72,7 +75,7 @@ function UpdateSettingsForm() {
           id='breakfast-price'
           disabled={isUpdatingSetting}
           defaultValue={breakfastPrice}
-          onBlur={(e) => handleUpdate(e, 'breakfastPrice')}
+          onBlur={(e) => handleUpdate(e, 'breakfastPrice', breakfastPrice)}
         />
       </FormRow>
     </Form>
