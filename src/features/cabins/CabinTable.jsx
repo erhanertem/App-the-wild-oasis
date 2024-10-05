@@ -30,7 +30,7 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
-function CabinTable({ showForm, setShowForm }) {
+function CabinTable() {
   // > MARK ACTIVE OPEN EDIT FORM
   // STATE THAT KEEPS TRACK OF OPEN edit form
   const [activeEditForm, setActiveEditForm] = useState(null);
@@ -63,8 +63,6 @@ function CabinTable({ showForm, setShowForm }) {
         <CabinRow
           cabin={cabin}
           key={cabin.id}
-          showForm={showForm}
-          setShowForm={setShowForm}
           activeEditForm={activeEditForm}
           setActiveEditForm={setActiveEditForm}
         />

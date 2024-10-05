@@ -46,22 +46,19 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditForm }) {
+function CabinRow({ cabin, activeEditForm, setActiveEditForm }) {
   // STATE TOGGLE CURRENT EDIT CABIN FORM VIEW
   const [showCurrentEditForm, setShowCurrentEditForm] = useState(false);
-  // STATE TOGGLE FOR CLOSING all cabin edit forms if create cabin form is active
-  useEffect(() => {
-    // OPEN create form && CLOSE edit forms and reset active edit form state
-    if (showForm === true) {
-      setShowCurrentEditForm(false);
-      setActiveEditForm(null);
-    } else {
-      // CLOSE create form && OPEN all edit forms
-      setShowCurrentEditForm(true);
-    }
-  }, [setActiveEditForm, showForm]);
 
-  const { id: cabinId, name, maxCapacity, regularPrice, discount, image, description } = cabin;
+  const {
+    id: cabinId,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    image,
+    description,
+  } = cabin;
 
   // > MOVED TO A CUSTOM HOOK
   const { isDeleting, deleteCabin } = useDeleteCabin();
@@ -91,7 +88,14 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
   const { isCreating, createCabin } = useCreateCabin(); // Used for duplicating cabin
 
   function handleDuplicate() {
-    createCabin({ name: `Copy of ${name}`, maxCapacity, regularPrice, discount, image, description });
+    createCabin({
+      name: `Copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      image,
+      description,
+    });
   }
 
   return (
@@ -101,7 +105,9 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
         <Cabin>{name}</Cabin>
         <div>Fits up to {maxCapacity} guests</div>
         <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>{discount ? formatCurrency(discount) : <span>&mdash;</span>}</Discount>
+        <Discount>
+          {discount ? formatCurrency(discount) : <span>&mdash;</span>}
+        </Discount>
         <div>
           <button
             disabled={isCreating}
@@ -126,8 +132,6 @@ function CabinRow({ cabin, showForm, setShowForm, activeEditForm, setActiveEditF
                 // Reset the active edit form state
                 setActiveEditForm(null);
               }
-              // Close create new cabin form
-              showForm && setShowForm(false);
             }}
           >
             <HiPencil />

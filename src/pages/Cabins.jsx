@@ -6,9 +6,6 @@ import CabinTable from '../features/cabins/CabinTable';
 import AddCabin from '../features/cabins/AddCabin';
 
 function Cabins() {
-  // STATE TOGGLE BETWEEN edit form AND all create forms
-  const [showForm, setShowForm] = useState(false);
-
   return (
     <>
       <Row type='horizontal'>
@@ -17,10 +14,7 @@ function Cabins() {
       </Row>
 
       <Row>
-        <CabinTable
-          showForm={showForm}
-          setShowForm={setShowForm}
-        />
+        <CabinTable />
         <AddCabin />
       </Row>
     </>
