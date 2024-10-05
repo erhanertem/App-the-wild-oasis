@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getSettings } from '../../services/apiSettings';
 
 // Custom TQ hook
-export function useSettings() {
+export function useGetSettings() {
   const {
     isLoading, // Represents the loading state while the query is fetching data
     data: settingsData, // The fetched data

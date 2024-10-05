@@ -1,4 +1,4 @@
-import { useSettings } from './useSettings';
+import { useGetSettings } from './useGetSettings';
 
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
@@ -7,7 +7,7 @@ import Spinner from '../../ui/Spinner';
 
 function UpdateSettingsForm() {
   const { isLoading, settingsData: { minBookingLength, maxBookingLength, maxGuestsPerBooking, breakfastPrice } = {} } =
-    useSettings();
+    useGetSettings();
 
   if (isLoading) return <Spinner />;
 
