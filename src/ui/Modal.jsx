@@ -1,4 +1,11 @@
-import { cloneElement, createContext, useContext, useState } from 'react';
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
@@ -107,6 +114,44 @@ function Open({ opens, children }) {
 }
 function Window({ name, children }) {
   const { openName, handleClose } = useContext(ModalContext);
+  // Points to the window modal on the DOM
+  const ref = useRef();
+
+  useEffect(
+    function () {
+      // Event handler for Close-On-Click-Outside
+      function handleOutOfModalClick(e) {
+        // console.log('#1', ref.current);
+        // console.log('#2', e.target);
+        // console.log('#3', e.target.contains(ref.current));
+        // If there is a window modal on DOM and wherever we have clicked (e.target) is NOT within the window REF dom element, proceed with modal close
+        if (ref.current && e.target.contains(ref.current)) {
+          console.log('Clicked outside');
+          handleClose();
+        }
+      }
+      // Event handler for Close-On-Hitting-Escape
+      function handleEscapeKey(e) {
+        if (e.key === 'Escape') {
+          console.log('Escape key pressed');
+          handleClose();
+        }
+      }
+
+      // DOM Event Listeners
+      // Event listener for Click outside
+      document.addEventListener('click', handleOutOfModalClick);
+      // Event listener for Escape key
+      document.addEventListener('keydown', handleEscapeKey);
+
+      // Cleanup function upon component dismount
+      return () => {
+        document.removeEventListener('click', handleOutOfModalClick);
+        document.removeEventListener('keydown', handleEscapeKey);
+      };
+    },
+    [handleClose, openName]
+  );
 
   // GUARD CLAUSE
   if (name !== openName) return null;
@@ -114,7 +159,8 @@ function Window({ name, children }) {
   return createPortal(
     // #1. JSX body to be inserted
     <Overlay>
-      <StyledModal>
+      {/* ref identifies the selection on the dom object */}
+      <StyledModal ref={ref}>
         <Button onClick={handleClose}>
           <HiXMark />
         </Button>
