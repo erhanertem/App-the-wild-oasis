@@ -1,6 +1,7 @@
 import Button from '../../ui/Button';
 import Modal from '../../ui/Modal';
 import CreateCabinForm from './CreateCabinForm';
+// import CabinTable from './CabinTable';
 
 // ORIGINAL MODAL IMPLEMENTATION
 // function AddCabin() {
@@ -35,11 +36,11 @@ function AddCabin() {
       </Modal.Window>
 
       {/* Another example modal - we can create as many modals as we want inside this component and only one can be displayed at a time */}
-      {/* <Modal.Open opens='graphs-summary'>
-        <Button>Show graph summary</Button>
+      {/* <Modal.Open opens='table'>
+        <Button>Show table</Button>
       </Modal.Open>
-      <Modal.Window name='graphs-summary'>
-        <CreateCabinForm />
+      <Modal.Window name='table'>
+        <CabinTable />
       </Modal.Window> */}
     </Modal>
   );
