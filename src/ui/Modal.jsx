@@ -75,12 +75,17 @@ const Button = styled.button`
 // >#1.CREATE CONTEXT API
 const ModalContext = createContext();
 // >#2.CREATE PARENT COMPONENT W/STANDARD CONTEXT PROVIDER IMPLEMENTATION
-function Modal({ children }) {
+function Modal({
+  children,
   // Takes in children prop so that it can display child components
-  // Keep track of which modal window (Modal.Open+Modal.Window) is open
+  // Children are Modal.Open and Modal.Window
+}) {
+  // Keep track of which modal window (Modal.Open+Modal.Window) is open, if there is more than one modal we want to display in the future
   const [openName, setOpenName] = useState('');
-  // Open/Close the modal window handlers
+  // Open/Close the modal window handlers we want to pass thru child API components
+  // For the Modal.Window API child component's children - <CreateCabinForm/> @ AddCabin.js
   const handleClose = () => setOpenName('');
+  // For the Modal.Open API child component's children - <Button>....</Button> @ AddCabin.js
   const handleOpen = (openName) => setOpenName(openName);
 
   return (
