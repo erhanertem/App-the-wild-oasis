@@ -1,3 +1,4 @@
+import { cloneElement, createContext, useContext, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
@@ -51,15 +52,73 @@ const Button = styled.button`
   }
 `;
 
-function Modal({ onClose, children }) {
+// ORIGINAL MODAL IMPLEMENTATION
+// function Modal({ onClose, children }) {
+//   return createPortal(
+//     // #1. JSX body to be inserted
+//     <Overlay>
+//       <StyledModal>
+//         <Button onClick={onClose}>
+//           <HiXMark />
+//         </Button>
+//         <div>{children}</div>
+//       </StyledModal>
+//     </Overlay>,
+//     // #2. Where to insert the portal
+//     // document.body
+//     // document.querySelector(selectors)
+//     document.getElementById('modal-container')
+//   );
+// }
+
+// > CREATE A COMPOUND COMPONENT
+// >#1.CREATE CONTEXT API
+const ModalContext = createContext();
+// >#2.CREATE PARENT COMPONENT W/STANDARD CONTEXT PROVIDER IMPLEMENTATION
+function Modal({ children }) {
+  // Takes in children prop so that it can display child components
+  // Keep track of which modal window (Modal.Open+Modal.Window) is open
+  const [openName, setOpenName] = useState('');
+  // Open/Close the modal window handlers
+  const handleClose = () => setOpenName('');
+  const handleOpen = (openName) => setOpenName(openName);
+
+  return (
+    // Provide states and props
+    <ModalContext.Provider
+      value={{ openName, setOpenName, handleClose, handleOpen }}
+    >
+      {children}
+    </ModalContext.Provider>
+  );
+}
+// >#3.CREATE CHILD COMPONENTS
+function Open({ opens, children }) {
+  const { handleOpen } = useContext(ModalContext);
+
+  // IMPORTANT: WE WANT TO ASSIGN THE CONTEXT STATE TO THE CHILDREN - BUTTON COMPONENT. IN ORDER TO DO THAT WE NEED TO REPACK THE CHILDREN WITH THIS OUTER STATE AND SERVER IT VIA CLONEELEMENT ADVANCED REACT FUNCTION
+  // return children;
+  return cloneElement(children, { onClick: () => handleOpen(opens) });
+}
+function Window({ name, children }) {
+  const { openName, handleClose } = useContext(ModalContext);
+
+  // GUARD CLAUSE
+  if (name !== openName) return null;
+
   return createPortal(
     // #1. JSX body to be inserted
     <Overlay>
       <StyledModal>
-        <Button onClick={onClose}>
+        <Button onClick={handleClose}>
           <HiXMark />
         </Button>
-        <div>{children}</div>
+        {/* IMPORTANT: WE WANT TO ASSIGN THE CONTEXT STATE TO THE CHILDREN -
+        CREATECABINFORM COMPONENT. THIS COMPONENT IF ITS CREATE NEW CABIN ACTION THEN WOULD REQUIRE ONCLOSEMODAL HANDLER PROP WHICH IS THE HANDLECLOSE HANDLER WE PROVIDE THRU CONTEXT API HERE. IN ORDER TO DO THAT WE NEED TO REPACK THE CHILDREN
+        WITH THIS OUTER STATE AND SERVER IT VIA CLONEELEMENT ADVANCED REACT
+        FUNCTION */}
+        {/* <div>{children}</div> */}
+        <div>{cloneElement(children, { onCloseModal: handleClose })}</div>
       </StyledModal>
     </Overlay>,
     // #2. Where to insert the portal
@@ -68,5 +127,9 @@ function Modal({ onClose, children }) {
     document.getElementById('modal-container')
   );
 }
+
+// >#4.ESTABLISH CC API
+Modal.Open = Open;
+Modal.Window = Window;
 
 export default Modal;
