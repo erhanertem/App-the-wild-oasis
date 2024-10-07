@@ -26,3 +26,4 @@ dist-ssr
 # Project specific
 *.supabase_pass
 *.vscode
+netlify.toml
