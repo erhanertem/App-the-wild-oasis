@@ -1,14 +1,8 @@
-import {
-  cloneElement,
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { cloneElement, createContext, useContext, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
+import { useOutsideClick } from '../hooks/useOutsideClick';
 
 const StyledModal = styled.div`
   position: fixed;
@@ -114,51 +108,65 @@ function Open({ opens, children }) {
 }
 function Window({ name, children }) {
   const { openName, handleClose } = useContext(ModalContext);
-  // Points to the window modal on the DOM
-  const ref = useRef();
 
-  useEffect(
-    function () {
-      // Event handler for Close-On-Click-Outside
-      function handleOutOfModalClick(e) {
-        // console.log('#1', ref.current);
-        // console.log('#2', e.target);
-        // console.log('#3', e.target.contains(ref.current));
-        // If there is a window modal on DOM and wherever we have clicked (e.target) is NOT within the window REF dom element, proceed with modal close
-        if (ref.current && e.target.contains(ref.current)) {
-          console.log('Clicked outside');
-          handleClose();
-        }
-      }
-      // Event handler for Close-On-Hitting-Escape
-      function handleEscapeKey(e) {
-        if (e.key === 'Escape') {
-          console.log('Escape key pressed');
-          handleClose();
-        }
-      }
+  // // Points to the window modal on the DOM
+  // const ref = useRef();
+  // // -> #1 ALTERNATE TO CLOSE THE MODAL
+  // useEffect(
+  //   function () {
+  //     // Event handler for Close-On-Click-Outside
+  //     function handleOutOfModalClick(e) {
+  //       // console.log('#1', ref.current);
+  //       // console.log('#2', e.target);
+  //       // console.log('#3', e.target.contains(ref.current));
+  //       // If there is a window modal on DOM and wherever we have clicked (e.target) is NOT within the window REF dom element, proceed with modal close
+  //       if (ref.current && e.target.contains(ref.current)) {
+  //         console.log('Clicked outside');
+  //         handleClose();
+  //       }
+  //     }
+  //     // Event handler for Close-On-Hitting-Escape
+  //     function handleEscapeKey(e) {
+  //       if (e.key === 'Escape') {
+  //         console.log('Escape key pressed');
+  //         handleClose();
+  //       }
+  //     }
 
-      // DOM Event Listeners
-      // Event listener for Click outside
-      document.addEventListener('click', handleOutOfModalClick);
-      // Event listener for Escape key
-      document.addEventListener('keydown', handleEscapeKey);
+  //     // DOM Event Listeners
+  //     // Event listener for Click outside
+  //     document.addEventListener('click', handleOutOfModalClick);
+  //     // Event listener for Escape key
+  //     document.addEventListener('keydown', handleEscapeKey);
 
-      // Cleanup function upon component dismount
-      return () => {
-        document.removeEventListener('click', handleOutOfModalClick);
-        document.removeEventListener('keydown', handleEscapeKey);
-      };
-    },
-    [handleClose, openName]
-  );
+  //     // Cleanup function upon component dismount
+  //     return () => {
+  //       document.removeEventListener('click', handleOutOfModalClick);
+  //       document.removeEventListener('keydown', handleEscapeKey);
+  //     };
+  //   },
+  //   [handleClose, openName]
+  // );
+  // // -> #2.ALTERNATE TO CLOSE A MODAL
+  // // Draw back isyou cant handle esc and it requires useEffect eventually
+  // function closeModal(e) {
+  //   console.log(e);
+  //   if (ref.current && e.target.contains(ref.current)) {
+  //     console.log('Clicked outside');
+  //     handleClose();
+  //   }
+  // }
+  // -> #3. ALTERNATE - ABSTRACT MODAL CLOSING BUSINESS INTO A CUSTOM HOOK
+  const ref = useOutsideClick(handleClose);
 
   // GUARD CLAUSE
   if (name !== openName) return null;
 
   return createPortal(
     // #1. JSX body to be inserted
-    <Overlay>
+    <Overlay
+    // onClick={closeModal}
+    >
       {/* ref identifies the selection on the dom object */}
       <StyledModal ref={ref}>
         <Button onClick={handleClose}>
