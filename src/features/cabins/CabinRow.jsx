@@ -7,6 +7,7 @@ import { useDeleteCabin } from './useDeleteCabin';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 import { useCreateCabin } from './useCreateCabin';
 import Modal from '../../ui/Modal';
+import ConfirmDelete from '../../ui/ConfirmDelete';
 
 const TableRow = styled.div`
   display: grid;
@@ -123,14 +124,20 @@ function CabinRow({ cabin }) {
             <CreateCabinForm cabinToEdit={cabin} />
           </Modal.Window>
 
-          <button
-            // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
-            // NOTE: Provided image reference to the delete mutation fn so that if there are dubs using the sasme image reference  should not pursue also deleting the image from the bucket
-            onClick={() => deleteCabin({ cabinId, image })}
-            disabled={isDeleting}
-          >
-            <HiTrash />
-          </button>
+          <Modal.Open opens='delete'>
+            <button disabled={isDeleting}>
+              <HiTrash />
+            </button>
+          </Modal.Open>
+          <Modal.Window name='delete'>
+            <ConfirmDelete
+              resourceName='cabins'
+              disabled={isDeleting}
+              // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
+              // NOTE: Provided image reference to the delete mutation fn so that if there are dubs using the sasme image reference  should not pursue also deleting the image from the bucket
+              onConfirm={() => deleteCabin({ cabinId, image })}
+            />
+          </Modal.Window>
         </Modal>
       </div>
     </TableRow>
