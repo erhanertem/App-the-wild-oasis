@@ -12,13 +12,7 @@ import { useCreateCabin } from './useCreateCabin';
 import { useEditCabin } from './useEditCabin';
 
 // NOTE: WE PROVIDE CABINTOEDIT WITH AN EMPTY {} BY DEFAULT. BECAUSE WE USE CABIN CREATION FORM FOR TWO ACTIONS: 1. CREATE A NEW CABIN, 2. EDIT AN EXISTING CABIN
-function CreateCabinForm({
-  cabinToEdit = {},
-  setActiveEditForm,
-  setShowCurrentEditForm,
-  // setShowForm,
-  onCloseModal,
-}) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   // FOR CABINS BEING EDITED, PREP THE CABIN DATA FROM cabinToEdit PROP
   const { id: idForCabinEditing, ...editValues } = cabinToEdit;
   // IDENTIFY IF ITS AN EDIT SESSION TO PRELOAD THE VALUES FROM editValues
@@ -53,10 +47,6 @@ function CreateCabinForm({
             reset();
             // Close modal
             onCloseModal?.();
-            // Close edit form
-            setShowCurrentEditForm(false);
-            // Reset active edit form
-            setActiveEditForm(null);
           },
         }
       );
@@ -71,8 +61,6 @@ function CreateCabinForm({
           reset();
           // Close modal
           onCloseModal?.();
-          // Close create form after succesfull submission
-          // setShowForm(false);
         },
       });
     }

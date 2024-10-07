@@ -1,21 +1,16 @@
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
-import Input from "../../ui/Input";
-import Form from "../../ui/Form";
-import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
-import Textarea from "../../ui/Textarea";
-import FormRow from "../../ui/FormRow";
+import Input from '../../ui/Input';
+import Form from '../../ui/Form';
+import Button from '../../ui/Button';
+import FileInput from '../../ui/FileInput';
+import Textarea from '../../ui/Textarea';
+import FormRow from '../../ui/FormRow';
 
-import { useCreateCabin } from "./useCreateCabin";
-import { useEditCabin } from "./useEditCabin";
+import { useCreateCabin } from './useCreateCabin';
+import { useEditCabin } from './useEditCabin';
 
-function CreateCabinForm({
-  cabinToEdit = {},
-  setShowEditCabinForm,
-  setActiveCabinEditForm,
-  onCloseModal,
-}) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
   // console.log("⚠️", cabinToEdit, editValues, isEditSession);
@@ -85,7 +80,7 @@ function CreateCabinForm({
     // The received data is raw. It has to be prepped to match our supabase table layout
     // console.log("👍", { ...data, image: data.image[0] });
 
-    const image = typeof data.image === "string" ? data.image : data.image[0];
+    const image = typeof data.image === 'string' ? data.image : data.image[0];
 
     if (isEditSession)
       editCabin(
@@ -97,10 +92,6 @@ function CreateCabinForm({
             console.log(data);
             // Reset the data @ form after successfull submission
             reset();
-            // turn off edit form
-            setShowEditCabinForm(false);
-            // nullify the selected one
-            setActiveCabinEditForm(null);
           },
         }
       );
@@ -130,78 +121,78 @@ function CreateCabinForm({
   return (
     <Form
       onSubmit={handleSubmit(onSubmit, onError)}
-      type={onCloseModal ? "modal" : "regular"}
+      type={onCloseModal ? 'modal' : 'regular'}
     >
       <FormRow
-        label="Cabin name"
+        label='Cabin name'
         error={errors?.name?.message}
       >
         <Input
-          type="text"
-          id="name"
+          type='text'
+          id='name'
           disabled={isWorking}
           // {...register("name")} //For registering data use the corresponding id w/out validation
-          {...register("name", { required: "This field is required" })} //For registering data use the corresponding id w/validation
+          {...register('name', { required: 'This field is required' })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
       <FormRow
-        label="Maximum capacity"
+        label='Maximum capacity'
         error={errors?.maxCapacity?.message}
       >
         <Input
-          type="number"
-          id="maxCapacity"
+          type='number'
+          id='maxCapacity'
           disabled={isWorking}
           min={1}
           // {...register("maxCapacity")} //For registering data use the corresponding id w/out validation
-          {...register("maxCapacity", {
-            required: "This field is required",
+          {...register('maxCapacity', {
+            required: 'This field is required',
             min: {
               value: 1, //min value
-              message: "Capacity should be at least 1", // In case validation fails message
+              message: 'Capacity should be at least 1', // In case validation fails message
             },
             max: {
               value: 4, //max value
-              message: "Capacity should be at most 4", //In case validation fails message
+              message: 'Capacity should be at most 4', //In case validation fails message
             },
           })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
       <FormRow
-        label="Regular price"
+        label='Regular price'
         error={errors?.regularPrice?.message}
       >
         <Input
-          type="number"
-          id="regularPrice"
+          type='number'
+          id='regularPrice'
           disabled={isWorking}
           min={0}
           // {...register("regularPrice")} //For registering data use the corresponding id w/out validation
-          {...register("regularPrice", {
-            required: "This field is required",
+          {...register('regularPrice', {
+            required: 'This field is required',
             min: {
               value: 1, //min value
-              message: "Regular  price should be greater than zero", // In case validation fails message
+              message: 'Regular  price should be greater than zero', // In case validation fails message
             },
           })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
       <FormRow
-        label="Discount"
+        label='Discount'
         error={errors?.discount?.message}
       >
         <Input
-          type="number"
-          id="discount"
+          type='number'
+          id='discount'
           disabled={isWorking}
           defaultValue={0}
           min={0}
           // {...register("discount")} //For registering data use the corresponding id w/out validation
-          {...register("discount", {
-            required: "This field is required",
+          {...register('discount', {
+            required: 'This field is required',
             //custom validation function for complex assigments
             validate: (value) => {
               // console.log(value);
@@ -215,30 +206,30 @@ function CreateCabinForm({
       </FormRow>
 
       <FormRow
-        label="Description for website"
+        label='Description for website'
         error={errors?.description?.message}
       >
         <Textarea
-          type="number"
-          id="description"
+          type='number'
+          id='description'
           disabled={isWorking}
-          defaultValue=""
+          defaultValue=''
           // {...register("description")} //For registering data use the corresponding id w/out validation
-          {...register("description", { required: "This field is required" })} //For registering data use the corresponding id w/validation
+          {...register('description', { required: 'This field is required' })} //For registering data use the corresponding id w/validation
         />
       </FormRow>
 
       <FormRow
-        label="Cabin photo"
+        label='Cabin photo'
         error={errors?.image?.message}
       >
         <FileInput
-          id="image"
-          type="file"
+          id='image'
+          type='file'
           disabled={isWorking}
-          accept="image/*"
-          {...register("image", {
-            required: isEditSession ? false : "This field is required", //Conditionalize required - mark tru for non-edit sessions
+          accept='image/*'
+          {...register('image', {
+            required: isEditSession ? false : 'This field is required', //Conditionalize required - mark tru for non-edit sessions
           })} //For registering data use the corresponding id
         />
       </FormRow>
@@ -246,8 +237,8 @@ function CreateCabinForm({
       <FormRow>
         {/* type is an HTML attribute! <button type="button|submit|reset"> */}
         <Button
-          variation="secondary"
-          type="reset"
+          variation='secondary'
+          type='reset'
           disabled={isWorking}
           onClick={() => onCloseModal?.()}
           // VERY IMPORTANT!! WE USED OPTIONAL CHAINING ON ONCLOSEMODAL AS ITS NOT THE CASE FOR EDITCABINS FOR INSTANCE AS ITS BEING SHARED BY BOTH. ONCLOSEMODAL WILL BE UNDEFINED AND BREAK THE CODE IN EDITCABINS
@@ -255,7 +246,7 @@ function CreateCabinForm({
           Cancel
         </Button>
         <Button disabled={isWorking}>
-          {isEditSession ? "Edit cabin" : "Create new cabin"}
+          {isEditSession ? 'Edit cabin' : 'Create new cabin'}
         </Button>
       </FormRow>
     </Form>
