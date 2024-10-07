@@ -72,6 +72,9 @@
   - Utilize compound component pattern to build re-usable modal component
     - Utilize cloneElement() advanced react fn to repack a react component w/ an
       external prop coming from CC API child component
+  - Utilize compound component pattern to build re-usable table component
+    - Utilize compound component pattern with the assitance of render prop
+      pattern @ Table.Body
 
   </details>
 

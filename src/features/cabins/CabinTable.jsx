@@ -83,9 +83,11 @@ function CabinTable() {
         <div></div>
       </Table.Header>
 
-      {cabins.map((cabin) => (
-        <CabinRow cabin={cabin} key={cabin.id} />
-      ))}
+      {/* Pass data into this CC API component in conjunction w/render prop pattern*/}
+      <Table.Body
+        data={cabins}
+        render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
+      />
     </Table>
   );
 }
