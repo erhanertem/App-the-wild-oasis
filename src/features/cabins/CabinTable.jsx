@@ -1,62 +1,90 @@
-import styled from 'styled-components';
 import Spinner from '../../ui/Spinner';
 import CabinRow from './CabinRow';
 import { useGetCabins } from './useGetCabins';
+import Table from '../../ui/Table';
 
-const Table = styled.div`
-  border: 1px solid var(--color-grey-200);
+// > SINGLE-USE COMPONENT
+// const Table = styled.div`
+//   border: 1px solid var(--color-grey-200);
 
-  font-size: 1.4rem;
-  background-color: var(--color-grey-0);
-  border-radius: 7px;
-  overflow: hidden;
-`;
+//   font-size: 1.4rem;
+//   background-color: var(--color-grey-0);
+//   border-radius: 7px;
+//   overflow: hidden;
+// `;
 
-const TableHeader = styled.header`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
+// const TableHeader = styled.header`
+//   display: grid;
+//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+//   column-gap: 2.4rem;
+//   align-items: center;
 
-  background-color: var(--color-grey-50);
-  border-bottom: 1px solid var(--color-grey-100);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  font-weight: 600;
-  color: var(--color-grey-600);
-  padding: 1.6rem 2.4rem;
-`;
+//   background-color: var(--color-grey-50);
+//   border-bottom: 1px solid var(--color-grey-100);
+//   text-transform: uppercase;
+//   letter-spacing: 0.4px;
+//   font-weight: 600;
+//   color: var(--color-grey-600);
+//   padding: 1.6rem 2.4rem;
+// `;
 
+// function CabinTable() {
+//   // > MOVED TO A CUSTOM HOOK
+//   const { isLoading, cabins } = useGetCabins();
+//   // // >#3.GET data via TQ
+//   // const {
+//   //   isLoading, // Represents the loading state while the query is fetching data
+//   //   data: cabins, // The fetched data (renamed to cabins using object destructuring)
+//   //   // error, // Any error that occurred during the fetch
+//   // } = useQuery({
+//   //   queryKey: ['cabins'], // The unique key for caching and identifying the query
+//   //   queryFn: getCabins, // The function responsible for fetching the data
+//   // });
+
+//   if (isLoading) return <Spinner />;
+
+//   return (
+//     <Table role='table'>
+//       <TableHeader role='row'>
+//         <div></div>
+//         <div>Cabin</div>
+//         <div>Capacity</div>
+//         <div>Price</div>
+//         <div>Discount</div>
+//         <div></div>
+//       </TableHeader>
+//       {cabins.map((cabin) => (
+//         <CabinRow
+//           cabin={cabin}
+//           key={cabin.id}
+//         />
+//       ))}
+//     </Table>
+//   );
+// }
+
+// > RE-USABLE CABIN TABLE IMPLEMENTATION VIA CC PATTERN
 function CabinTable() {
-  // > MOVED TO A CUSTOM HOOK
+  //   // // >#3.GET data via TQ
+  //   // > MOVED TO A CUSTOM HOOK
   const { isLoading, cabins } = useGetCabins();
-  // // >#3.GET data via TQ
-  // const {
-  //   isLoading, // Represents the loading state while the query is fetching data
-  //   data: cabins, // The fetched data (renamed to cabins using object destructuring)
-  //   // error, // Any error that occurred during the fetch
-  // } = useQuery({
-  //   queryKey: ['cabins'], // The unique key for caching and identifying the query
-  //   queryFn: getCabins, // The function responsible for fetching the data
-  // });
 
   if (isLoading) return <Spinner />;
 
   return (
-    <Table role='table'>
-      <TableHeader role='row'>
+    // re-usable CC component container with API components
+    <Table columnsCSS='0.6fr 1.8fr 2.2fr 1fr 1fr 1fr'>
+      <Table.Header>
         <div></div>
         <div>Cabin</div>
         <div>Capacity</div>
         <div>Price</div>
         <div>Discount</div>
         <div></div>
-      </TableHeader>
+      </Table.Header>
+
       {cabins.map((cabin) => (
-        <CabinRow
-          cabin={cabin}
-          key={cabin.id}
-        />
+        <CabinRow cabin={cabin} key={cabin.id} />
       ))}
     </Table>
   );
