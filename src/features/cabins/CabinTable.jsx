@@ -1,9 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-import { getCabins } from '../../services/apiCabins';
 import Spinner from '../../ui/Spinner';
 import CabinRow from './CabinRow';
-import { useEffect, useState } from 'react';
 import { useGetCabins } from './useGetCabins';
 
 const Table = styled.div`
@@ -31,10 +28,6 @@ const TableHeader = styled.header`
 `;
 
 function CabinTable() {
-  // > MARK ACTIVE OPEN EDIT FORM
-  // STATE THAT KEEPS TRACK OF OPEN edit form
-  const [activeEditForm, setActiveEditForm] = useState(null);
-
   // > MOVED TO A CUSTOM HOOK
   const { isLoading, cabins } = useGetCabins();
   // // >#3.GET data via TQ
@@ -63,8 +56,6 @@ function CabinTable() {
         <CabinRow
           cabin={cabin}
           key={cabin.id}
-          activeEditForm={activeEditForm}
-          setActiveEditForm={setActiveEditForm}
         />
       ))}
     </Table>

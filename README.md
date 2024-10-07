@@ -24,12 +24,14 @@
     - template literals + conditional statements
   - Creating re-usable styled components
     - Propping via 'custom_named' prop
-      - \<StyleSheetManager> App wrapper SC component for enabling transient custom props
+      - \<StyleSheetManager> App wrapper SC component for enabling transient
+        custom props
     - Propping via 'as' prop (HTML tag modifier)
     - defaultProps function - Set defaults for the propping type
   - Create styled component contemplating a (ReactRouter) component
     - styled() SC function
-  - Create styled component w/ injected tag element attributes for code abstraction
+  - Create styled component w/ injected tag element attributes for code
+    abstraction
     - attrs() SC function
 
 - React Router
@@ -58,9 +60,18 @@
 
   - Manual user triggered form submission
     - useForm() RHF hook
-    - Standard Form validation RHF rules (required, min, max) - Custom(functionalized) Form validation rule (validate)
-    - Read values from form fields via getValues() RHF fn to compliment dependant validation challanges
+    - Standard Form validation RHF rules (required, min, max) -
+      Custom(functionalized) Form validation rule (validate)
+    - Read values from form fields via getValues() RHF fn to compliment
+      dependant validation challanges
   - Automatic onBlur type form submission
+
+- Advanced React
+
+  - Create modals using createPortal react fn
+  - Utilize compound component pattern to build re-usable modal component
+    - Utilize cloneElement() advanced react fn to repack a react component w/ an
+      external prop coming from CC API child component
 
   </details>
 
@@ -70,12 +81,15 @@ In addition to the project cirriculum:
 
 - Provide custom solutions around cabin API
   - Refined cabin edit and create API handling
-  - Improved DELETE functionality w/ cabin data recovery feature upon unsuccessful image delete operation
-- Implement auto switching forms @ cabins page between edit forms and create forms allowing only a single form displayed
-  at a time.
-- Restrict deletion of shared image bucket files, if shared more than one cabin to keep integrity of cabin table data.
-- Avoid redundant PATCH fetch requests by checking the currValue against the onBlur value while handling automatic
-  onBlur type form submission @ settings page
+  - Improved DELETE functionality w/ cabin data recovery feature upon
+    unsuccessful image delete operation
+- Implement auto switching forms @ cabins page between edit forms and create
+  forms allowing only a single form displayed at a time.
+- Restrict deletion of shared image bucket files if shared by more multiple
+  cabins to keep integrity of cabin table data.
+- Avoid redundant UPDATE fetch requests by checking the currValue against the
+  onBlur value while handling automatic onBlur type form submission @ settings
+  page
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 

@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import styled from 'styled-components';
 import { formatCurrency } from '../../utils/helpers';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CreateCabinForm from './CreateCabinForm';
 import { useDeleteCabin } from './useDeleteCabin';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 import { useCreateCabin } from './useCreateCabin';
+import Modal from '../../ui/Modal';
 
 const TableRow = styled.div`
   display: grid;
@@ -46,10 +47,7 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin, activeEditForm, setActiveEditForm }) {
-  // STATE TOGGLE CURRENT EDIT CABIN FORM VIEW
-  const [showCurrentEditForm, setShowCurrentEditForm] = useState(false);
-
+function CabinRow({ cabin }) {
   const {
     id: cabinId,
     name,
@@ -99,43 +97,32 @@ function CabinRow({ cabin, activeEditForm, setActiveEditForm }) {
   }
 
   return (
-    <>
-      <TableRow role='row'>
-        <Img src={image} />
-        <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity} guests</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>
-          {discount ? formatCurrency(discount) : <span>&mdash;</span>}
-        </Discount>
-        <div>
-          <button
-            disabled={isCreating}
-            onClick={handleDuplicate}
-          >
-            <HiSquare2Stack />
-          </button>
-          <button
-            onClick={() => {
-              // Update ACTIVE edit form state @ CabinTable
-              // When clicked, if not an active edit form open it
-              if (activeEditForm !== cabinId) {
-                // Mark this edit form active
-                setActiveEditForm(cabinId);
-                // Show the current edit form
-                setShowCurrentEditForm(true);
-              }
-              // When clicked, if it's the active edit form, close it
-              if (activeEditForm === cabinId && showCurrentEditForm) {
-                // Close the current edit form
-                setShowCurrentEditForm(false);
-                // Reset the active edit form state
-                setActiveEditForm(null);
-              }
-            }}
-          >
-            <HiPencil />
-          </button>
+    <TableRow role='row'>
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      <Discount>
+        {discount ? formatCurrency(discount) : <span>&mdash;</span>}
+      </Discount>
+      <div>
+        <button
+          disabled={isCreating}
+          onClick={handleDuplicate}
+        >
+          <HiSquare2Stack />
+        </button>
+
+        <Modal>
+          <Modal.Open opens='edit'>
+            <button>
+              <HiPencil />
+            </button>
+          </Modal.Open>
+          <Modal.Window name='edit'>
+            <CreateCabinForm cabinToEdit={cabin} />
+          </Modal.Window>
+
           <button
             // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
             // NOTE: Provided image reference to the delete mutation fn so that if there are dubs using the sasme image reference  should not pursue also deleting the image from the bucket
@@ -144,16 +131,9 @@ function CabinRow({ cabin, activeEditForm, setActiveEditForm }) {
           >
             <HiTrash />
           </button>
-        </div>
-      </TableRow>
-      {activeEditForm === cabinId && showCurrentEditForm && (
-        <CreateCabinForm
-          cabinToEdit={cabin}
-          setActiveEditForm={setActiveEditForm}
-          setShowCurrentEditForm={setShowCurrentEditForm}
-        />
-      )}
-    </>
+        </Modal>
+      </div>
+    </TableRow>
   );
 }
 
