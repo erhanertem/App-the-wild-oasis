@@ -1,8 +1,10 @@
+import styled from "styled-components";
 import { createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import { HiEllipsisVertical } from "react-icons/hi2";
-import styled from "styled-components";
+
 import { useOutsideClick } from "../hooks/useOutsideClick";
+
+import { HiEllipsisVertical } from "react-icons/hi2";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -66,24 +68,24 @@ const StyledButton = styled.button`
 `;
 
 // > #1.CREATE A CONTEXT API
-const MenuContext = createContext();
+const MenusContext = createContext();
 
 // > #2.CC CONTEXT PROVIDER PARENT COMPONENT
 function Menus({
   children, // Child API components...
 }) {
   // STATE THAT KEEPS TRACK OF OPEN MENU
-  const [openId, setOpenId] = useState(null);
+  const [openId, setOpenId] = useState("");
   // STATE THAT REPORTS THE CURRENT CLICKED MENU ICON LOCATION
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
 
   // EVENTHANDLERS
-  const handleClose = () => setOpenId(null);
+  const handleClose = () => setOpenId("");
   const handleOpen = (id) => setOpenId(id);
 
   // PROVIDE CONTEXT
   return (
-    <MenuContext.Provider
+    <MenusContext.Provider
       value={{
         openId,
         handleClose,
@@ -92,17 +94,18 @@ function Menus({
         setButtonPosition,
       }}>
       {children}
-    </MenuContext.Provider>
+    </MenusContext.Provider>
   );
 }
 
 // > #3.CC CHILD API COMPONENTS
 function Toggle({ id }) {
   const { openId, handleClose, handleOpen, setButtonPosition } =
-    useContext(MenuContext);
+    useContext(MenusContext);
 
   // Handle close/open menu by clicking the 3 dot button
   function handleClick(e) {
+    e.stopPropagation();
     // VERY IMPORTANT: As soon as the button clicked, we need to calculate the location of the closest parenting button in order to locate the portal created in the Menu.List API component correctly using some DOM traversing
     const rect = e.target.closest("button").getBoundingClientRect();
     setButtonPosition({
@@ -110,7 +113,8 @@ function Toggle({ id }) {
       y: rect.y + rect.height + 8,
     });
 
-    openId === null || openId !== id ? handleOpen(id) : handleClose();
+    openId === id ? handleClose() : handleOpen(id);
+    // openId === "" || openId !== id ? handleOpen(id) : handleClose();
   }
 
   return (
@@ -121,9 +125,10 @@ function Toggle({ id }) {
 }
 
 function List({ id, children }) {
-  const { openId, buttonPosition, handleClose } = useContext(MenuContext);
+  const { openId, buttonPosition, handleClose } = useContext(MenusContext);
 
-  const ref = useOutsideClick(handleClose, true, "Escape");
+  const ref = useOutsideClick(handleClose, false, "Escape");
+  // WE choose EVENT Bubbling rather than EVENT Capturing by opting for false @listenCapturing - meaning, we carry the outside check on the parent rather than here, at which we stop further bubbling via e.stopPropagation()
 
   // GUARD CLAUSE
   if (openId !== id) return null;
@@ -139,7 +144,7 @@ function List({ id, children }) {
 }
 
 function Button({ children, icon, onClick }) {
-  const { handleClose } = useContext(MenuContext);
+  const { handleClose } = useContext(MenusContext);
 
   function handleClick() {
     onClick?.(); //Conditionally call the possibly passed on handleDuplicate function @ Menus.Buutton as some Buttons do have some dont.

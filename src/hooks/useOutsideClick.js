@@ -13,7 +13,8 @@ export function useOutsideClick(
     function () {
       // Event handler for Close-On-Click-Outside
       function handleClick(e) {
-        // if (ref.current && e.target.contains(ref.current)) { - Alternate of below code w/out needing capturing set to true
+        // Alternate of below code w / out needing capturing set to true
+        // if (ref.current && e.target.contains(ref.current)) {
         if (ref.current && !ref.current.contains(e.target)) {
           // console.log('Clicked outside');
           handler();
