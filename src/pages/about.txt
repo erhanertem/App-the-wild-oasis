@@ -1,0 +1,1 @@
+This folder stores all the pages for the client side routing endpoints. These page components do not create any side-effects but delegate their functionality to the components associated with their respective features.

@@ -1,10 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  /* grid-template-columns: 20rem 1.5fr 0.8fr; */
-  grid-template-columns: 20rem minmax(100px, 1fr) 0.5fr;
+  grid-template-columns: 24rem 1fr 1.2fr;
   gap: 2.4rem;
 
   padding: 1.2rem 0;
@@ -27,9 +26,11 @@ const StyledFormRow = styled.div`
     gap: 1.2rem;
   }
 `;
+
 const Label = styled.label`
   font-weight: 500;
 `;
+
 const Error = styled.span`
   font-size: 1.4rem;
   color: var(--color-red-700);
@@ -38,10 +39,19 @@ const Error = styled.span`
 function FormRow({ label, error, children }) {
   return (
     <StyledFormRow>
-      {/* 👇 Consider w/no labels (FormRow that includes the button only and no label is proped) or w/labels (the rest) */}
-      {/* we can use children.props.id in conditions where children bears only one react component - It reaches that component's props named id and reads it value */}
+      {/* <Label htmlFor='name'>Cabin name</Label> */}
       {label && <Label htmlFor={children.props.id}>{label}</Label>}
+      {/* <Input
+        type='text'
+        id='name'
+        // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
+        {...register('name', {
+          required: 'This field is required',
+        })}
+      /> */}
       {children}
+      {/* Conditionally disclose an error message if there is any reported by the RHF */}
+      {/* {errors?.name?.message && <Error>{errors.name.message}</Error>} */}
       {error && <Error>{error}</Error>}
     </StyledFormRow>
   );

@@ -1,29 +1,27 @@
-import supabase from "./supabase";
+import supabase from './supabase';
 
 export async function getSettings() {
-  const { data, error } = await supabase.from("settings").select("*").single();
+  const { data, error: settingsReadError } = await supabase.from('settings').select('*').single();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Settings could not be loaded");
+  if (settingsReadError) {
+    console.error(settingsReadError);
+    throw new Error('Settings could not be loaded');
   }
-
-  // console.log(data);
   return data;
 }
 
 // We expect a newSetting object that looks like {setting: newValue}
 export async function updateSetting(newSetting) {
-  const { data, error } = await supabase
-    .from("settings")
+  const { data, error: settingUpdateError } = await supabase
+    .from('settings')
     .update(newSetting)
     // There is only ONE row of settings, and it has the ID=1, and so this is the updated one
-    .eq("id", 1)
+    .eq('id', 1)
     .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Settings could not be updated");
+  if (settingUpdateError) {
+    console.error(settingUpdateError);
+    throw new Error('Settings could not be updated');
   }
   return data;
 }

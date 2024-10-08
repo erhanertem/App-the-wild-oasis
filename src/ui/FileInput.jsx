@@ -1,6 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-const FileInput = styled.input.attrs({ type: "file" })`
+const FileInput = styled.input.attrs({ type: 'file' })`
+  min-width: 22rem;
   font-size: 1.4rem;
   border-radius: var(--border-radius-sm);
 
@@ -19,6 +20,13 @@ const FileInput = styled.input.attrs({ type: "file" })`
     &:hover {
       background-color: var(--color-brand-700);
     }
+  }
+
+  &:disabled {
+    background-color: #f0f0f0; /* Light grey */
+    color: #a0a0a0; /* Grey text */
+    cursor: not-allowed; /* Change cursor to show it's disabled */
+    opacity: 0.5; /* Optional: Add transparency */
   }
 `;
 

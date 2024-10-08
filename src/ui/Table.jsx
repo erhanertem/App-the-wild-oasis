@@ -1,3 +1,4 @@
+import { createContext, useContext } from "react";
 import styled from "styled-components";
 
 const StyledTable = styled.div`
@@ -58,3 +59,54 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+// > #1.CREATE A CONTEXT API
+const TableContext = createContext();
+
+// > #2. CC CONTEXT PROVIDER PARENT COMPONENT
+function Table({
+  columnsCSS, // Custom CSS for table
+  children, // Child API components... Table.Header, Table.Row etc.
+}) {
+  return (
+    <TableContext.Provider value={{ columnsCSS }}>
+      <StyledTable role='table'>{children}</StyledTable>
+    </TableContext.Provider>
+  );
+}
+
+// > #3. CC CHILD API COMPONENTS
+function Header({ children }) {
+  const { columnsCSS } = useContext(TableContext);
+
+  return (
+    <StyledHeader role='row' columns={columnsCSS} as='header'>
+      {children}
+    </StyledHeader>
+  );
+}
+function Row({ children }) {
+  const { columnsCSS } = useContext(TableContext);
+
+  return (
+    <StyledRow role='row' columns={columnsCSS}>
+      {children}
+    </StyledRow>
+  );
+}
+function Body({ data, render }) {
+  // data = []; // TEST COMPONENT
+  // GUARD CLAUSE
+  if (!data.length || !render)
+    return <Empty>No data to show at the moment</Empty>;
+
+  return <StyledBody>{data.map(render)}</StyledBody>;
+}
+
+// > #4.ASSIGN API COMPONENTS
+Table.Header = Header;
+Table.Body = Body;
+Table.Row = Row;
+Table.Footer = Footer;
+
+export default Table;

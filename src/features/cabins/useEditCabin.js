@@ -1,30 +1,28 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
-import { createEditCabin } from "../../services/apiCabins";
+import { createOrEditCabin } from '../../services/apiCabins';
 
 export function useEditCabin() {
+  // // >#6.GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
   const queryClient = useQueryClient();
-
+  // >#5.2.EDIT CABIN via TQ
   const { isPending: isEditing, mutate: editCabin } = useMutation({
-    // mutationFn: (newCabin,id) => createEditCabin(newCabin,id),
-    mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id), // same as above - shorthand version - NOTE: We are allowed to provide only one object as an argument
+    mutationFn: ({ cabinToEdit, idForCabinEditing }) => createOrEditCabin(cabinToEdit, idForCabinEditing),
     onSuccess: () => {
-      // Display success notification
-      toast.success("Cabin successfully editied");
-      // Invalidate the cabins query
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      // VERY IMPORTANT!!! WE CAN'T CALL THEM HERE AS WE HAVE NO ACCESS TO THESE HOWEVER, MUTATE FUNCTION PASSED VIA CREATECABIN @ EXPORT ALSO INCLUDES ONSUCCES AND THESE ITEMS BELOW COULDBE CALLED WHERE MUTATION TAKES PLACE IN A OPTIONS OBJECT.
-      // // Reset the data @ form after successfull submission
+      toast.success('Cabin succesfully edited');
+      // >#6.2.Tell the Query Client Instance to invalidate the cache with a matching TQ KEY
+      queryClient.invalidateQueries({
+        queryKey: ['cabins'],
+      });
+      // VERY IMPORTANT! CANT GET THESE INTO A CUSTOM HOOK. INSTEAD WE SPECIFY THEM AS ONSUCCESS OPTIONS WHILE USING THE MUTATOR FUNCTION IN THE SUBMIT HANDLER FN
       // reset();
-      // // turn off edit form
-      // setShowEditCabinForm(false);
-      // // nullify the selected one
-      // setActiveCabinEditForm(null);
+      // // Close edit form
+      // setShowCurrentEditForm(false);
+      // // Reset active edit form
+      // setActiveEditForm(null);
     },
-    onError: (err) => {
-      toast.error(err.message);
-    },
+    onError: (err) => toast.error(err.message),
   });
 
   return { isEditing, editCabin };

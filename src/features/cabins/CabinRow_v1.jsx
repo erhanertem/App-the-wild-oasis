@@ -60,7 +60,7 @@ function CabinRow({ cabin }) {
   } = cabin;
 
   // > MOVED TO A CUSTOM HOOK
-  const { deleteCabin } = useDeleteCabin();
+  const { isDeleting, deleteCabin } = useDeleteCabin();
   // // GET A REFERENCE TO TQ CLIENT WHICH WOULD BE USED BY MUTATION ONSUCCESS TO INVALIDATE THE CACHE
   // const queryClient = useQueryClient();
 
@@ -84,7 +84,7 @@ function CabinRow({ cabin }) {
   //   // onError: (err) => alert(err.message),
   //   onError: (err) => toast.error(err.message),
   // });
-  const { createCabin } = useCreateCabin(); // Used for duplicating cabin
+  const { isCreating, createCabin } = useCreateCabin(); // Used for duplicating cabin
 
   function handleDuplicate() {
     createCabin({
@@ -107,47 +107,47 @@ function CabinRow({ cabin }) {
         {discount ? formatCurrency(discount) : <span>&mdash;</span>}
       </Discount>
       <div>
-        {/* Menus CC context parent component serves as only serving states, etc. Does not bring in additional styling */}
+        <button disabled={isCreating} onClick={handleDuplicate}>
+          <HiSquare2Stack />
+        </button>
         <Modal>
-          {/* MENU BTN+DROP DOWN MENU CONTAINER */}
-          <Menus.Menu>
-            {/* MENU BTN @ EACH ROW */}
-            <Menus.Toggle
-              id={cabinId}
-              /* We will have many of those  that is why id={cabinId} is being proped */
+          <Modal.Open opens='edit'>
+            <button>
+              <HiPencil />
+            </button>
+          </Modal.Open>
+          <Modal.Window name='edit'>
+            <CreateCabinForm cabinToEdit={cabin} />
+          </Modal.Window>
+
+          <Modal.Open opens='delete'>
+            <button disabled={isDeleting}>
+              <HiTrash />
+            </button>
+          </Modal.Open>
+          <Modal.Window name='delete'>
+            <ConfirmDelete
+              resourceName='cabins'
+              disabled={isDeleting}
+              // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
+              // NOTE: Provided image reference to the delete mutation fn so that if there are dubs using the sasme image reference  should not pursue also deleting the image from the bucket
+              onConfirm={() => deleteCabin({ cabinId, image })}
             />
-
-            {/* MENU LIST CONTAINER */}
-            <Menus.List id={cabinId}>
-              {/* DUPLICATE ITEM FUNCTION */}
-              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
-                Duplicate
-              </Menus.Button>
-              {/* EDIT ITEM FUNCTION MODAL OPENER */}
-              <Modal.Open opens='edit'>
-                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
-              </Modal.Open>
-              {/* DELETE ITEM FUNCTION MODAL OPENER */}
-              <Modal.Open opens='delete'>
-                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-              </Modal.Open>
-            </Menus.List>
-
-            {/* EDIT ITEM MODAL */}
-            <Modal.Window name='edit'>
-              <CreateCabinForm cabinToEdit={cabin} />
-            </Modal.Window>
-            {/* DELETE ITEM MODAL */}
-            <Modal.Window name='delete'>
-              <ConfirmDelete
-                resourceName='cabins'
-                // >#4.USE MUTATE FN TO INITIATE TQ FETCHING
-                // NOTE: Provided image reference to the delete mutation fn so that if there are dubs using the sasme image reference  should not pursue also deleting the image from the bucket
-                onConfirm={() => deleteCabin({ cabinId, image })}
-              />
-            </Modal.Window>
-          </Menus.Menu>
+          </Modal.Window>
         </Modal>
+
+        {/* Menus CC context parent component serves as only serving states, etc. Does not bring in additional styling */}
+        <Menus.Menu>
+          {/* We will have many of those  */}
+          <Menus.Toggle id={cabinId} />
+          <Menus.List id={cabinId}>
+            <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+              Duplicate
+            </Menus.Button>
+            <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+            <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+          </Menus.List>
+        </Menus.Menu>
       </div>
     </Table.Row>
   );
