@@ -1,11 +1,12 @@
-import supabase from '../../services/supabase';
-import { useEffect } from 'react';
+import supabase from "../../services/supabase";
+import { useEffect } from "react";
 
-import { useGetCabins } from './useGetCabins';
+import { useGetCabins } from "./useGetCabins";
 
-import CabinRow from './CabinRow';
-import Table from '../../ui/Table';
-import Spinner from '../../ui/Spinner';
+import CabinRow from "./CabinRow";
+import Table from "../../ui/Table";
+import Spinner from "../../ui/Spinner";
+import Menus from "../../ui/Menus";
 
 // > SINGLE-USE COMPONENT
 // const Table = styled.div`
@@ -77,10 +78,10 @@ function CabinTable() {
   useEffect(() => {
     // >#R3.1.CREATE BEACON CHANNEL
     const channel = supabase
-      .channel('custom-all-channel')
+      .channel("custom-all-channel")
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'cabins' },
+        "postgres_changes",
+        { event: "*", schema: "public", table: "cabins" },
         (payload) => {
           // GUARD CLAUSE
           // TODO - BOOTLEG SOLUTION
@@ -89,7 +90,7 @@ function CabinTable() {
             refetch();
           }, 2000);
 
-          console.log('🆘Payload received!', payload); // Check full payload
+          console.log("🆘Payload received!", payload); // Check full payload
         }
       )
       .subscribe();
@@ -102,23 +103,26 @@ function CabinTable() {
   if (isLoading) return <Spinner />;
 
   return (
-    // re-usable CC component container with API components
-    <Table columnsCSS='0.6fr 1.8fr 2.2fr 1fr 1fr 1fr'>
-      <Table.Header>
-        <div></div>
-        <div>Cabin</div>
-        <div>Capacity</div>
-        <div>Price</div>
-        <div>Discount</div>
-        <div></div>
-      </Table.Header>
+    // NOTE: Menus CC context parent component serves as only serving states, etc. Does not bring in additional styling
+    <Menus>
+      {/* re-usable CC component container with API components */}
+      <Table columnsCSS='0.6fr 1.8fr 2.2fr 1fr 1fr 1fr'>
+        <Table.Header>
+          <div></div>
+          <div>Cabin</div>
+          <div>Capacity</div>
+          <div>Price</div>
+          <div>Discount</div>
+          <div></div>
+        </Table.Header>
 
-      {/* Pass data into this CC API component in conjunction w/render prop pattern*/}
-      <Table.Body
-        data={cabins}
-        render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
-      />
-    </Table>
+        {/* Pass data into this CC API component in conjunction w/render prop pattern*/}
+        <Table.Body
+          data={cabins}
+          render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
+        />
+      </Table>
+    </Menus>
   );
 }
 

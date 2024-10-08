@@ -68,6 +68,7 @@
 
 - Advanced React
 
+  - useRef hook usage in handling portal close by clicking its outer space
   - Create modals using createPortal react fn
   - Utilize compound component pattern to build re-usable modal component
     - Utilize cloneElement() advanced react fn to repack a react component w/ an
