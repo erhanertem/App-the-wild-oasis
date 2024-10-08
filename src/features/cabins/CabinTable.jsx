@@ -1,7 +1,11 @@
-import Spinner from '../../ui/Spinner';
-import CabinRow from './CabinRow';
+import supabase from '../../services/supabase';
+import { useEffect } from 'react';
+
 import { useGetCabins } from './useGetCabins';
+
+import CabinRow from './CabinRow';
 import Table from '../../ui/Table';
+import Spinner from '../../ui/Spinner';
 
 // > SINGLE-USE COMPONENT
 // const Table = styled.div`
@@ -67,7 +71,33 @@ import Table from '../../ui/Table';
 function CabinTable() {
   //   // // >#3.GET data via TQ
   //   // > MOVED TO A CUSTOM HOOK
-  const { isLoading, cabins } = useGetCabins();
+  const { isLoading, cabins, refetch } = useGetCabins();
+
+  // > #R3.LISTEN FOR SUPABASE BEACON UPON COMPONENT MOUNT FOR SERVER SIDE CHANGES
+  useEffect(() => {
+    // >#R3.1.CREATE BEACON CHANNEL
+    const channel = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'cabins' },
+        (payload) => {
+          // GUARD CLAUSE
+          // TODO - BOOTLEG SOLUTION
+          // Delay the manual instant refetch to ensure image processing is done
+          setTimeout(() => {
+            refetch();
+          }, 2000);
+
+          console.log('🆘Payload received!', payload); // Check full payload
+        }
+      )
+      .subscribe();
+    // >#R3.2.CLEANUP FUNCTION - TERMINATE BEACON CHANNEL UPON COMPONENT DISMOUNT
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
 
   if (isLoading) return <Spinner />;
 
