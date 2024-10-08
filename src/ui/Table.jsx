@@ -1,5 +1,5 @@
-import { createContext, useContext } from 'react';
-import styled from 'styled-components';
+import { createContext, useContext } from "react";
+import styled from "styled-components";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -63,7 +63,7 @@ const Empty = styled.p`
 // > #1.CREATE A CONTEXT API
 const TableContext = createContext();
 
-// > #2. CC parent component
+// > #2. CC CONTEXT PROVIDER PARENT COMPONENT
 function Table({
   columnsCSS, // Custom CSS for table
   children, // Child API components... Table.Header, Table.Row etc.
@@ -75,7 +75,7 @@ function Table({
   );
 }
 
-// > #3. CC Child API components
+// > #3. CC CHILD API COMPONENTS
 function Header({ children }) {
   const { columnsCSS } = useContext(TableContext);
 
@@ -103,7 +103,7 @@ function Body({ data, render }) {
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
 
-//
+// > #4.ASSIGN API COMPONENTS
 Table.Header = Header;
 Table.Body = Body;
 Table.Row = Row;

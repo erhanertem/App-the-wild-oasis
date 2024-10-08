@@ -75,6 +75,7 @@
   - Utilize compound component pattern to build re-usable table component
     - Utilize compound component pattern with the assitance of render prop
       pattern @ Table.Body
+  - Utilize compound component in conjunction with render prop pattern
 
   </details>
 
@@ -93,6 +94,8 @@ In addition to the project cirriculum:
 - Avoid redundant UPDATE fetch requests by checking the currValue against the
   onBlur value while handling automatic onBlur type form submission @ settings
   page
+- Backend updates trigger instant UI updates via Supabase subscription beacons
+  eliminating the need of manually refreshing the browser
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 
