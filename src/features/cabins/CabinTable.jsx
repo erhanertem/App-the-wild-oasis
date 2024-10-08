@@ -84,7 +84,7 @@ function CabinTable() {
         (payload) => {
           // GUARD CLAUSE
           // TODO - BOOTLEG SOLUTION
-          // Delay the manual instant refetch to ensure image processing is done
+          // Delay the manual refetch to ensure image processing is done
           setTimeout(() => {
             refetch();
           }, 2000);

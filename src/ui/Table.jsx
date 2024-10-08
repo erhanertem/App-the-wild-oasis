@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'react';
 import styled from 'styled-components';
-import CabinRow from '../features/cabins/CabinRow';
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -96,6 +95,7 @@ function Row({ children }) {
   );
 }
 function Body({ data, render }) {
+  // data = []; // TEST COMPONENT
   // GUARD CLAUSE
   if (!data.length || !render)
     return <Empty>No data to show at the moment</Empty>;
