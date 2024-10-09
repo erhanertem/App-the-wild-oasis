@@ -30,8 +30,8 @@ const FilterButton = styled.button`
   transition: all 0.3s;
 
   &:hover:not(:disabled) {
-    background-color: var(--color-brand-600);
-    color: var(--color-brand-50);
+    background-color: var(--color-brand-200);
+    color: var(--color-brand-600);
   }
 `;
 
@@ -45,6 +45,8 @@ function Filter({ filterField, options }) {
    * setSearchParams: A function to update the query parameters in the URL.
    */
   const [searchParams, setSearchParams] = useSearchParams();
+  // Read the current active filter from URL
+  const currentFilter = searchParams.get(filterField) || options[0].value;
 
   function handleClick(value) {
     // Modify query parameter w/ a value
@@ -60,8 +62,9 @@ function Filter({ filterField, options }) {
     <StyledFilter>
       {options.map((option) => (
         <FilterButton
-          key={option.label}
+          key={option.value}
           onClick={() => handleClick(option.value)}
+          active={option.value === currentFilter}
         >
           {option.label}
         </FilterButton>
