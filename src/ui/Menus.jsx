@@ -5,7 +5,6 @@ import { createPortal } from "react-dom";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 import { HiEllipsisVertical } from "react-icons/hi2";
-import { useOutsideClick } from "./../hooks/useOutsideClick";
 
 const StyledMenu = styled.div`
   display: flex;
