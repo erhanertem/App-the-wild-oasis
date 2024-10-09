@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const StyledFilter = styled.div`
@@ -33,3 +34,38 @@ const FilterButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+function Filter() {
+  // URL PARAMS STATE
+  /**
+   * useSearchParams: This React Router hook provides access to the URL's query parameters, and allows you to manipulate them.
+   * searchParams: Represents the current query parameters in the URL.
+   * https://example.com?discount=50&category=clothing --> In this case, discount and category are query parameters.
+   * The set method is used to update or add a query parameter to searchParams.
+   * setSearchParams: A function to update the query parameters in the URL.
+   */
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  function handleClick(value) {
+    // Modify query parameter w/ a value
+    // discount=no-discount
+    searchParams.set("discount", value);
+    // Apply this change to the URL
+    setSearchParams(searchParams);
+  }
+
+  return (
+    <StyledFilter>
+      <FilterButton onClick={() => handleClick("all")}>All</FilterButton>
+      <FilterButton onClick={() => handleClick("no-discount")}>
+        {/* NOTE: naming with dashes such as no-discount is because theu will appear in the URL so we cant accept spacing  */}
+        No Discount
+      </FilterButton>
+      <FilterButton onClick={() => handleClick("with-discount")}>
+        With Discount
+      </FilterButton>
+    </StyledFilter>
+  );
+}
+
+export default Filter;

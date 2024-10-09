@@ -7,6 +7,7 @@ import CabinRow from "./CabinRow";
 import Table from "../../ui/Table";
 import Spinner from "../../ui/Spinner";
 import Menus from "../../ui/Menus";
+import { useSearchParams } from "react-router-dom";
 
 // > SINGLE-USE COMPONENT
 // const Table = styled.div`
@@ -70,6 +71,9 @@ import Menus from "../../ui/Menus";
 
 // > RE-USABLE CABIN TABLE IMPLEMENTATION VIA CC PATTERN
 function CabinTable() {
+  // READ URL STATE FOR FILTERING OPERATIONS
+  const [searchParams] = useSearchParams();
+
   //   // // >#3.GET data via TQ
   //   // > MOVED TO A CUSTOM HOOK
   const { isLoading, cabins, refetch } = useGetCabins();
@@ -102,11 +106,26 @@ function CabinTable() {
 
   if (isLoading) return <Spinner />;
 
+  // READ URL 'discount' VALUE
+  // NOTE: When we first hit the cabins endpoint, discount value would be null so we use shortcircuitig and declare it 'all' if it returns null
+  const filterValue = searchParams.get("discount") || "all";
+
+  let filteredCabins;
+  if (filterValue === "all") {
+    filteredCabins = cabins;
+  }
+  if (filterValue === "no-discount") {
+    filteredCabins = cabins.filter((cabin) => cabin.discount === 0);
+  }
+  if (filterValue === "with-discount") {
+    filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
+  }
+
   return (
     // NOTE: Menus CC context parent component serves as only serving states, etc. Does not bring in additional styling
     <Menus>
       {/* re-usable CC component container with API components */}
-      <Table columnsCSS='0.6fr 1.8fr 2.2fr 1fr 1fr 1fr'>
+      <Table columnsCSS="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
         <Table.Header>
           <div></div>
           <div>Cabin</div>
@@ -118,8 +137,14 @@ function CabinTable() {
 
         {/* Pass data into this CC API component in conjunction w/render prop pattern*/}
         <Table.Body
-          data={cabins}
-          render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
+          // data={cabins}
+          data={filteredCabins}
+          render={(cabin) => (
+            <CabinRow
+              cabin={cabin}
+              key={cabin.id}
+            />
+          )}
         />
       </Table>
     </Menus>
