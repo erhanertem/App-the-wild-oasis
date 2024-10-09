@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 
-import Input from '../../ui/Input';
-import Form from '../../ui/Form';
-import Button from '../../ui/Button';
-import FileInput from '../../ui/FileInput';
-import Textarea from '../../ui/Textarea';
-import FormRow from '../../ui/FormRow';
+import Input from "../../ui/Input";
+import Form from "../../ui/Form";
+import Button from "../../ui/Button";
+import FileInput from "../../ui/FileInput";
+import Textarea from "../../ui/Textarea";
+import FormRow from "../../ui/FormRow";
 
-import { useCreateCabin } from './useCreateCabin';
-import { useEditCabin } from './useEditCabin';
+import { useCreateCabin } from "./useCreateCabin";
+import { useEditCabin } from "./useEditCabin";
 
 // NOTE: WE PROVIDE CABINTOEDIT WITH AN EMPTY {} BY DEFAULT. BECAUSE WE USE CABIN CREATION FORM FOR TWO ACTIONS: 1. CREATE A NEW CABIN, 2. EDIT AN EXISTING CABIN
 function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
@@ -26,11 +26,11 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
     handleSubmit, // Dial in actual form submission fn
     reset, // Resets the form fields
     getValues, // Reads values from other form fields to accomodate dependant form fields
-    formState, // Gets the errors from onErrorFn handler out of RHF to be used in practical UI error handling mediums such as toaster
+    formState: { errors }, // Gets the errors from onErrorFn handler out of RHF to be used in practical UI error handling mediums such as toaster
   } = useForm({ defaultValues: isEditSession ? editValues : {} });
 
-  // GET THE ERRORS OUT OF RHF AND USE IT IN JSX BODY CONDITIONALLY
-  const { errors } = formState;
+  // // GET THE ERRORS OUT OF RHF AND USE IT IN JSX BODY CONDITIONALLY
+  // const { errors } = formState;
 
   // >#4.OUR RHF CUSTOM SUBMIT HANDLER FN
   function onSubmitFn(formData) {
@@ -131,113 +131,113 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
     // >#3.HAVE REACT-HOOK-FORM HANDLESUBMIT <OUR CUSTOM SUBMIT HANDLER FNS> DISCLOSED @ STEP#4 - FOR PROBLEMATIC SUBMISSION ROUTED TO onErrorFn HANDLER (suited only for console.logs), FOR NON-PROBLEMATIC SUBMISSION ROUTED TO onSubmitFn HANDLER
     <Form
       onSubmit={handleSubmit(onSubmitFn, onErrorFn)}
-      type={onCloseModal ? 'modal' : 'regular'} // Identify the type of form beased on props served
+      type={onCloseModal ? "modal" : "regular"} // Identify the type of form beased on props served
     >
       <FormRow
-        label='Cabin name'
+        label="Cabin name"
         error={errors?.name?.message}
       >
         <Input
-          type='text'
-          id='name'
+          type="text"
+          id="name"
           disabled={isProcessing}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'name' - creates onBlur and onChnage props in this styled Input component
-          {...register('name', {
-            required: 'This field is required',
+          {...register("name", {
+            required: "This field is required",
           })}
         />
       </FormRow>
 
       <FormRow
-        label='Maximum capacity'
+        label="Maximum capacity"
         error={errors?.maxCapacity?.message}
       >
         <Input
-          type='number'
-          id='maxCapacity'
+          type="number"
+          id="maxCapacity"
           disabled={isProcessing}
           min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'maxCapacity' - creates onBlur and onChnage props in this styled Input component
-          {...register('maxCapacity', {
-            required: 'This field is required',
+          {...register("maxCapacity", {
+            required: "This field is required",
             // VIA MIN TQ ATTR VALIDATION
             // NOTE: NEED CSS MIN/MAX CONTROL AS WELL TO NOT DROP BELOW 1
-            min: { value: 1, message: 'Capacity should be at least 1' },
+            min: { value: 1, message: "Capacity should be at least 1" },
           })}
         />
       </FormRow>
 
       <FormRow
-        label='Regular price'
+        label="Regular price"
         error={errors?.regularPrice?.message}
       >
         <Input
-          type='number'
-          id='regularPrice'
+          type="number"
+          id="regularPrice"
           disabled={isProcessing}
           // onWheel={(e) => e.target.blur()} // Disables the scrolling behavior
           // min={1} //CSS fix for decrementor
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'regularPrice' - creates onBlur and onChnage props in this styled Input component
-          {...register('regularPrice', {
-            required: 'This field is required',
+          {...register("regularPrice", {
+            required: "This field is required",
             // VIA MIN TQ ATTR VALIDATION
             // NOTE: NEED CSS MIN/MAX CONTROL AS WELL TO NOT DROP BELOW 1
-            min: { value: 1, message: 'Price should be at least 1' },
-            max: { value: 32767, message: 'Price can not exceed 32767' },
+            min: { value: 1, message: "Price should be at least 1" },
+            max: { value: 32767, message: "Price can not exceed 32767" },
           })}
         />
       </FormRow>
 
       <FormRow
-        label='Discount'
+        label="Discount"
         error={errors?.discount?.message}
       >
         <Input
-          type='number'
-          id='discount'
+          type="number"
+          id="discount"
           disabled={isProcessing}
           min={0} //CSS fix for decrementor
           defaultValue={0}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'discount' - creates onBlur and onChnage props in this styled Input component
-          {...register('discount', {
-            required: 'This field is required',
+          {...register("discount", {
+            required: "This field is required",
             // VIA CUSTOM VALIDATION
             validate: (value) =>
               Number(value) <= Number(getValues().regularPrice) ||
-              'Discount should not exceed regular price',
+              "Discount should not exceed regular price",
           })}
         />
       </FormRow>
 
       <FormRow
-        label='Description for website'
+        label="Description for website"
         error={errors?.description?.message}
       >
         <Textarea
-          type='number'
-          id='description'
+          type="number"
+          id="description"
           disabled={isProcessing}
-          defaultValue=''
+          defaultValue=""
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'description' - creates onBlur and onChnage props in this styled Input component
-          {...register('description', {
-            required: 'This field is required',
+          {...register("description", {
+            required: "This field is required",
           })}
         />
       </FormRow>
 
       <FormRow
-        label='Cabin photo'
+        label="Cabin photo"
         error={errors?.description?.message}
       >
         <FileInput
           // NOTE: We can either provide the attribute here or engae in styled component declaration via attrs() function
           // type='file' // A field that allows users to upload a file.
-          id='image'
-          accept='image/*'
+          id="image"
+          accept="image/*"
           disabled={isProcessing}
           // >#2.REGISTER THE ENTERED DATA TO REACT HOOK FORM - Register refers to id 'image' - creates onBlur and onChnage props in this styled Input component
-          {...register('image', {
-            required: isEditSession ? false : 'This field is required',
+          {...register("image", {
+            required: isEditSession ? false : "This field is required",
           })}
         />
       </FormRow>
@@ -245,14 +245,14 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button
-          variation='secondary'
-          type='reset' //Regular HTML attribute
+          variation="secondary"
+          type="reset" //Regular HTML attribute
           onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>
         <Button disabled={isProcessing}>
-          {isEditSession ? 'Edit cabin' : 'Create new cabin'}
+          {isEditSession ? "Edit cabin" : "Create new cabin"}
         </Button>
       </FormRow>
     </Form>

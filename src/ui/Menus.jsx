@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 import { HiEllipsisVertical } from "react-icons/hi2";
+import { useOutsideClick } from "./../hooks/useOutsideClick";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -92,7 +93,8 @@ function Menus({
         handleOpen,
         buttonPosition,
         setButtonPosition,
-      }}>
+      }}
+    >
       {children}
     </MenusContext.Provider>
   );
@@ -105,6 +107,7 @@ function Toggle({ id }) {
 
   // Handle close/open menu by clicking the 3 dot button
   function handleClick(e) {
+    // NOTE on stopPropogation : We let event useOutsideClick @ List container bubble and let it stop here. Because Toggle button falls outside of List container and we want this object to be not counted as outside object by letting the event bubble. Otherwise, while Toggle will turn off menu with this component, since we have clicked out of List, it will reverse this toggle simply making it not go away.
     e.stopPropagation();
     // VERY IMPORTANT: As soon as the button clicked, we need to calculate the location of the closest parenting button in order to locate the portal created in the Menu.List API component correctly using some DOM traversing
     const rect = e.target.closest("button").getBoundingClientRect();
@@ -135,7 +138,10 @@ function List({ id, children }) {
 
   // STYLEDLIST EXPECTS POSITION SC PROP IN {X:..,Y:..} KEY/VALUE PAIRS
   return createPortal(
-    <StyledList position={buttonPosition} ref={ref}>
+    <StyledList
+      position={buttonPosition}
+      ref={ref}
+    >
       {children}
     </StyledList>,
     // document.body
