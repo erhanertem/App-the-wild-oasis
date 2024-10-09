@@ -35,7 +35,7 @@ const FilterButton = styled.button`
   }
 `;
 
-function Filter() {
+function Filter({ filterField, options }) {
   // URL PARAMS STATE
   /**
    * useSearchParams: This React Router hook provides access to the URL's query parameters, and allows you to manipulate them.
@@ -49,21 +49,35 @@ function Filter() {
   function handleClick(value) {
     // Modify query parameter w/ a value
     // discount=no-discount
-    searchParams.set("discount", value);
+    // searchParams.set("discount", value);
+    searchParams.set(filterField, value);
     // Apply this change to the URL
     setSearchParams(searchParams);
   }
 
   return (
+    // > REUSABLE CLIENT-SIDE FILTERING W/PROPS
     <StyledFilter>
-      <FilterButton onClick={() => handleClick("all")}>All</FilterButton>
-      <FilterButton onClick={() => handleClick("no-discount")}>
-        {/* NOTE: naming with dashes such as no-discount is because theu will appear in the URL so we cant accept spacing  */}
-        No Discount
-      </FilterButton>
-      <FilterButton onClick={() => handleClick("with-discount")}>
-        With Discount
-      </FilterButton>
+      {options.map((option) => (
+        <FilterButton
+          key={option.label}
+          onClick={() => handleClick(option.value)}
+        >
+          {option.label}
+        </FilterButton>
+      ))}
+
+      {
+        // > SINGLE USE CLIENT-SIDE FILTERING
+        // <FilterButton onClick={() => handleClick("all")}>All</FilterButton>
+        // <FilterButton onClick={() => handleClick("no-discount")}>
+        //   {/* NOTE: naming with dashes such as no-discount is because theu will appear in the URL so we cant accept spacing  */}
+        //   No Discount
+        // </FilterButton>
+        // <FilterButton onClick={() => handleClick("with-discount")}>
+        //   With Discount
+        // </FilterButton>
+      }
     </StyledFilter>
   );
 }
