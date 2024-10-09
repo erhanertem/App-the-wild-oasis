@@ -106,10 +106,9 @@ function CabinTable() {
 
   if (isLoading) return <Spinner />;
 
-  // READ URL 'discount' VALUE
+  // READ URL 'discount' PARAMS VALUE
   // NOTE: When we first hit the cabins endpoint, discount value would be null so we use shortcircuitig and declare it 'all' if it returns null
   const filterValue = searchParams.get("discount") || "all";
-
   let filteredCabins;
   if (filterValue === "all") {
     filteredCabins = cabins;
@@ -120,6 +119,16 @@ function CabinTable() {
   if (filterValue === "with-discount") {
     filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
   }
+
+  // READ URL 'sortBy' PARAMS VALUE
+  const sortBy = searchParams.get("sortBy") || "name-desc";
+  // Strip 'name-asc' into two pieces , field (name) & direction (asc)
+  const [field, direction] = sortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+  const filteredAndSortedCabins = filteredCabins.sort(
+    (a, b) => (a[field] - b[field]) * modifier
+  );
+  console.log(filteredAndSortedCabins);
 
   return (
     // NOTE: Menus CC context parent component serves as only serving states, etc. Does not bring in additional styling
@@ -138,7 +147,8 @@ function CabinTable() {
         {/* Pass data into this CC API component in conjunction w/render prop pattern*/}
         <Table.Body
           // data={cabins}
-          data={filteredCabins}
+          // data={filteredCabins}
+          data={filteredAndSortedCabins}
           render={(cabin) => (
             <CabinRow
               cabin={cabin}
