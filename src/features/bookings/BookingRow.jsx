@@ -34,20 +34,25 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
-    id: bookingId,
-    created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    totalPrice,
-    status,
-    guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
-  },
-}) {
+function BookingRow(
+  // destructure booking prop in-place
+  {
+    booking: {
+      id: bookingId,
+      created_at,
+      startDate,
+      endDate,
+      numNights,
+      numGuests,
+      totalPrice,
+      status,
+      guests: { fullName: guestName, email },
+      cabins: { name: cabinName },
+    },
+  }
+) {
+  // Map status to appropriate color for tag
+  // NOTE: In JavaScript object keys, quotes around keys are only necessary when the key contains special characters like spaces, hyphens, or other characters that aren't valid in an unquoted key. Keys like unconfirmed, which follow valid identifier naming rules (alphanumeric characters, underscores, etc.), do not need to be enclosed in quotes.
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
