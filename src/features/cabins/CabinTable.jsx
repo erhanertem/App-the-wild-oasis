@@ -104,6 +104,9 @@ function CabinTable() {
     };
   }, [refetch]);
 
+  // // GUARD CLAUSE - INTERCEPT IF THERE IS NO EXISTING DATA - EARLY RETURN
+  // if (!cabins.length) return <Empty resourceName="cabins" />;
+
   if (isLoading) return <Spinner />;
 
   // READ URL 'discount' PARAMS VALUE
@@ -128,7 +131,7 @@ function CabinTable() {
   const filteredAndSortedCabins = filteredCabins.sort(
     (a, b) => (a[field] - b[field]) * modifier
   );
-  console.log(filteredAndSortedCabins);
+  // console.log(filteredAndSortedCabins);
 
   return (
     // NOTE: Menus CC context parent component serves as only serving states, etc. Does not bring in additional styling
@@ -146,6 +149,7 @@ function CabinTable() {
 
         {/* Pass data into this CC API component in conjunction w/render prop pattern*/}
         <Table.Body
+          resourcename="cabins"
           // data={cabins}
           // data={filteredCabins}
           data={filteredAndSortedCabins}

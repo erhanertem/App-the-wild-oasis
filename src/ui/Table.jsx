@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import styled from "styled-components";
+import Empty from "./Empty";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -53,13 +54,6 @@ const Footer = styled.footer`
   }
 `;
 
-const Empty = styled.p`
-  font-size: 1.6rem;
-  font-weight: 500;
-  text-align: center;
-  margin: 2.4rem;
-`;
-
 // > #1.CREATE A CONTEXT API
 const TableContext = createContext();
 
@@ -70,7 +64,7 @@ function Table({
 }) {
   return (
     <TableContext.Provider value={{ columnsCSS }}>
-      <StyledTable role='table'>{children}</StyledTable>
+      <StyledTable role="table">{children}</StyledTable>
     </TableContext.Provider>
   );
 }
@@ -80,7 +74,11 @@ function Header({ children }) {
   const { columnsCSS } = useContext(TableContext);
 
   return (
-    <StyledHeader role='row' columns={columnsCSS} as='header'>
+    <StyledHeader
+      role="row"
+      columns={columnsCSS}
+      as="header"
+    >
       {children}
     </StyledHeader>
   );
@@ -89,16 +87,18 @@ function Row({ children }) {
   const { columnsCSS } = useContext(TableContext);
 
   return (
-    <StyledRow role='row' columns={columnsCSS}>
+    <StyledRow
+      role="row"
+      columns={columnsCSS}
+    >
       {children}
     </StyledRow>
   );
 }
-function Body({ data, render }) {
+function Body({ data, render, resourcename = "data" }) {
   // data = []; // TEST COMPONENT
-  // GUARD CLAUSE
-  if (!data.length || !render)
-    return <Empty>No data to show at the moment</Empty>;
+  // GUARD CLAUSE - INTERCEPT IF THERE IS NO EXISTING DATA - EARLY RETURN
+  if (!data.length || !render) return <Empty resourcename={resourcename} />;
 
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
