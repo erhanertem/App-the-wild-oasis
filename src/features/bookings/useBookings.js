@@ -20,14 +20,19 @@ export function useBookings() {
   // // 💡 ALLOW CUSTOMZIATION OF METHOD ...but requires some more work as well...
   // : { field: "status", value: filterValue, method: "" };
 
+  // GET SORT DATA
+  const sortByDef = searchParams.get("sortBy") || "startDate-desc";
+  const [field, direction] = sortByDef.split("-");
+  const sortBy = { field, direction };
+
   const {
     isLoading,
     error,
     data: bookings,
   } = useQuery({
     // IN ORDER TO TRIGGER AUTO REFETCH DUE CHANGES ON FILTER OBJECT, TQ ALLOWS US TO INCLUDE FILTER IN QUERYKEY ARRAY - WORKING KIND OF A DEPEDENCY ARRAY
-    queryKey: ["bookings", filter],
-    queryFn: () => getBookings(filter),
+    queryKey: ["bookings", filter, sortBy],
+    queryFn: () => getBookings(filter, sortBy),
   });
 
   return { isLoading, error, bookings };
