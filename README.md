@@ -46,6 +46,7 @@
       - replace attribute
     - Create wrapper component (routeless) RR route used across multiple routes
       - \<Outlet/> RR component - Have wrapper RR route pass thru child routes
+    - Implement API-side filtering and sorting operations on the table data via - useSearchParams() RR hook and useQuery TQ hook
 
 - Tanstack Query
 
@@ -69,7 +70,6 @@
 
 - Advanced React
 
-  - useSearchParams() hook for handling table filtering
   - useRef() hook for handling portal close by clicking its outer space
   - Create modals using createPortal react fn
   - Utilize compound component pattern to build re-usable modal component

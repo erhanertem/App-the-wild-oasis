@@ -1,8 +1,9 @@
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings() {
-  const { data, error } = await supabase
+export async function getBookings(filter) {
+  // BASE QUERY
+  let query = supabase
     .from("bookings")
     /**
      * 'id, created_at, ...' builds selected columns for the bookings table
@@ -12,6 +13,16 @@ export async function getBookings() {
     .select(
       "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)"
     );
+
+  // CONDITIONAL FUNCTIONS GOES HERE BASED ON FILTERBY OR SORTBY ARGS!
+  if (filter !== null) {
+    console.log(filter);
+    query = query[filter.method || "eq"](filter.field, filter.value);
+    // // 💡 ALLOW CUSTOMZIATION OF METHOD
+    // query = query[filter.method || "eq"](filter.field, filter.value);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);

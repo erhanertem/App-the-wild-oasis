@@ -9,8 +9,8 @@ function BookingTable() {
   // NOTE: bookings is given a fallback value of [] to make sure we do not throw an exception before loading data
   // console.log(bookings);
 
-  // // GUARD CLAUSE - INTERCEPT IF THERE IS NO EXISTING DATA - EARLY RETURN
-  // NOTE: Handled inside the Table.Body Internally
+  // // // GUARD CLAUSE - INTERCEPT IF THERE IS NO EXISTING DATA - EARLY RETURN
+  // // NOTE: Handled inside the Table.Body Internally
   // if (!bookings.length) return <Empty resourceName="bookings"></Empty>;
 
   if (isLoading) return <Spinner />;
