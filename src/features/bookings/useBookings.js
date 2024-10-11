@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 import { getBookings } from "../../services/apiBookings";
+import { PAGE_SIZE_PER_PAGINATION } from "../../utils/constants";
 
 export function useBookings() {
   /**
@@ -35,8 +36,25 @@ export function useBookings() {
   } = useQuery({
     // IN ORDER TO TRIGGER AUTO REFETCH DUE CHANGES ON FILTER OBJECT, TQ ALLOWS US TO INCLUDE FILTER IN QUERYKEY ARRAY - WORKING KIND OF A DEPEDENCY ARRAY
     queryKey: ["bookings", filter, sortBy, page],
-    queryFn: () => getBookings(filter, sortBy, page),
+    queryFn: () => getBookings({ filter, sortBy, page }),
   });
+
+  // PRE-FETCHING DATA IN TQ
+  const queryClient = useQueryClient();
+  // Compute the pagination pages
+  const pageCount = Math.ceil(count / PAGE_SIZE_PER_PAGINATION);
+  // GUARD CLAUSE - Stop pre-fetching prior to last page so that we do not pre-fetch for a non-existing page
+  if (page < pageCount)
+    queryClient.prefetchQuery({
+      queryKey: ["bookings", filter, sortBy, page + 1],
+      queryFn: () => getBookings({ filter, sortBy, page: page + 1 }),
+    });
+  // GUARD CLAUSE - Stop pre-fetching prior to first page so that we do not pre-fetch for a non-existing page
+  if (page > 1)
+    queryClient.prefetchQuery({
+      queryKey: ["bookings", filter, sortBy, page - 1],
+      queryFn: () => getBookings({ filter, sortBy, page: page - 1 }),
+    });
 
   return { isLoading, error, bookings, count };
 }

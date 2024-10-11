@@ -2,7 +2,7 @@ import { PAGE_SIZE_PER_PAGINATION } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings(filter, sortBy, page) {
+export async function getBookings({ filter, sortBy, page }) {
   // BASE QUERY
   let query = supabase
     .from("bookings")
@@ -19,7 +19,7 @@ export async function getBookings(filter, sortBy, page) {
   // CONDITIONAL FUNCTIONS GOES HERE BASED ON FILTERBY OR SORTBY ARGS!
   // FILTER
   if (filter) {
-    console.log(filter);
+    // console.log(filter);
     query = query[filter.method || "eq"](filter.field, filter.value);
     // // 💡 ALLOW CUSTOMZIATION OF METHOD
     // query = query[filter.method || "eq"](filter.field, filter.value);
