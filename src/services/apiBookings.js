@@ -1,7 +1,8 @@
+import { PAGE_SIZE_PER_PAGINATION } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings(filter, sortBy) {
+export async function getBookings(filter, sortBy, page) {
   // BASE QUERY
   let query = supabase
     .from("bookings")
@@ -11,7 +12,8 @@ export async function getBookings(filter, sortBy) {
      * 'guests(fullName, email)' only graps fullName and email columns from matching guests
      */
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)"
+      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)",
+      { count: "exact" } // Query the data for the exact number of results. We need this number because, PAGUINATION query addition to this base query will limit itself a certain number of results which won't allow us to paginate.
     );
 
   // CONDITIONAL FUNCTIONS GOES HERE BASED ON FILTERBY OR SORTBY ARGS!
@@ -28,15 +30,24 @@ export async function getBookings(filter, sortBy) {
       ascending: sortBy.direction === "asc",
     });
   }
+  // PAGINATION
+  if (page) {
+    const from = (page - 1) * PAGE_SIZE_PER_PAGINATION;
+    const to = from + PAGE_SIZE_PER_PAGINATION - 1;
+    query = query.range(from, to);
+  }
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
   if (error) {
     console.error(error);
     throw new Error("Bookings could not be loaded");
   }
 
-  return data;
+  return {
+    data, // Crippled data pagination portion
+    count, // Total number of results for the whole query free of pagination
+  };
 }
 
 export async function getBooking(id) {

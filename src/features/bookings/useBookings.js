@@ -25,15 +25,18 @@ export function useBookings() {
   const [field, direction] = sortByDef.split("-");
   const sortBy = { field, direction };
 
+  // GET PAGINATION DATA
+  const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+
   const {
     isLoading,
     error,
-    data: bookings,
+    data: { data: bookings, count } = {},
   } = useQuery({
     // IN ORDER TO TRIGGER AUTO REFETCH DUE CHANGES ON FILTER OBJECT, TQ ALLOWS US TO INCLUDE FILTER IN QUERYKEY ARRAY - WORKING KIND OF A DEPEDENCY ARRAY
-    queryKey: ["bookings", filter, sortBy],
-    queryFn: () => getBookings(filter, sortBy),
+    queryKey: ["bookings", filter, sortBy, page],
+    queryFn: () => getBookings(filter, sortBy, page),
   });
 
-  return { isLoading, error, bookings };
+  return { isLoading, error, bookings, count };
 }

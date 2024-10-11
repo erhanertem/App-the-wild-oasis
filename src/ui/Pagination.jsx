@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { useSearchParams } from "react-router-dom";
+import { PAGE_SIZE_PER_PAGINATION } from "../utils/constants";
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -52,13 +53,15 @@ const PaginationButton = styled.button`
     width: 1.8rem;
   }
 
+  &:disabled {
+    color: rgba(193, 193, 193, 0.8);
+  }
+
   &:hover:not(:disabled) {
     background-color: var(--color-brand-600);
     color: var(--color-brand-50);
   }
 `;
-
-const PAGE_SIZE_PER_PAGINATION = 10;
 
 function Pagination({ count }) {
   const [searchParams, setSearchParams] = useSearchParams();
