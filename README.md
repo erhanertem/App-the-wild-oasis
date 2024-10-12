@@ -57,6 +57,7 @@
     - 'GET' data w/ useQuery TQ hook
     - 'POST'/'UPDATE'/'DELETE' data w/ useMutation TQ hook
   - Re-factoring TQ context snippets to dry react components
+  - Pre-fetching for backward and forward pagination for better UX via prefetchQuery() TQ Client fn
 
 - Reach-Hook-Form
 
