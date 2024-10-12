@@ -46,7 +46,12 @@
       - replace attribute
     - Create wrapper component (routeless) RR route used across multiple routes
       - \<Outlet/> RR component - Have wrapper RR route pass thru child routes
-    - Implement API-side filtering and sorting operations on the table data via - useSearchParams() RR hook and useQuery TQ hook
+    - Implement API-side filtering and sorting operations on the bookings table data
+      - Limited data fetching / articulate on server side
+        - Build dynamic API based on useSearchParams RR URL params state for sorting/filtering instructions as acquired passed onto API call via useQuery TQ data fetching
+    - Implement CLIENT-side filtering and sorting operations on the cabins table data
+      - Entire data set fetching / articulate on client side
+        - useQuery TQ data fetching & useSearchParams RR URL params state for sorting/filtering instructions
 
 - Tanstack Query
 

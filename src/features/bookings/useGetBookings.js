@@ -4,7 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { getBookings } from "../../services/apiBookings";
 import { PAGE_SIZE_PER_PAGINATION } from "../../utils/constants";
 
-export function useBookings() {
+// GET BOOKINGS DATA WITH API-SIDE FILTERING/SORTING DISSIMILAR TO WHAT WE HAVE DONE WITH THE CABINS DATA
+export function useGetBookings() {
   /**
    * INSTEAD OF FILTERING/SORTING WHOLE DATA RECEIVED FROM THE DB, WE WANT TO CUSTOM FETCH DATA AND ONLY RECEIVE THE REQUIRED ONES WHEN WE TOGGLE BETWEEN SORT AND FILTER OPTIONS @ BOOKING TABLE. THIS SELECTIVE FILTERING AND SORTING FETCH OPERATION IS CALLED SERVER-SIDE FILTERING.
    * WE CANT MANUPLATE GETBOOKINGS API FN VIA READING PARAMS FROM RR useSearchParams, AS  ITS NOT ACCESSIBLE OUT OF REACT COMPONENT. WE CAN MANUPLATE THIS FUNCTION RIGHT HERE SINCE WE ACCESS IT @ QUERYFN KEY OF USEQUERY.
@@ -21,12 +22,12 @@ export function useBookings() {
   // // 💡 ALLOW CUSTOMZIATION OF METHOD ...but requires some more work as well...
   // : { field: "status", value: filterValue, method: "" };
 
-  // GET SORT DATA
+  // GET SORT VALUE
   const sortByDef = searchParams.get("sortBy") || "startDate-desc";
   const [field, direction] = sortByDef.split("-");
   const sortBy = { field, direction };
 
-  // GET PAGINATION DATA
+  // GET PAGINATION VALUE
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
 
   const {

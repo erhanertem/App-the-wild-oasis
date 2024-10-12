@@ -1,4 +1,4 @@
-import { useBookings } from "./useBookings";
+import { useGetBookings } from "./useGetBookings";
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
@@ -6,7 +6,7 @@ import Spinner from "../../ui/Spinner";
 import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const { bookings = [], count, isLoading } = useBookings();
+  const { bookings = [], count, isLoading } = useGetBookings();
   // NOTE: bookings is given a fallback value of [] to make sure we do not throw an exception before loading data
   // console.log(bookings);
 
