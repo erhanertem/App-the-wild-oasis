@@ -52,6 +52,7 @@
     - Implement CLIENT-side filtering and sorting operations on the cabins table data
       - Entire data set fetching / articulate on client side
         - useQuery TQ data fetching & useSearchParams RR URL params state for sorting/filtering instructions
+    - Read URL path parameter via useParams RR hook to display information about a choosen booking
 
 - Tanstack Query
 
