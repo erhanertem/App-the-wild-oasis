@@ -53,6 +53,10 @@ function Filter({ filterField, options }) {
     // discount=no-discount
     // searchParams.set("discount", value);
     searchParams.set(filterField, value);
+    // Reset filter page to start w/ 1
+    if (searchParams.get("page")) {
+      searchParams.set("page", 1);
+    }
     // Apply this change to the URL
     setSearchParams(searchParams);
   }
