@@ -11,7 +11,7 @@ export function useGetBooking() {
     error,
     data: booking,
   } = useQuery({
-    queryKey: ["bookings"],
+    queryKey: ["bookings", bookingId],
     queryFn: () => getBooking(bookingId),
     retry: false, // By default, TQ tries to fetch data 3 times before it fails gracefully
   });

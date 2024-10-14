@@ -14,6 +14,7 @@ import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import Booking from "./pages/Booking";
+import Checkin from "./pages/Checkin";
 
 // > #1. SETUP TANSTACK QUERY CLIENT W/CACHING SUPPORT
 const queryClient = new QueryClient({
@@ -67,6 +68,10 @@ function App() {
             <Route
               path="bookings/:bookingId"
               element={<Booking />}
+            />
+            <Route
+              path="checkin/:bookingId"
+              element={<Checkin />}
             />
             <Route
               path="cabins"
