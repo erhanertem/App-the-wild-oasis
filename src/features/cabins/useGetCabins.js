@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { getCabins } from '../../services/apiCabins';
+import { getCabins } from "../../services/apiCabins";
 
 export function useGetCabins() {
   // >#3.GET data via TQ
@@ -10,7 +10,7 @@ export function useGetCabins() {
     refetch,
     // error, // Any error that occurred during the fetch
   } = useQuery({
-    queryKey: ['cabins'], // The unique key for caching and identifying the query
+    queryKey: ["cabins"], // The unique key for caching and identifying the query
     queryFn: getCabins, // The function responsible for fetching the data
   });
 
