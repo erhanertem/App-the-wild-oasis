@@ -44,13 +44,13 @@ export function useGetBookings() {
   const queryClient = useQueryClient();
   // Compute the pagination pages
   const pageCount = Math.ceil(count / PAGE_SIZE_PER_PAGINATION);
-  // GUARD CLAUSE - Stop pre-fetching prior to last page so that we do not pre-fetch for a non-existing page
+  // GUARD CLAUSE - Stop pre-fetching prior to last page so that we do not pre-fetch a non-existing next page
   if (page < pageCount)
     queryClient.prefetchQuery({
       queryKey: ["bookings", filter, sortBy, page + 1],
       queryFn: () => getBookings({ filter, sortBy, page: page + 1 }),
     });
-  // GUARD CLAUSE - Stop pre-fetching prior to first page so that we do not pre-fetch for a non-existing page
+  // GUARD CLAUSE - Stop pre-fetching prior to first page so that we do not pre-fetch a non-existing prev page
   if (page > 1)
     queryClient.prefetchQuery({
       queryKey: ["bookings", filter, sortBy, page - 1],

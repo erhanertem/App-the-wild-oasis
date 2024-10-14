@@ -34,7 +34,7 @@ export async function getBookings({ filter, sortBy, page }) {
   if (page) {
     const from = (page - 1) * PAGE_SIZE_PER_PAGINATION;
     const to = from + PAGE_SIZE_PER_PAGINATION - 1;
-    query = query.range(from, to);
+    query = query.range(from, to); // Supabase range is zero based so from 0 to 9 to get 10 items a page
   }
 
   const { data, error, count } = await query;

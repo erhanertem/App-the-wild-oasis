@@ -64,6 +64,7 @@ const PaginationButton = styled.button`
 `;
 
 function Pagination({ count }) {
+  // READ CURRENT PAGE FROM PAGE PARAMS @ URL
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = !searchParams.get("page")
     ? 1
