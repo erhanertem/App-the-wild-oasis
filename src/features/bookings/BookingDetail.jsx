@@ -13,6 +13,7 @@ import { useGetBooking } from "./useGetBooking";
 import Spinner from "../../ui/Spinner";
 import BookingDataBox from "./BookingDataBox";
 import { useNavigate } from "react-router-dom";
+import { useCreateCheckout } from "../check-in-out/useCreateCheckout";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -21,11 +22,12 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const { booking, isLoading } = useGetBooking();
+  const { booking, isLoading: isGettingBooking } = useGetBooking();
+  const { checkOut, isCheckingOut } = useCreateCheckout();
   const navigate = useNavigate();
   const moveBack = useMoveBack();
 
-  if (isLoading) return <Spinner />;
+  if (isGettingBooking) return <Spinner />;
 
   const { status, id: bookingId } = booking;
 
@@ -53,6 +55,9 @@ function BookingDetail() {
           <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
             Check in
           </Button>
+        )}
+        {status === "checked-in" && (
+          <Button onClick={() => checkOut(bookingId)}>Check out</Button>
         )}
         <Button
           variation="secondary"
