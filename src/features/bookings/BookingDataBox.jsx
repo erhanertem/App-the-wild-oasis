@@ -68,7 +68,12 @@ const Guest = styled.div`
   }
 `;
 
-const Price = styled.div`
+// FORWARDED PROP STYLED COMPONENT TO GET OVER ISPAID PROP BEING A PROBLEM FOR CUSTOM ATTRIBUTE NAMING
+// Define the Price styled component with shouldForwardProp
+const Price = styled.div.withConfig({
+  // shouldForwardProp will prevent `isPaid` from being forwarded to the DOM element
+  shouldForwardProp: (prop) => prop !== "isPaid",
+})`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -93,6 +98,32 @@ const Price = styled.div`
     color: currentColor !important;
   }
 `;
+// REGULAR STYLED COMPONENT
+// const Price = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   padding: 1.6rem 3.2rem;
+//   border-radius: var(--border-radius-sm);
+//   margin-top: 2.4rem;
+
+//   background-color: ${(props) =>
+//     props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+//   color: ${(props) =>
+//     props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+
+//   & p:last-child {
+//     text-transform: uppercase;
+//     font-size: 1.4rem;
+//     font-weight: 600;
+//   }
+
+//   svg {
+//     height: 2.4rem;
+//     width: 2.4rem;
+//     color: currentColor !important;
+//   }
+// `;
 
 const Footer = styled.footer`
   padding: 1.6rem 4rem;
@@ -140,7 +171,12 @@ function BookingDataBox({ booking }) {
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          {countryFlag && (
+            <Flag
+              src={countryFlag}
+              alt={`Flag of ${country}`}
+            />
+          )}
           <p>
             {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
           </p>
@@ -159,12 +195,18 @@ function BookingDataBox({ booking }) {
           </DataItem>
         )}
 
-        <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
+        <DataItem
+          icon={<HiOutlineCheckCircle />}
+          label="Breakfast included?"
+        >
           {hasBreakfast ? "Yes" : "No"}
         </DataItem>
 
         <Price isPaid={isPaid}>
-          <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
+          <DataItem
+            icon={<HiOutlineCurrencyDollar />}
+            label={`Total price`}
+          >
             {formatCurrency(totalPrice)}
 
             {hasBreakfast &&
