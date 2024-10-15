@@ -57,7 +57,12 @@ function BookingDetail() {
           </Button>
         )}
         {status === "checked-in" && (
-          <Button onClick={() => checkOut(bookingId)}>Check out</Button>
+          <Button
+            disabled={isCheckingOut}
+            onClick={() => checkOut(bookingId)}
+          >
+            Check out
+          </Button>
         )}
         <Button
           variation="secondary"
