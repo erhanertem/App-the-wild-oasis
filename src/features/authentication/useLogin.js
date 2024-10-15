@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -13,9 +11,9 @@ export function useLogin() {
   const { mutate: login, isPending: isLogging } = useMutation({
     mutationFn: loginApi,
     onSuccess: (userObj) => {
-      // console.log(userObj); // userObj --> {user:***, session:***}
+      // console.log(userObj); // userObj as arged in login mutate fn -> {user:***, session:***}
       // Manually inject cache data to user query key
-      queryClient.setQueriesData(["user"], userObj);
+      queryClient.setQueryData(["user"], userObj.user);
       navigate("/dashboard");
     },
     onError: (err) => {
