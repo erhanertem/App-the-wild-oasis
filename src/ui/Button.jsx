@@ -48,7 +48,18 @@ const variations = {
   `,
 };
 
-const Button = styled.button`
+/** REWRITE VIA WITHCONFIG+SHOULDFORWARDPROP CUSTOM PROP PASSING IN SCs */
+const Button = styled.button.withConfig({
+  shouldForwardProp: (prop) =>
+    ![
+      "size",
+      "variation",
+      "disabledBackgroundColor",
+      "disabledColor",
+      "disabledBorderColor",
+      "disabledOpacity",
+    ].includes(prop),
+})`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
@@ -58,18 +69,42 @@ const Button = styled.button`
 
   &:disabled {
     cursor: not-allowed;
-    background-color: var(--color-grey-300);
-    color: var(--color-grey-600);
-    border: 1px solid var(--color-grey-400);
+    background-color: ${(props) => props.disabledBackgroundColor};
+    color: ${(props) => props.disabledColor};
+    border: 1px solid ${(props) => props.disabledBorderColor};
     box-shadow: none;
-    opacity: 0.6;
+    opacity: ${(props) => props.disabledOpacity};
     pointer-events: none;
   }
 `;
+/**
+ const Button = styled.button`
+  border: none;
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-sm);
+
+  ${(props) => sizes[props.size]};
+  ${(props) => variations[props.variation]};
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: ${(props) => props.disabledBackgroundColor};
+    color: ${(props) => props.disabledColor};
+    border: 1px solid ${(props) => props.disabledBorderColor};
+    box-shadow: none;
+    opacity: ${(props) => props.disabledOpacity};
+    pointer-events: none;
+  }
+`;
+ */
 
 Button.defaultProps = {
   variation: "primary",
   size: "medium",
+  disabledBackgroundColor: "var(--color-grey-300)",
+  disabledColor: "var(--color-grey-600)",
+  disabledBorderColor: "var(--color-grey-400)",
+  disabledOpacity: 0.6,
 };
 
 export default Button;

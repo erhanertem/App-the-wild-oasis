@@ -1,4 +1,4 @@
-import { default as styled } from 'styled-components';
+import styled from "styled-components";
 
 const Input = styled.input`
   min-width: 22rem;

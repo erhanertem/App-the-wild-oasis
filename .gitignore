@@ -27,3 +27,4 @@ dist-ssr
 *.supabase_pass
 *.vscode
 netlify.toml
+temp_*
