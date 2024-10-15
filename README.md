@@ -27,13 +27,14 @@
     - Propping via 'custom_named' prop
       - \<StyleSheetManager> App wrapper SC component for enabling transient
         custom props
-    - Propping via 'as' prop (HTML tag modifier)
+    - Propping via 'as' polymorphic prop (HTML tag modifier)
     - defaultProps function - Set defaults for the propping type
   - Create styled component contemplating a (ReactRouter) component
     - styled() SC function
   - Create styled component w/ injected tag element attributes for code
     abstraction
     - attrs() SC function
+  - Make use of .withConfig() + shouldForwardProp for creating transient prop
 
 - React Router
 

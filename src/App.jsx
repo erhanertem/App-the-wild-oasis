@@ -15,6 +15,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
+import ProtectedRoute from "./ui/ProtectedRoute";
 
 // > #1. SETUP TANSTACK QUERY CLIENT W/CACHING SUPPORT
 const queryClient = new QueryClient({
@@ -42,7 +43,14 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                {/* Applayout wraps all our endpoints. So wrapping Applayout component by ProtectedRoute help us protect the Outlet/children components as well automatically */}
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             {/* Redirecting from root to /dashboard */}
             <Route
               index

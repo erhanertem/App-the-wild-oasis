@@ -21,7 +21,16 @@ function LoginForm() {
     // GUARD CLAUSE - Check login entries
     if (!email || !password) return;
 
-    login({ email, password });
+    login(
+      { email, password },
+      // Implement field clearance whether its a success or bad credential
+      {
+        onSettled: () => {
+          setEmail("");
+          setPassword("");
+        },
+      }
+    );
   }
 
   return (
