@@ -55,7 +55,7 @@ export async function getBooking(id) {
     .from("bookings")
     .select("*, cabins(*), guests(*)")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error(error);

@@ -1,19 +1,21 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-// import BookingDataBox from "./BookingDataBox";
+import { useCreateCheckout } from "../check-in-out/useCreateCheckout";
+import { useMoveBack } from "../../hooks/useMoveBack";
+import { useGetBooking } from "./useGetBooking";
+import { useDeleteBooking } from "./useDeleteBooking";
+
 import Row from "../../ui/Row";
 import Heading from "../../ui/Heading";
 import Tag from "../../ui/Tag";
 import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
-
-import { useMoveBack } from "../../hooks/useMoveBack";
-import { useGetBooking } from "./useGetBooking";
+import Modal from "../../ui/Modal";
 import Spinner from "../../ui/Spinner";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 import BookingDataBox from "./BookingDataBox";
-import { useNavigate } from "react-router-dom";
-import { useCreateCheckout } from "../check-in-out/useCreateCheckout";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -24,6 +26,8 @@ const HeadingGroup = styled.div`
 function BookingDetail() {
   const { booking, isLoading: isGettingBooking } = useGetBooking();
   const { checkOut, isCheckingOut } = useCreateCheckout();
+  const { deleteBooking, isDeletingBooking } = useDeleteBooking();
+
   const navigate = useNavigate();
   const moveBack = useMoveBack();
 
@@ -64,6 +68,25 @@ function BookingDetail() {
             Check out
           </Button>
         )}
+
+        <Modal>
+          <Modal.Open opens="delete">
+            <Button variation="danger">Delete booking</Button>
+          </Modal.Open>
+          <Modal.Window name="delete">
+            <ConfirmDelete
+              resourceName="booking"
+              onConfirm={() =>
+                deleteBooking(bookingId, {
+                  // onSEttled means wheter its a success or error execure it
+                  onSettled: () => navigate(-1),
+                })
+              }
+              disabled={isDeletingBooking}
+            />
+          </Modal.Window>
+        </Modal>
+
         <Button
           variation="secondary"
           onClick={moveBack}
