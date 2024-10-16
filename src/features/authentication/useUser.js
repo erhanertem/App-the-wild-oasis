@@ -4,10 +4,13 @@ import { getCurrentUser } from "../../services/apiAuth";
 
 // CACHE USER INFO
 export function useUser() {
-  const { isLoading, data: user } = useQuery({
+  const { isLoading: isLoadingCurrentUser, data: user } = useQuery({
     queryKey: ["user"],
     queryFn: getCurrentUser,
   });
 
-  return { isLoading, isAuthenticated: user?.role === "authenticated" };
+  return {
+    isLoadingCurrentUser,
+    isAuthenticated: user?.role === "authenticated",
+  };
 }

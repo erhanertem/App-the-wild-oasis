@@ -8,16 +8,16 @@ import FullPage from "./FullPage";
 
 function AuthRoute({ children }) {
   const navigate = useNavigate();
-  const { isLoading, isAuthenticated } = useUser();
+  const { isLoadingCurrentUser, isAuthenticated } = useUser();
 
   // If the user is authenticated, redirect to dashboard
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
-  }, [isAuthenticated, isLoading, navigate]);
+  }, [isAuthenticated, navigate]);
 
-  if (isLoading) {
+  if (!isAuthenticated && isLoadingCurrentUser) {
     return (
       <FullPage>
         <Spinner />

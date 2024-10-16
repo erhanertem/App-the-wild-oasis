@@ -26,6 +26,7 @@ export async function login({ email, password }) {
 
 // Function user credentials after login
 export async function getCurrentUser() {
+  // > Retrieve session object from localStorage stored via Supabase client
   const { data: localStorageData, error: localStorageRetrieveError } =
     await supabase.auth.getSession();
 
@@ -39,7 +40,7 @@ export async function getCurrentUser() {
   if (!session) return null;
 
   /**
-  WHY NEED GETUSER() WHILE THIS DATA IS ALREADY AVAILABLE IN GETSESSION DATA ?
+   WHY NEED GETUSER() WHILE THIS DATA IS ALREADY AVAILABLE IN GETSESSION DATA ?
 
   It's a common practice to refetch user data on navigation, especially in scenarios where user permissions or account status might change frequently.
 
@@ -49,6 +50,7 @@ export async function getCurrentUser() {
 
   However, you can optimize this process by implementing caching mechanisms or only fetching user data when necessary, depending on your application's specific requirements and performance considerations.
   */
+  // > If there is a session recorded in localstorage ask Supabase server to provide the latest and greatest User info to make sure its still a valid authentication and not revoked after this record
   const { data: supabaseUserData, error: supabaseError } =
     await supabase.auth.getUser();
 
