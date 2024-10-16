@@ -108,6 +108,12 @@ In addition to the project cirriculum:
 - Backend updates trigger instant UI updates via Supabase subscription beacons
   eliminating the need of manually refreshing the browser
 
+  &emsp;
+
+⚠️ Pending Issues:
+
+- Bootleg solution @ supabase subscription beacons needs a better solution.
+
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 
 <img src="./screenshot.webp" width="600px"/>
