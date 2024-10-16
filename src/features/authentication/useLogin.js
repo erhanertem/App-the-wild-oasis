@@ -8,13 +8,17 @@ export function useLogin() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { mutate: login, isPending: isLogging } = useMutation({
+  const { mutate: login, isPending: isLoggingIn } = useMutation({
     mutationFn: loginApi,
     onSuccess: (userObj) => {
       // console.log(userObj); // userObj as arged in login mutate fn -> {user:***, session:***}
       // Manually inject cache data to user query key
       queryClient.setQueryData(["user"], userObj.user);
-      navigate("/dashboard");
+      navigate(
+        "/dashboard",
+        // Disallow going back in the browser
+        { replace: true }
+      );
     },
     onError: (err) => {
       console.log("ERROR", err);
@@ -22,5 +26,5 @@ export function useLogin() {
     },
   });
 
-  return { login, isLogging };
+  return { login, isLoggingIn };
 }

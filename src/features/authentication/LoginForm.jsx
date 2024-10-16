@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useLogin } from "./useLogin";
 
@@ -9,12 +9,12 @@ import FormRowVertical from "../../ui/FormRowVertical";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 function LoginForm() {
+  const { login, isLoggingIn } = useLogin();
+
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   const [email, setEmail] = useState("erhan@email.com");
   const [password, setPassword] = useState("pass1234");
-
-  const { login, isLogging } = useLogin();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -43,7 +43,7 @@ function LoginForm() {
           autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          disabled={isLogging}
+          disabled={isLoggingIn}
         />
       </FormRowVertical>
       <FormRowVertical label="Password">
@@ -53,19 +53,19 @@ function LoginForm() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          disabled={isLogging}
+          disabled={isLoggingIn}
         />
       </FormRowVertical>
       <FormRowVertical>
         <Button
           size="large"
-          disabled={isLogging}
+          disabled={isLoggingIn}
           disabledBackgroundColor="var(--color-brand-600)"
           disabledBorderColor="var(--color-brand-600)"
           disabledColor="var(--color-brand-50)"
           disabledOpacity={1}
         >
-          {!isLogging ? "Login" : <SpinnerMini />}
+          {!isLoggingIn ? "Login" : <SpinnerMini />}
         </Button>
       </FormRowVertical>
     </Form>
