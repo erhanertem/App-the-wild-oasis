@@ -12,7 +12,7 @@ export function useLogin() {
     mutationFn: loginApi,
     onSuccess: (userObj) => {
       // console.log(userObj); // userObj as arged in login mutate fn -> {user:***, session:***}
-      // Manually inject cache data to user query key
+      // Manually inject cache data to user query key - NOT REQUIRED - JUST EXPERIMENTATION - SHORTLIVED AND WILL BE OVERWRITTEN BY USEUSER CACHING ANYWAYS
       queryClient.setQueryData(["user"], userObj.user);
       navigate(
         "/dashboard",
