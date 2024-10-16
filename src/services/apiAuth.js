@@ -24,7 +24,7 @@ export async function login({ email, password }) {
   return data;
 }
 
-// Function user credentials after login
+// Function proof-checking user credentials after login
 export async function getCurrentUser() {
   // > Retrieve session object from localStorage stored via Supabase client
   const { data: localStorageData, error: localStorageRetrieveError } =

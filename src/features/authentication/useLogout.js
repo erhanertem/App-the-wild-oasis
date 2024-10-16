@@ -1,4 +1,4 @@
-import { useMutationState, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { logout as logoutApi } from "../../services/apiAuth";
 import toast from "react-hot-toast";
@@ -8,7 +8,7 @@ export function useLogout() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { mutate: logout, isPending: isLoggingOut } = useMutationState({
+  const { mutate: logout, isPending: isLoggingOut } = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
       // Manually remove query cache for the user key so that no malicious actor can get a hold of it upon a succesfull logout
