@@ -1,14 +1,22 @@
 import supabase from "./supabase";
 
+export async function logout() {
+  const { error: logOutError } = await supabase.auth.signOut();
+
+  if (logOutError) {
+    throw new Error(logOutError.message);
+  }
+}
+
 // Function for initial login
 export async function login({ email, password }) {
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error: loginError } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
-    throw new Error(error);
+  if (loginError) {
+    throw new Error(loginError.message);
   }
 
   // console.log(data);
@@ -24,7 +32,7 @@ export async function getCurrentUser() {
   const { session } = localStorageData;
 
   if (localStorageRetrieveError) {
-    throw new Error(localStorageRetrieveError);
+    throw new Error(localStorageRetrieveError.message);
   }
 
   // GUARD CLAUSE - EARLY RETURN IF THERE IS NO ACTIVE SESSION STORED IN LOCALSTORAGE(BY SUPABASE)
@@ -45,7 +53,7 @@ export async function getCurrentUser() {
     await supabase.auth.getUser();
 
   if (supabaseError) {
-    throw new Error(supabaseError);
+    throw new Error(supabaseError.message);
   }
 
   return supabaseUserData?.user;
