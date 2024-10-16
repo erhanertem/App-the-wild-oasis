@@ -37,6 +37,7 @@ export async function getCurrentUser() {
   }
 
   // GUARD CLAUSE - EARLY RETURN IF THERE IS NO ACTIVE SESSION STORED IN LOCALSTORAGE(BY SUPABASE)
+  // NOTE: null return is actually the value returned from this function and useUser TQ custom hook writes it off to the "user" cache - See TQ dev tool data explorer tab
   if (!session) return null;
 
   /**

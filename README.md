@@ -107,7 +107,7 @@ In addition to the project cirriculum:
   page
 - Backend updates trigger instant UI updates via Supabase subscription beacons
   eliminating the need of manually refreshing the browser
-- Protect login page from being hit intentionally after log in
+- Protect login page from being hit intentionally by an authenticated user
 
   &emsp;
 
