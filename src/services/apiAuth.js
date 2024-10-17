@@ -1,4 +1,50 @@
+import toast from "react-hot-toast";
 import supabase from "./supabase";
+
+export async function signup({ fullName, email, password }) {
+  // WARNING: By design, session signup actually flushes the current user signin along with localStorage supabase auth.
+  // >#1 Save the current session object from localStorage stored via Supabase client before signing up a new user
+  const { data: currentSessionData, error: localStorageRetrieveError } =
+    await supabase.auth.getSession();
+
+  const { session } = currentSessionData;
+
+  if (localStorageRetrieveError) {
+    throw new Error(localStorageRetrieveError.message);
+  }
+
+  // >#2 Sign up a new user with Supabase and pass the fullName, Avator URL as an option
+  /*
+  In Supabase, the signUp function is used to create a new user account with an email and password. The reason fullName is passed inside the options object (specifically under data) is because the main signUp method is focused on creating authentication-related information (like the email and password). Any additional data related to the user's profile (such as fullName, avatar, or other custom fields) are handled separately and are typically stored in a related profile table.
+
+  email and password: These are core fields for authentication.
+  options: This is an object that contains extra information for customizing the sign-up process.
+  */
+  const { data: user, error: signupError } = await supabase.auth.signUp({
+    email, // core requiremnt for supabase email based sign up
+    password, // core requirment for supabase email based sign up
+    options: {
+      data: { fullName, avatar: "" },
+    }, // optional fields provided on top of core requiremnts
+  });
+
+  if (signupError) {
+    /**
+     * Error object has 4 properties: name, message, stack and cause
+     */
+    // console.log(signupError.name);
+    // console.log(signupError.message);
+    // console.log(signupError.cause);
+    throw new Error(
+      `${signupError.message}. Please try a different email address`
+    );
+  }
+
+  // >#3. If there is a logged in user, restore original localStorage Auth to keep current user logged in
+  if (session) await supabase.auth.setSession(session);
+
+  return user;
+}
 
 export async function logout() {
   const { error: logOutError } = await supabase.auth.signOut();

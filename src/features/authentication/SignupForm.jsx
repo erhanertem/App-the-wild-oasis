@@ -1,22 +1,46 @@
 import { useForm } from "react-hook-form";
+
+import { useSignup } from "./useSignup";
+
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 
+/**
+ * Use temp-mail.org to get temp email adresses which is shortlived but long enough to let the user sign up for our app. As of 2024 temp email signups are not available to supabase
+ * Setup gmail smtp server via App pass to send emails to clients
+ */
+
+// import { useNavigate } from "react-router-dom";
+
 function SignupForm() {
+  // const navigate = useNavigate();
+  const { signup, isSigningup } = useSignup();
+
   const {
     register, // Register form field values
     formState, // Gets the errors from onErrorFn handler out of RHF to be used in practical UI error handling mediums such as toaster
     getValues, // Reads the values in the form fields
     handleSubmit, // Dials in actual form submit handler fn
+    reset, // Resets fields to their initial values
   } = useForm();
   // GET THE ERRORS OUT OF RHF AND USE IT IN JSX BODY CONDITIONALLY
   const { errors } = formState;
 
-  // Handle form submission if validations are passed
-  function onSubmitFn(data) {
-    console.log(data);
+  // Handle form submission if validations are passed - destructring @ args object in order to dismiss passwordConfirm from the returned form data
+  function onSubmitFn({ email, fullName, password }) {
+    signup(
+      { email, fullName, password },
+      {
+        onSuccess: () => {
+          // Reset form fields
+          reset();
+          // // Navigate away from the use signup form page
+          // navigate("/dashboard");
+        },
+      }
+    );
   }
 
   return (
@@ -28,6 +52,7 @@ function SignupForm() {
         <Input
           type="text"
           id="fullName"
+          disabled={isSigningup}
           {...register("fullName", { required: "This field is required" })}
         />
       </FormRow>
@@ -39,6 +64,7 @@ function SignupForm() {
         <Input
           type="email"
           id="email"
+          disabled={isSigningup}
           {...register("email", {
             required: "This field is required",
             pattern: {
@@ -56,6 +82,7 @@ function SignupForm() {
         <Input
           type="password"
           id="password"
+          disabled={isSigningup}
           {...register("password", {
             required: "This field is required",
             minLength: {
@@ -73,6 +100,7 @@ function SignupForm() {
         <Input
           type="password"
           id="passwordConfirm"
+          disabled={isSigningup}
           {...register("passwordConfirm", {
             required: "This field is required",
             validate: (value) =>
@@ -86,10 +114,11 @@ function SignupForm() {
         <Button
           variation="secondary"
           type="reset"
+          disabled={isSigningup}
         >
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button disabled={isSigningup}>Create new user</Button>
       </FormRow>
     </Form>
   );

@@ -108,6 +108,7 @@ In addition to the project cirriculum:
 - Backend updates trigger instant UI updates via Supabase subscription beacons
   eliminating the need of manually refreshing the browser
 - Protect login page from being hit intentionally by an authenticated user
+- Fix user signup to supabase due to supabase signup fn causing user aut-logout/localStorage supa-auth data swap
 
   &emsp;
 
