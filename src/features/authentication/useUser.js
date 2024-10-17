@@ -10,6 +10,7 @@ export function useUser() {
   });
 
   return {
+    user,
     isLoadingCurrentUser,
     isAuthenticated: user?.role === "authenticated",
   };

@@ -13,8 +13,8 @@ function LoginForm() {
 
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("erhan@email.com");
-  const [password, setPassword] = useState("pass1234");
+  const [email, setEmail] = useState("hiveso9437@abaot.com");
+  const [password, setPassword] = useState("12345678");
 
   function handleSubmit(e) {
     e.preventDefault();
