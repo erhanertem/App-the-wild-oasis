@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import Spinner from "./Spinner";
 
-import { useUser } from "../features/authentication/useUser";
+import { useGetUser } from "../features/authentication/useGetUser";
 
 const FullPage = styled.div`
   height: 100dvh;
@@ -18,7 +18,7 @@ function ProtectedRoute({ children }) {
   const navigate = useNavigate();
 
   // > #1.Load Authenticated User
-  const { isLoadingCurrentUser, isAuthenticated } = useUser();
+  const { isLoadingCurrentUser, isAuthenticated } = useGetUser();
 
   // > #2.If there is No authenticated user, redirect to the /login endpoint
   useEffect(() => {

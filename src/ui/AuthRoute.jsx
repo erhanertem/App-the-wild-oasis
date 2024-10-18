@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useUser } from "../features/authentication/useUser";
+import { useGetUser } from "../features/authentication/useGetUser";
 
 import Spinner from "./Spinner";
 import FullPage from "./FullPage";
 
 function AuthRoute({ children }) {
   const navigate = useNavigate();
-  const { isLoadingCurrentUser, isAuthenticated } = useUser();
+  const { isLoadingCurrentUser, isAuthenticated } = useGetUser();
 
   // If the user is authenticated, redirect to dashboard
   useEffect(() => {
