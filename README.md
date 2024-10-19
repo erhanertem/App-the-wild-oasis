@@ -8,7 +8,7 @@
 
 <details>
 
-<summary><img src="./readme/education.gif" width="30px"/>Key take-aways from this project...</summary>
+<summary><img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/education.gif" width="30px"/>Key take-aways from this project...</summary>
 
 - React folder structure and project planning
 
@@ -93,7 +93,7 @@
 
 &emsp;
 
-<img src="./readme/learning.gif" width="30px"/>In addition to the project cirriculum:
+<img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/learning.gif" width="30px"/>In addition to the project cirriculum:
 
 - Provide custom solutions around cabin API
   - Refined cabin edit and create API handling
@@ -114,11 +114,11 @@
 
   &emsp;
 
-<img src="./readme/report.gif" width="30px"/> Pending Issues:
+<img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/report.gif" width="30px"/> Pending Issues:
 
 - Bootleg solution @ supabase subscription beacons needs a better solution.
 
-#### <img src="./readme/file.gif" width="30px"/>[The Wild Oasis App](https://****)
+#### <img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/file.gif" width="30px"/>[The Wild Oasis App](https://****)
 
 <img src="./screenshot.webp" width="600px"/>
 
