@@ -111,22 +111,22 @@ export async function updateCurrentUser({
         "Error deleting the avatar file: " + deleteAvatarError.message
       );
     }
-
-    // Step 2: Upload the new file
-    const { error: uploadNewAvatarError } = await supabase.storage
-      .from("avatars")
-      .upload(fileName, newAvatarFile, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-    if (uploadNewAvatarError) {
-      throw new Error(
-        "Error uploading the new avatar file: " + uploadNewAvatarError.message
-      );
-    }
-
-    console.log("File replaced successfully");
   }
+
+  // Step 2: Upload the new file
+  const { error: uploadNewAvatarError } = await supabase.storage
+    .from("avatars")
+    .upload(fileName, newAvatarFile, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+  if (uploadNewAvatarError) {
+    throw new Error(
+      "Error uploading the new avatar file: " + uploadNewAvatarError.message
+    );
+  }
+
+  console.log("File replaced successfully");
 
   // >#3. Update the avatar in the user data
   const { error: updateUserDataError } = await supabase.auth.updateUser({
