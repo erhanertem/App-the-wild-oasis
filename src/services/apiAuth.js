@@ -97,22 +97,25 @@ export async function updateCurrentUser({
   const currentAvatarFileName = currentAvatarURL.split("/").pop();
   const currentAvatarFileExists = currentAvatarURL !== "";
 
-  // ->#2.1 Prepare the new avatar img name for storing
-  const fileName = `avatar-${updatedUserData.user.id}-${Date.now()}`;
-
   // ->#2.2 Upsert the new avatar image
   if (currentAvatarFileExists) {
-    // Step 1: Delete the existing file
-    const { error: deleteAvatarError } = await supabase.storage
+    const { data: newAvatar, error: upsertAvatarError } = await supabase.storage
       .from("avatars")
-      .remove([currentAvatarFileName]);
-    if (deleteAvatarError) {
+      .upload(currentAvatarFileName, newAvatarFile, {
+        upsert: true,
+      });
+    if (upsertAvatarError) {
       throw new Error(
-        "Error deleting the avatar file: " + deleteAvatarError.message
+        "Error upserting the new avatar file: " + upsertAvatarError.message
       );
     }
-
-    // Step 2: Upload the new file
+    console.log("➕ File replaced successfully");
+    console.log(newAvatar.path);
+    return newAvatar.path;
+  } else {
+    // ->#2.1 Prepare the new avatar img name for storing
+    const fileName = `avatar-${updatedUserData.user.id}-${Date.now()}`;
+    // ->#2.2 Upload the new file
     const { error: uploadNewAvatarError } = await supabase.storage
       .from("avatars")
       .upload(fileName, newAvatarFile, {
@@ -124,18 +127,17 @@ export async function updateCurrentUser({
         "Error uploading the new avatar file: " + uploadNewAvatarError.message
       );
     }
-
     console.log("File replaced successfully");
-  }
 
-  // >#3. Update the avatar in the user data
-  const { error: updateUserDataError } = await supabase.auth.updateUser({
-    data: {
-      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-    },
-  });
-  if (updateUserDataError) {
-    throw new Error(updateUserDataError.message);
+    // >#3. Update the avatar in the user data
+    const { error: updateUserDataError } = await supabase.auth.updateUser({
+      data: {
+        avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+      },
+    });
+    if (updateUserDataError) {
+      throw new Error(updateUserDataError.message);
+    }
   }
 }
 
