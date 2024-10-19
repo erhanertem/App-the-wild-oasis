@@ -8,9 +8,10 @@ export function useUpdateUser() {
 
   const { isPending: isUpdatingUser, mutate: updateUser } = useMutation({
     mutationFn: updateCurrentUser,
+    // eslint-disable-next-line no-unused-vars
     onSuccess: (updatedUser) => {
       toast.success("User account succesfully updated");
-      console.log(updatedUser);
+      // console.log(updatedUser);
       // // MANUAL UPDATE
       // queryClient.setQueryData(["user"], updatedUser);
       queryClient.invalidateQueries({
