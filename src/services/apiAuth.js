@@ -96,42 +96,41 @@ export async function updateCurrentUser({
   // >#2. Proceed w/ Uploading the new avatar image
   const currentAvatarFileName = currentAvatarURL.split("/").pop();
   const currentAvatarFileExists = currentAvatarURL !== "";
-
-  // ->#2.1 Prepare the new avatar img name for storing
-  const fileName = `avatar-${updatedUserData.user.id}-${Date.now()}`;
-
+  let fileName;
   // ->#2.2 Upsert the new avatar image
   if (currentAvatarFileExists) {
-    // Step 1: Delete the existing file
-    const { error: deleteAvatarError } = await supabase.storage
+    fileName = currentAvatarFileName;
+    const { error: upsertAvatarError } = await supabase.storage
       .from("avatars")
-      .remove([currentAvatarFileName]);
-    if (deleteAvatarError) {
+      .upload(currentAvatarFileName, newAvatarFile, {
+        upsert: true,
+      });
+    if (upsertAvatarError) {
       throw new Error(
-        "Error deleting the avatar file: " + deleteAvatarError.message
+        "Error upserting the new avatar file: " + upsertAvatarError.message
+      );
+    }
+  } else {
+    // ->#2.1 Prepare the new avatar img name for storing
+    fileName = `avatar-${updatedUserData.user.id}-${Date.now()}`;
+    // ->#2.2 Upload the new file
+    const { error: uploadNewAvatarError } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, newAvatarFile, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+    if (uploadNewAvatarError) {
+      throw new Error(
+        "Error uploading the new avatar file: " + uploadNewAvatarError.message
       );
     }
   }
 
-  // Step 2: Upload the new file
-  const { error: uploadNewAvatarError } = await supabase.storage
-    .from("avatars")
-    .upload(fileName, newAvatarFile, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-  if (uploadNewAvatarError) {
-    throw new Error(
-      "Error uploading the new avatar file: " + uploadNewAvatarError.message
-    );
-  }
-
-  console.log("File replaced successfully");
-
-  // >#3. Update the avatar in the user data
+  // >#3. Update the avatar in the user data via Cache-Busting Query Parameter to cover also no-avatr picture name change
   const { error: updateUserDataError } = await supabase.auth.updateUser({
     data: {
-      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}?bust=${new Date().getTime()}`,
     },
   });
   if (updateUserDataError) {

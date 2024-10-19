@@ -23,7 +23,7 @@ function UpdateUserDataForm() {
   const [fullName, setFullName] = useState(currentFullName);
   const [newAvatarFile, setNewAvatarFile] = useState(null);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     // GUARD CLAUSE - CHECK IF FULLNAME EXISTS, AVATAR IS OPTIONAL
