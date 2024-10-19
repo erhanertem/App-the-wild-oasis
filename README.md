@@ -7,7 +7,8 @@
 ### **Objective:** Create The Wild Oasis App
 
 <details>
-<summary>Key take-aways from this project:</summary>
+
+<summary><img src="./readme/education.gif" width="30px"/>Key take-aways from this project:</summary>
 
 - React folder structure and project planning
 
@@ -92,7 +93,7 @@
 
 &emsp;
 
-In addition to the project cirriculum:
+<img src="./readme/learning.gif" width="30px"/>In addition to the project cirriculum:
 
 - Provide custom solutions around cabin API
   - Refined cabin edit and create API handling
@@ -113,12 +114,12 @@ In addition to the project cirriculum:
 
   &emsp;
 
-⚠️ Pending Issues:
+<img src="./readme/report.gif" width="30px"/> Pending Issues:
 
 - Bootleg solution @ supabase subscription beacons needs a better solution.
 - Replacing an Avatar image with the same name does not trigger a refetch.
 
-#### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
+#### <img src="./readme/file.gif" width="30px"/>[The Wild Oasis App](https://****)
 
 <img src="./screenshot.webp" width="600px"/>
 
