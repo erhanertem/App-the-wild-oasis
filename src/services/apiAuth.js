@@ -96,10 +96,11 @@ export async function updateCurrentUser({
   // >#2. Proceed w/ Uploading the new avatar image
   const currentAvatarFileName = currentAvatarURL.split("/").pop();
   const currentAvatarFileExists = currentAvatarURL !== "";
-
+  let fileName;
   // ->#2.2 Upsert the new avatar image
   if (currentAvatarFileExists) {
-    const { data: newAvatar, error: upsertAvatarError } = await supabase.storage
+    fileName = currentAvatarFileName;
+    const { error: upsertAvatarError } = await supabase.storage
       .from("avatars")
       .upload(currentAvatarFileName, newAvatarFile, {
         upsert: true,
@@ -109,12 +110,9 @@ export async function updateCurrentUser({
         "Error upserting the new avatar file: " + upsertAvatarError.message
       );
     }
-    console.log("➕ File replaced successfully");
-    console.log(newAvatar.path);
-    return newAvatar.path;
   } else {
     // ->#2.1 Prepare the new avatar img name for storing
-    const fileName = `avatar-${updatedUserData.user.id}-${Date.now()}`;
+    fileName = `avatar-${updatedUserData.user.id}-${Date.now()}`;
     // ->#2.2 Upload the new file
     const { error: uploadNewAvatarError } = await supabase.storage
       .from("avatars")
@@ -127,17 +125,16 @@ export async function updateCurrentUser({
         "Error uploading the new avatar file: " + uploadNewAvatarError.message
       );
     }
-    console.log("File replaced successfully");
+  }
 
-    // >#3. Update the avatar in the user data
-    const { error: updateUserDataError } = await supabase.auth.updateUser({
-      data: {
-        avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-      },
-    });
-    if (updateUserDataError) {
-      throw new Error(updateUserDataError.message);
-    }
+  // >#3. Update the avatar in the user data via Cache-Busting Query Parameter to cover also no-avatr picture name change
+  const { error: updateUserDataError } = await supabase.auth.updateUser({
+    data: {
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}?bust=${new Date().getTime()}`,
+    },
+  });
+  if (updateUserDataError) {
+    throw new Error(updateUserDataError.message);
   }
 }
 

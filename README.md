@@ -8,7 +8,7 @@
 
 <details>
 
-<summary><img src="./readme/education.gif" width="30px"/>Key take-aways from this project:</summary>
+<summary><img src="./readme/education.gif" width="30px"/>Key take-aways from this project...</summary>
 
 - React folder structure and project planning
 
@@ -110,14 +110,13 @@
   eliminating the need of manually refreshing the browser
 - Protect login page from being hit intentionally by an authenticated user
 - Fix user signup to supabase due to supabase signup fn causing user aut-logout/localStorage supa-auth data swap
-- Implement deletion of old avatar picture form the supabase bucket upon user avatar upload
+- Implement deletion of old avatar picture from the supabase bucket upon user's new avatar upload via <strong>CACHE BUSTING QUERY PARAMETER</strong>
 
   &emsp;
 
 <img src="./readme/report.gif" width="30px"/> Pending Issues:
 
 - Bootleg solution @ supabase subscription beacons needs a better solution.
-- Replacing an Avatar image with the same name does not trigger a refetch.
 
 #### <img src="./readme/file.gif" width="30px"/>[The Wild Oasis App](https://****)
 
