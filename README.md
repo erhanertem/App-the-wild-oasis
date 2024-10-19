@@ -1,4 +1,4 @@
-### 👋 **I am Erhan ERTEM**
+### Hi! <img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/wave.gif" width="30px"/> **I am Erhan ERTEM**
 
 &emsp;
 
