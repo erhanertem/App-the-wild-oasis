@@ -109,12 +109,14 @@ In addition to the project cirriculum:
   eliminating the need of manually refreshing the browser
 - Protect login page from being hit intentionally by an authenticated user
 - Fix user signup to supabase due to supabase signup fn causing user aut-logout/localStorage supa-auth data swap
+- Implement deletion of old avatar picture form the supabase bucket upon user avatar upload
 
   &emsp;
 
 ⚠️ Pending Issues:
 
 - Bootleg solution @ supabase subscription beacons needs a better solution.
+- Replacing an Avatar image with the same name does not trigger a refetch.
 
 #### <img src="./push.gif" width="30px"/>[The Wild Oasis App](https://****)
 

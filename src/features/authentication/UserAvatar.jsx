@@ -25,7 +25,7 @@ function UserAvatar() {
   const { user } = useGetUser();
 
   const { fullName, avatar } = user.user_metadata;
-  console.log(user, fullName, avatar);
+
   return (
     <StyledUserAvatar>
       <Avatar
