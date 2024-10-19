@@ -128,14 +128,16 @@ export async function updateCurrentUser({
   }
 
   // >#3. Update the avatar in the user data via Cache-Busting Query Parameter to cover also no-avatr picture name change
-  const { error: updateUserDataError } = await supabase.auth.updateUser({
-    data: {
-      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}?bust=${new Date().getTime()}`,
-    },
-  });
+  const { data: updatedUser, error: updateUserDataError } =
+    await supabase.auth.updateUser({
+      data: {
+        avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}?bust=${new Date().getTime()}`,
+      },
+    });
   if (updateUserDataError) {
     throw new Error(updateUserDataError.message);
   }
+  return updatedUser;
 }
 
 // Function proof-checking user credentials after login

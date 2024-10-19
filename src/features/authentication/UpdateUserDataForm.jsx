@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
@@ -29,7 +29,24 @@ function UpdateUserDataForm() {
     // GUARD CLAUSE - CHECK IF FULLNAME EXISTS, AVATAR IS OPTIONAL
     if (!fullName) return;
 
-    updateUser({ fullName, newAvatarFile, currentAvatarURL });
+    updateUser(
+      { fullName, newAvatarFile, currentAvatarURL },
+      {
+        onSuccess: () => {
+          // Reset state upon successful submission
+          setNewAvatarFile(null);
+          // Reset form fields upon succesfull form submission
+          e.target.reset();
+        },
+      }
+    );
+  }
+
+  function handleCancel() {
+    // IMPORTANT! Button has type="reset", so we do not need e.preventDefault() as it won't submit the form but reset the form fields.
+    // RESET FORM STATES
+    setFullName(currentFullName);
+    setNewAvatarFile(null);
   }
 
   return (
@@ -62,6 +79,7 @@ function UpdateUserDataForm() {
           type="reset"
           variation="secondary"
           disabled={isUpdatingUser}
+          onClick={handleCancel}
         >
           Cancel
         </Button>
