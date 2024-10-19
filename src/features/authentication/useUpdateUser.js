@@ -12,8 +12,10 @@ export function useUpdateUser() {
     onSuccess: (updatedUser) => {
       toast.success("User account succesfully updated");
       // console.log(updatedUser);
-      // // MANUAL UPDATE
-      // queryClient.setQueryData(["user"], updatedUser);
+      // // ALTERNATE#1 MANUAL UPDATE
+      // const { user } = updatedUser;
+      // queryClient.setQueryData(["user"], user);
+      // // ALTERNATE #2 AUTO RE-FETCH BASED ON QUERY KEY
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
