@@ -115,6 +115,7 @@ function SignupForm() {
           variation="secondary"
           type="reset"
           disabled={isSigningup}
+          onClick={reset} // Reset RHF error messages etc.
         >
           Cancel
         </Button>
