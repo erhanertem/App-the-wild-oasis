@@ -8,7 +8,7 @@
 
 <details>
 
-<summary><img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/education.gif" width="30px"/>Key take-aways from this project...</summary>
+<summary><img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/education.gif" width="30px"/><strong>Key take-aways from this project...</strong></summary>
 
 - React folder structure and project planning
 
@@ -93,7 +93,7 @@
 
 &emsp;
 
-<img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/learning.gif" width="30px"/>In addition to the project cirriculum:
+<img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/learning.gif" width="30px"/><strong>In addition to the project cirriculum:</strong>
 
 - Provide custom solutions around cabin API
   - Refined cabin edit and create API handling
@@ -114,7 +114,7 @@
 
   &emsp;
 
-<img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/report.gif" width="30px"/> Pending Issues:
+<img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/report.gif" width="30px"/> <strong>Pending Issues:</strong>
 
 - Bootleg solution @ supabase subscription beacons needs a better solution.
 
