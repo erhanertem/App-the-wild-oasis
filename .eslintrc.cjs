@@ -6,13 +6,13 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
-    "next/core-web-vitals",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
   settings: { react: { version: "18.2" } },
   plugins: ["react-refresh"],
   rules: {
+    "react/no-unescaped-entities": "off",
     "react/prop-types": "off",
     "react/jsx-no-target-blank": "off",
     "react-refresh/only-export-components": [
@@ -20,7 +20,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "no-unused-vars": "off",
-    "react/no-unescaped-entities": "off",
     "react/prop-types": "off",
   },
 };
