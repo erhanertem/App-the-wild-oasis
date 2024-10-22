@@ -7,6 +7,11 @@ function DarkModeProvider({ children }) {
   // CUSTOM HOOK STATE THTA IS CAPABLE OF REGISTER TO LOCALSTORAGE OF THE BROWSER
   const [isDarkMode, setIsDarkMode] = useLocalStorageState(false, "isDarkMode");
 
+  useLocalStorageState(
+    window.matchMedia("(prefers-color-scheme: dark)").matches,
+    "isDarkMode"
+  );
+
   useEffect(() => {
     // document.documentElement.classList.toggle("dark-mode");
     if (isDarkMode) {
