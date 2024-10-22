@@ -25,7 +25,7 @@ export function useRecentStays() {
 
   // Filter only confirmed stays if stays data exists
   const confirmedStays = stays?.filter(
-    (stay) => stays.status === "checked-in" || stay.status === "checked-out"
+    (stay) => stay.status === "checked-in" || stay.status === "checked-out"
   );
 
   return { stays, confirmedStays, numDays, isLoadingStays };
