@@ -8,6 +8,7 @@ import Spinner from "../../ui/Spinner";
 import Stats from "./Stats";
 import { useGetCabins } from "../cabins/useGetCabins";
 import SalesChart from "./SalesChart";
+import DurationChart from "./DurationChart";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -34,7 +35,10 @@ function DashboardLayout() {
       />
       <div>Statistics</div>
       <div>Today's activity</div>
-      <div>Chart stay durations</div>
+      <DurationChart
+        confirmedStays={confirmedStays}
+        stays={stays}
+      />
       <SalesChart recentBookings={recentBookings} />
     </StyledDashboardLayout>
   );

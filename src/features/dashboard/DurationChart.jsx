@@ -1,4 +1,14 @@
 import styled from "styled-components";
+import Heading from "../../ui/Heading";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChartBox = styled.div`
   /* Box */
@@ -113,9 +123,12 @@ function prepareData(startData, stays) {
     );
   }
 
+  // REBUILD A NEW DATA ARRAY BAED ON STARTDATA TEMPLATE USING RAW DATA PROP STAYS
   const data = stays
     .reduce((arr, cur) => {
+      // Get a hold of numNights property of each object in the array of raw data
       const num = cur.numNights;
+      // Increment the value of matching object @ startDataArray that falls under the numNights value
       if (num === 1) return incArrayValue(arr, "1 night");
       if (num === 2) return incArrayValue(arr, "2 nights");
       if (num === 3) return incArrayValue(arr, "3 nights");
@@ -126,7 +139,59 @@ function prepareData(startData, stays) {
       if (num >= 21) return incArrayValue(arr, "21+ nights");
       return arr;
     }, startData)
+    // Filter out objects with zero values
     .filter((obj) => obj.value > 0);
 
   return data;
 }
+
+function DurationChart({ confirmedStays, stays }) {
+  console.log(stays);
+
+  const { isDarkMode } = useDarkMode();
+  const startData = isDarkMode ? startDataDark : startDataLight;
+  const data = prepareData(startData, stays);
+
+  return (
+    <ChartBox>
+      <Heading as="h2">Stay duration summary</Heading>
+      {/* Responsive container from Recharts for fluidity */}
+      <ResponsiveContainer
+        width="100%"
+        height={240}
+      >
+        <PieChart>
+          <Pie
+            data={data}
+            //  Respecting array of objects {duration, value, color} for the pie chart data
+            nameKey="duration" // Tag data
+            dataKey="value" // Actual data
+            innerRadius={85}
+            outerRadius={110}
+            cx="40%"
+            cy="50%"
+            paddingAngle={3}
+          >
+            {data.map((each) => (
+              <Cell
+                fill={each.color}
+                key={each.duration}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend
+            verticalAlign="middle"
+            align="right"
+            width="30%"
+            layout="vertical"
+            iconSize={15}
+            iconType="circle"
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
+}
+
+export default DurationChart;
