@@ -1,5 +1,18 @@
 import styled from "styled-components";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+import { useDarkMode } from "../../context/DarkModeContext";
+
 import DashboardBox from "./DashboardBox";
+import Heading from "../../ui/Heading";
 
 const StyledSalesChart = styled(DashboardBox)`
   grid-column: 1 / -1;
@@ -43,17 +56,169 @@ const fakeData = [
   { label: "Feb 06", totalSales: 1450, extrasSales: 400 },
 ];
 
-const isDarkMode = true;
-const colors = isDarkMode
-  ? {
-      totalSales: { stroke: "#4f46e5", fill: "#4f46e5" },
-      extrasSales: { stroke: "#22c55e", fill: "#22c55e" },
-      text: "#e5e7eb",
-      background: "#18212f",
-    }
-  : {
-      totalSales: { stroke: "#4f46e5", fill: "#c7d2fe" },
-      extrasSales: { stroke: "#16a34a", fill: "#dcfce7" },
-      text: "#374151",
-      background: "#fff",
-    };
+function SalesChart({ recentBookings, numDays }) {
+  console.log(recentBookings);
+  console.log(numDays);
+
+  const { isDarkMode } = useDarkMode();
+  const colors = !isDarkMode
+    ? {
+        // totalSales: { stroke: "#4f46e5", fill: "#4f46e5" },
+        totalSales: {
+          stroke: "#4f46e5",
+          fill: "url(#colorGradientTotalSalesDarkMode)",
+        },
+        // extrasSales: { stroke: "#22c55e", fill: "#22c55e" },
+        extrasSales: {
+          stroke: "#22c55e",
+          fill: "url(#colorGradientExtrasSalesDarkMode)",
+        },
+        text: "#e5e7eb",
+        background: "#18212f",
+      }
+    : {
+        // totalSales: { stroke: "#4f46e5", fill: "#c7d2fe" },
+        totalSales: {
+          stroke: "#4f46e5",
+          fill: "url(#colorGradientTotalSales)",
+        },
+        // extrasSales: { stroke: "#16a34a", fill: "#dcfce7" },
+        extrasSales: {
+          stroke: "#16a34a",
+          fill: "url(#colorGradientExtrasSales)",
+        },
+        text: "#374151",
+        background: "#fff",
+      };
+
+  return (
+    <StyledSalesChart>
+      <Heading as="h2">Sales</Heading>
+
+      {/* RECHARTS CONTAINER TO MAKE GRAPH FLUID */}
+      {/* If no fluidity is aimed, provide width and height attrs in AreaChart */}
+      <ResponsiveContainer
+        height={300}
+        width="100%"
+      >
+        {/* Feed the data to AreaChart */}
+        <AreaChart data={fakeData}>
+          {/* Define the linear gradient */}
+          <defs>
+            <linearGradient
+              id="colorGradientTotalSales"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="30%"
+                stopColor="#4f46e5"
+                stopOpacity={1}
+              />
+              <stop
+                offset="100%"
+                stopColor="#c7d2fe"
+                stopOpacity={0.3}
+              />
+            </linearGradient>
+            <linearGradient
+              id="colorGradientTotalSalesDarkMode"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="30%"
+                stopColor="#4f46e5"
+                stopOpacity={1}
+              />
+              <stop
+                offset="100%"
+                stopColor="#4f46e5"
+                stopOpacity={0.3}
+              />
+            </linearGradient>
+
+            <linearGradient
+              id="colorGradientExtrasSales"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="30%"
+                stopColor="#16a34a"
+                stopOpacity={1}
+              />
+              <stop
+                offset="100%"
+                stopColor="#dcfce7"
+                stopOpacity={0.3}
+              />
+            </linearGradient>
+            <linearGradient
+              id="colorGradientExtrasSalesDarkMode"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="30%"
+                stopColor="#22c55e"
+                stopOpacity={1}
+              />
+              <stop
+                offset="100%"
+                stopColor="#22c55e"
+                stopOpacity={0.3}
+              />
+            </linearGradient>
+          </defs>
+
+          {/* VISUAL PARTS */}
+          {/* Axis definitions */}
+          <XAxis
+            dataKey="label"
+            tick={{ fill: colors.text }}
+            tickLine={{ stroke: colors.text }}
+          />
+          <YAxis
+            unit="$"
+            tick={{ fill: colors.text }}
+            tickLine={{ stroke: colors.text }}
+          />
+          {/* Define cartesian grid for the graph */}
+          <CartesianGrid strokeDasharray="4" />
+          {/* Tooltip configuration */}
+          <Tooltip contentStyle={{ backgroundColor: colors.background }} />
+          {/* GRAPH CONTEXT */}
+          <Area
+            dataKey="totalSales" // Visualizes the total sales data
+            type="monotone" // Defines how the line is drawn. other options: linear, step, basis, etc.
+            stroke={colors.totalSales.stroke} // Line color
+            fill={colors.totalSales.fill} // Area fill color
+            strokeWidth={2} //Line width
+            name="Total Sales" // Tooltip tag
+            unit="$" // Tooltip unit
+          />
+          <Area
+            dataKey="extrasSales"
+            type="monotone"
+            stroke={colors.extrasSales.stroke}
+            fill={colors.extrasSales.fill}
+            strokeWidth={2}
+            name="Extras Sales"
+            unit="$"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </StyledSalesChart>
+  );
+}
+
+export default SalesChart;

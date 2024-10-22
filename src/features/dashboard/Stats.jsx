@@ -16,13 +16,13 @@ function Stats({ recentBookings, confirmedStays, numDays, cabinCount }) {
   // >#3. checkins data
   const checkins = confirmedStays.length || 0;
   // >#4. occupancy data
+  // customer checked in nights / number of all days for all cabins
   const occupancy =
     (
-      confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
-      (numDays * cabinCount)
-    ).toFixed(2) *
-      100 +
-    "%";
+      (confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
+        (numDays * cabinCount)) *
+      100
+    ).toFixed(1) + "%";
 
   return (
     <>
