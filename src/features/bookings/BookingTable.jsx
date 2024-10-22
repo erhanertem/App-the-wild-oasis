@@ -7,7 +7,7 @@ import Pagination from "../../ui/Pagination";
 import Empty from "../../ui/Empty";
 
 function BookingTable() {
-  // const { bookings = [], count, isLoading } = useGetBookings();
+  const { bookings = [], count, isLoading } = useGetBookings();
   // NOTE: bookings is given a fallback value of [] to make sure we do not throw an exception before loading data
   // console.log(bookings);
 
@@ -15,9 +15,9 @@ function BookingTable() {
   // // NOTE: Handled inside the Table.Body Internally
   // if (!bookings.length) return <Empty resourceName="bookings" />;
 
-  // ERROR BOUNDARY TESTING CODE
-  const { bookings, count, isLoading } = useGetBookings();
-  if (!bookings.length) return <Empty resourceName="bookings" />;
+  // // ❌ ERROR BOUNDARY TESTING CODE
+  // const { bookings, count, isLoading } = useGetBookings();
+  // if (!bookings.length) return <Empty resourceName="bookings" />;
 
   if (isLoading) return <Spinner />;
 
