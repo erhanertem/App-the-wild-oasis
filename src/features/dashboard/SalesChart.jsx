@@ -13,6 +13,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 
 import DashboardBox from "./DashboardBox";
 import Heading from "../../ui/Heading";
+import { format } from "date-fns";
 
 const StyledSalesChart = styled(DashboardBox)`
   grid-column: 1 / -1;
@@ -58,17 +59,23 @@ const StyledSalesChart = styled(DashboardBox)`
 
 function SalesChart({ recentBookings }) {
   const unProcessedGraphData = recentBookings
+    // SORT ASC ORDER ISO DATES
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+    // CREATE ARRAY OF OBJECTS [{label: "Jan 09", totalSales: 780, extrasSales: 70}, ...]
     .map((booking) => {
+      const date = new Date(booking.created_at);
       return {
         label: new Intl.DateTimeFormat("en-US", {
           month: "short",
           day: "numeric",
-        }).format(new Date(booking.created_at)),
+        }).format(date),
+        year: date.getFullYear(),
         totalSales: booking.totalPrice,
         extrasSales: booking.extrasPrice,
       };
     });
+
+  // GROUP BY SIMILAR DATE TOTALSALES, EXTRASSALES
   const aggregatedData = unProcessedGraphData.reduce((acc, curr) => {
     // Check if the current label already exists in the accumulator
     const existingInAccumulator = acc.find((item) => item.label === curr.label);
@@ -83,7 +90,6 @@ function SalesChart({ recentBookings }) {
 
     return acc;
   }, []);
-  console.log(aggregatedData);
 
   const { isDarkMode } = useDarkMode();
   const colors = !isDarkMode
@@ -118,7 +124,11 @@ function SalesChart({ recentBookings }) {
 
   return (
     <StyledSalesChart>
-      <Heading as="h2">Sales</Heading>
+      <Heading as="h2">
+        Sales from {unProcessedGraphData.at(0).label},{" "}
+        {unProcessedGraphData.at(0).year} &mdash;{" "}
+        {unProcessedGraphData.at(-1).label}, {unProcessedGraphData.at(-1).year}
+      </Heading>
 
       {/* RECHARTS CONTAINER TO MAKE GRAPH FLUID */}
       {/* If no fluidity is aimed, provide width and height attrs in AreaChart */}
