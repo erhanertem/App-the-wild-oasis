@@ -88,6 +88,7 @@
     - Utilize compound component pattern with the assitance of render prop
       pattern @ Table.Body
   - Utilize compound component in conjunction with render prop pattern
+  - Handling React errors on the client side gracefully via <strong>React Error Boundaries</strong> library
 
   </details>
 
