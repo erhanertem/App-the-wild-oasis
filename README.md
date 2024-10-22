@@ -119,7 +119,7 @@
 
 - Bootleg solution @ supabase subscription beacons needs a better solution.
 
-#### <img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/file.gif" width="30px"/>[The Wild Oasis App](https://****)
+#### <img src="https://raw.githubusercontent.com/erhanertem/erhanertem/main/icons/file.gif" width="30px"/>[The Wild Oasis App](https://app-wild-oasis-erhan-ertem.netlify.app)
 
 <img src="./screenshot.webp" width="600px"/>
 
