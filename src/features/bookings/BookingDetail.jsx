@@ -16,6 +16,7 @@ import Modal from "../../ui/Modal";
 import Spinner from "../../ui/Spinner";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import BookingDataBox from "./BookingDataBox";
+import Empty from "../../ui/Empty";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -24,7 +25,7 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const { booking, isLoading: isGettingBooking } = useGetBooking();
+  let { booking, isLoading: isGettingBooking } = useGetBooking();
   const { checkOut, isCheckingOut } = useCreateCheckout();
   const { deleteBooking, isDeletingBooking } = useDeleteBooking();
 
@@ -32,6 +33,9 @@ function BookingDetail() {
   const moveBack = useMoveBack();
 
   if (isGettingBooking) return <Spinner />;
+
+  // GUARD CLAUSE
+  if (!booking) return <Empty resourcename="booking" />;
 
   const { status, id: bookingId } = booking;
 
