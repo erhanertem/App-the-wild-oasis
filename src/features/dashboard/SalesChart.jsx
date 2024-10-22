@@ -125,9 +125,9 @@ function SalesChart({ recentBookings }) {
   return (
     <StyledSalesChart>
       <Heading as="h2">
-        Sales from {unProcessedGraphData.at(0).label},{" "}
+        Sales from {unProcessedGraphData.at(0).label}{" "}
         {unProcessedGraphData.at(0).year} &mdash;{" "}
-        {unProcessedGraphData.at(-1).label}, {unProcessedGraphData.at(-1).year}
+        {unProcessedGraphData.at(-1).label} {unProcessedGraphData.at(-1).year}
       </Heading>
 
       {/* RECHARTS CONTAINER TO MAKE GRAPH FLUID */}
