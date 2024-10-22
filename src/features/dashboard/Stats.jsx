@@ -9,12 +9,11 @@ import { formatCurrency } from "../../utils/helpers";
 
 function Stats({ recentBookings, confirmedStays, numDays, cabinCount }) {
   // >#1. bookings data
-  const numBookings = recentBookings.length || 0;
+  const numBookings = recentBookings.length;
   // >#2. sales data
-  const sales =
-    recentBookings.reduce((acc, cur) => acc + cur.totalPrice, 0) || 0;
+  const sales = recentBookings.reduce((acc, cur) => acc + cur.totalPrice, 0);
   // >#3. checkins data
-  const checkins = confirmedStays.length || 0;
+  const checkins = confirmedStays.length;
   // >#4. occupancy data
   // customer checked in nights / number of all days for all cabins
   const occupancy =
