@@ -12,8 +12,8 @@
 
 - React folder structure and project planning
 
-- Styling w/ Styled Components
 - Contemplate Global Remote States w/ Supabase
+- Styling w/ Styled Components
 
   - Create in-component styled-components
   - Create global styled-component
